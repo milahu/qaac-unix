@@ -21,8 +21,6 @@
 #pragma warning(pop)
 #include "util.h"
 
-#define HR(expr) (void)(win32::throwIfError((expr), #expr))
-
 namespace win32 {
 
     // Function to get the number of milliseconds since system startup
@@ -51,11 +49,6 @@ namespace win32 {
     inline void throw_error(const std::string& msg, uint32_t error)
     {
         throw_error(strutil::us2w(msg), error);
-    }
-
-    inline void throwIfError(HRESULT expr, const char *msg)
-    {
-        if (FAILED(expr)) throw_error(msg, expr);
     }
 
     inline std::string GetFullPathNameX(const std::string &path)
