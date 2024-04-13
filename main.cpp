@@ -29,7 +29,6 @@
 #include "FLACModule.h"
 #include "LibSndfileSource.h"
 #include "WavpackSource.h"
-#include "AvisynthSource.h"
 #include "OpusPacketDecoder.h"
 #ifdef REFALAC
 #include "ALACEncoderX.h"
