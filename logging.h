@@ -1,9 +1,11 @@
-#include <cstdio> // stderr, FILE
-#include <cstdarg>
-#include <vector>
+#include <cstdio> // stderr, FILE, vsnprintf
+#include <cstdarg> // va_list
+#include <vector> // std::vector
 #include <cstdlib> // std::setbuf
 #include <fcntl.h> // open
 #include <unistd.h> // fileno
+#include <iostream> // std::cout
+#include <memory> // std::shared_ptr
 #include "win32util.h"
 
 class Log {
@@ -44,13 +46,26 @@ public:
     }
     void vwprintf(const char *fmt, va_list args)
     {
-        int rc = _vscwprintf(fmt, args);
-        std::vector<char> buffer(rc + 1);
-        rc = _vsnwprintf(buffer.data(), buffer.size(), fmt, args);
+        va_list args_copy;
+        va_copy(args_copy, args);
+        int length = vsnprintf(nullptr, 0, fmt, args_copy);
+        va_end(args_copy);
 
-        OutputDebugStringW(buffer.data());
-        for (size_t i = 0; i < m_streams.size(); ++i)
-            std::fputws(buffer.data(), m_streams[i].get());
+        if (length < 0) {
+            // Handle error
+            return;
+        }
+
+        std::vector<char> buffer(length + 1);
+        vsnprintf(buffer.data(), buffer.size(), fmt, args);
+
+        // OutputDebugStringW(buffer.data()); // OutputDebugStringW is Windows-specific
+        std::cout << buffer.data(); // Print to console instead
+
+        // Assuming m_streams is a vector of shared_ptr<FILE>
+        for (size_t i = 0; i < m_streams.size(); ++i) {
+            std::fputs(buffer.data(), m_streams[i].get());
+        }
     }
     void wprintf(const char *fmt, ...)
     {
