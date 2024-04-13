@@ -1184,7 +1184,6 @@ int wmain1(int argc, char **argv)
 #endif
     Options opts;
 
-    SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
     std::setlocale(LC_CTYPE, "");
     std::setbuf(stderr, 0);
     _setmode(0, _O_BINARY);
