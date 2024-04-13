@@ -69,15 +69,15 @@ namespace win32 {
         return GetFullPathName(path);
     }
 
-    inline std::string PathReplaceExtension(const std::string &path,
-                                             const char *ext)
-    {
-        const char *beg = path.c_str();
-        const char *end = PathFindExtensionW(beg);
-        std::string s(beg, end);
-        //if (ext[0] != L'.') s.push_back(L'.');
-        s += ext;
-        return s;
+    inline std::string PathReplaceExtension(const std::string &path, const std::string &newExtension) {
+        // Find the last dot in the path
+        size_t dotPos = path.find_last_of('.');
+        if (dotPos != std::string::npos) {
+            // Replace the substring starting from the dot position with the new extension
+            return path.substr(0, dotPos) + "." + newExtension;
+        }
+        // If no dot is found, just append the new extension
+        return path + "." + newExtension;
     }
 
     // XXX: limited to MAX_PATH
