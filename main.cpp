@@ -92,7 +92,7 @@ public:
         }
     }
     void flush() {
-        if (m_verbose) std::fputws(m_message.c_str(), stderr);
+        if (m_verbose) std::fputs(m_message.c_str(), stderr);
         if (m_verbose && m_console_visible &&
             m_last_tick_stderr - m_last_tick_title > m_interval * 4)
         {

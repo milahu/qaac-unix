@@ -347,7 +347,7 @@ void usage()
 
 static void complain(const char *s)
 {
-    std::fputws(s, stderr);
+    std::fputs(s, stderr);
     OutputDebugStringW(s);
 }
 
