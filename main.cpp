@@ -81,11 +81,11 @@ public:
           m_verbose(verbose)
     {
         m_console_visible = is_console_visible();
-        m_last_tick_title = m_last_tick_stderr = GetTickCount();
+        m_last_tick_title = m_last_tick_stderr = win32::GetTickCount();
     }
     void put(const std::string &message) {
         m_message = message;
-        uint32_t tick = GetTickCount();
+        uint32_t tick = win32::GetTickCount();
         if (tick - m_last_tick_stderr > m_interval) {
             m_last_tick_stderr = tick;
             flush();
