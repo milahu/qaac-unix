@@ -826,7 +826,7 @@ void show_available_aac_settings()
 }
 
 static
-void setup_aach_codec(HMODULE hDll)
+void setup_aach_codec(void* hDll)
 {
     CFPlugInFactoryFunction aachFactory =
         AutoCast(GetProcAddress(hDll, "ACMP4AACHighEfficiencyEncoderFactory"));
