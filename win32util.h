@@ -8,7 +8,6 @@
 #include <memory>
 #include <unistd.h>
 #include <fcntl.h>
-#include <share.h>
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
