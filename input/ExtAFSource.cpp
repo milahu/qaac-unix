@@ -19,7 +19,7 @@ namespace audiofile {
             UInt32 *nread)
     {
         int fd = static_cast<int>(reinterpret_cast<intptr_t>(cookie));
-        if (_lseeki64(fd, pos, SEEK_SET) != pos)
+        if (lseek(fd, pos, SEEK_SET) != pos)
             return ioErr;
         ssize_t n = util::nread(fd, data, count);
         if (n < 0)

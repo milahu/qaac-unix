@@ -44,12 +44,12 @@ namespace TagLibX {
 
         void seek(long offset, IOStream::Position p = Beginning)
         {
-            _lseeki64(m_fd, offset, p);
+            lseek(m_fd, offset, p);
         }
         void clear() { }
         long tell() const
         {
-            int64_t n = _lseeki64(m_fd, 0, SEEK_CUR);
+            int64_t n = lseek(m_fd, 0, SEEK_CUR);
             if (n > 0xffffffffLL)
                 throw std::runtime_error("File position exceeded "
                                          "the limit of TagLib");

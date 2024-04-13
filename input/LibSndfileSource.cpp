@@ -80,7 +80,7 @@ struct SFVirtualIOImpl: public SF_VIRTUAL_IO
     static sf_count_t seek(sf_count_t off, int whence, void *cookie)
     {
         int fd = static_cast<int>(reinterpret_cast<intptr_t>(cookie));
-        return _lseeki64(fd, off, whence);
+        return lseek(fd, off, whence);
     }
     static sf_count_t read(void *data, sf_count_t count, void *cookie)
     {
@@ -90,7 +90,7 @@ struct SFVirtualIOImpl: public SF_VIRTUAL_IO
     static sf_count_t tell(void *cookie)
     {
         int fd = static_cast<int>(reinterpret_cast<intptr_t>(cookie));
-        return _lseeki64(fd, 0, SEEK_CUR);
+        return lseek(fd, 0, SEEK_CUR);
     }
 };
 

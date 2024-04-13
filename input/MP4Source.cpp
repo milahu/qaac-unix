@@ -38,7 +38,7 @@ MP4Source::MP4Source(const std::shared_ptr<FILE> &fp)
         int fd = fileno(m_fp.get());
         {
             util::FilePositionSaver _(fd);
-            _lseeki64(fd, 0, SEEK_SET);
+            lseek(fd, 0, SEEK_SET);
             char buf[8];
             if (read(fd, buf, 8) != 8 || std::memcmp(&buf[4], "ftyp", 4))
                 throw std::runtime_error("Not an MP4 file");

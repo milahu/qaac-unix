@@ -60,7 +60,7 @@ namespace wavpack {
     }
     static int64_t tell(void *cookie)
     {
-        return _lseeki64(fd(cookie), 0, SEEK_CUR);
+        return lseek(fd(cookie), 0, SEEK_CUR);
     }
     static uint32_t tell32(void *cookie)
     {
@@ -69,7 +69,7 @@ namespace wavpack {
     }
     static int seek(void *cookie, int64_t off, int whence)
     {
-        return _lseeki64(fd(cookie), off, whence) >= 0 ? 0 : -1;
+        return lseek(fd(cookie), off, whence) >= 0 ? 0 : -1;
     }
     static int seek32(void *cookie, int32_t off, int whence)
     {
@@ -179,7 +179,7 @@ bool WavpackSource::parseWrapper()
 {
     int fd = fileno(m_fp.get());
     util::FilePositionSaver saver__(fd);
-    _lseeki64(fd, 0, SEEK_SET);
+    lseek(fd, 0, SEEK_SET);
 
     WavpackHeader hdr;
     if (read(fd, &hdr, sizeof(hdr)) != sizeof(hdr))
@@ -190,14 +190,14 @@ bool WavpackSource::parseWrapper()
         return false;
     std::vector<char> first_block(hdr.ckSize);
 
-    _lseeki64(fd, 0, SEEK_SET);
+    lseek(fd, 0, SEEK_SET);
     if (read(fd, &first_block[0], hdr.ckSize) != hdr.ckSize)
         return false;
     void *loc = m_module.GetWrapperLocation(&first_block[0], 0);
     if (!loc)
         return false;
     ptrdiff_t off = static_cast<char *>(loc) - &first_block[0];
-    _lseeki64(fd, off, SEEK_SET);
+    lseek(fd, off, SEEK_SET);
 
     try {
         WaveSource src(m_fp, false);

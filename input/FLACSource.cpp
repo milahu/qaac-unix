@@ -47,14 +47,14 @@ FLACSource::FLACSource(const std::shared_ptr<FILE> &fp):
             size <<= 7;
             size |= buffer[i];
         }
-        CHECKCRT(_lseeki64(fileno(m_fp.get()), 10 + size, SEEK_SET) < 0);
+        CHECKCRT(lseek(fileno(m_fp.get()), 10 + size, SEEK_SET) < 0);
         util::check_eof(util::nread(fileno(m_fp.get()), buffer, 33) == 33);
     }
     uint32_t fcc = util::fourcc(buffer);
     if ((fcc != *(int32_t*)"fLaC" && fcc != *(int32_t*)"OggS")
      || (fcc == *(int32_t*)"OggS" && std::memcmp(&buffer[28], "\177FLAC", 5)))
         throw std::runtime_error("Not a FLAC file");
-    CHECKCRT(_lseeki64(fileno(m_fp.get()), 0, SEEK_SET) < 0);
+    CHECKCRT(lseek(fileno(m_fp.get()), 0, SEEK_SET) < 0);
 
     m_decoder =
         decoder_t(m_module.stream_decoder_new(),
@@ -127,7 +127,7 @@ FLAC__StreamDecoderSeekStatus
 FLACSource::seekCallback(uint64_t offset)
 {
     m_eof = false;
-    if (_lseeki64(fileno(m_fp.get()), offset, SEEK_SET) == offset)
+    if (lseek(fileno(m_fp.get()), offset, SEEK_SET) == offset)
         return FLAC__STREAM_DECODER_SEEK_STATUS_OK; 
     else
         return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR; 
@@ -136,7 +136,7 @@ FLACSource::seekCallback(uint64_t offset)
 FLAC__StreamDecoderTellStatus
 FLACSource::tellCallback(uint64_t *offset)
 {
-    int64_t off = _lseeki64(fileno(m_fp.get()), 0, SEEK_CUR);
+    int64_t off = lseek(fileno(m_fp.get()), 0, SEEK_CUR);
     if (off < 0)
         return FLAC__STREAM_DECODER_TELL_STATUS_ERROR;
     *offset = off;

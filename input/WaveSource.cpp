@@ -31,7 +31,7 @@ WaveSource::WaveSource(const std::shared_ptr<FILE> &fp, bool ignorelength)
     else
         m_length = data_length / m_block_align;
     if (m_seekable) {
-        m_data_pos = _lseeki64(fd(), 0, SEEK_CUR);
+        m_data_pos = lseek(fd(), 0, SEEK_CUR);
         if (m_length == ~0ULL)
             m_length = (_filelengthi64(fd()) - m_data_pos) / m_block_align;
     }
@@ -65,7 +65,7 @@ size_t WaveSource::readSamples(void *buffer, size_t nsamples)
 void WaveSource::seekTo(int64_t count)
 {
     if (m_seekable) {
-        CHECKCRT(_lseeki64(fd(), m_data_pos + count * m_block_align,
+        CHECKCRT(lseek(fd(), m_data_pos + count * m_block_align,
                            SEEK_SET) < 0);
         m_position = count;
     }
@@ -131,7 +131,7 @@ inline void WaveSource::read64le(void *n)
 void WaveSource::skip(int64_t n)
 {
     if (m_seekable)
-        CHECKCRT(_lseeki64(fd(), n, SEEK_CUR) < 0);
+        CHECKCRT(lseek(fd(), n, SEEK_CUR) < 0);
     else {
         char buf[8192];
         while (n > 0) {

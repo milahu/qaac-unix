@@ -62,7 +62,7 @@ size_t Normalizer::processT(size_t nsamples)
             if (x > m_peak) m_peak = x;
         }
     } else if (fd() > 0)
-        CHECKCRT(_lseeki64(fd(), 0, SEEK_SET) < 0);
+        CHECKCRT(lseek(fd(), 0, SEEK_SET) < 0);
     return nc;
 }
 

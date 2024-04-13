@@ -183,11 +183,11 @@ namespace util {
     public:
         explicit FilePositionSaver(int fd): m_fd(fd)
         {
-            m_saved_position = _lseeki64(m_fd, 0, SEEK_CUR);
+            m_saved_position = lseek(m_fd, 0, SEEK_CUR);
         }
         ~FilePositionSaver()
         {
-            _lseeki64(m_fd, m_saved_position, SEEK_SET);
+            lseek(m_fd, m_saved_position, SEEK_SET);
         }
     };
 

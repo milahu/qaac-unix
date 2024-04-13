@@ -75,7 +75,7 @@ struct TakStreamIoInterfaceImpl: public TtakStreamIoInterface {
     static TtakBool seek(void *cookie, TtakInt64 pos)
     {
         int fd = static_cast<int>(reinterpret_cast<intptr_t>(cookie));
-        return _lseeki64(fd, pos, SEEK_SET) == pos;
+        return lseek(fd, pos, SEEK_SET) == pos;
     }
     static TtakBool size(void *cookie, TtakInt64 *len)
     {

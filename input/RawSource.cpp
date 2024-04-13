@@ -53,7 +53,7 @@ void RawSource::seekTo(int64_t count)
 {
     int fd = fileno(m_fp.get());
     if (isSeekable()) {
-        CHECKCRT(_lseeki64(fd, count*m_asbd.mBytesPerFrame, SEEK_SET) < 0);
+        CHECKCRT(lseek(fd, count*m_asbd.mBytesPerFrame, SEEK_SET) < 0);
         m_position = count;
     } else if (m_position > count) {
         throw std::runtime_error("Cannot seek back the input");

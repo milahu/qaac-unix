@@ -37,7 +37,7 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
             m_sources[path] = src; \
             return src; \
         } catch (...) { \
-            _lseeki64(fileno(fp.get()), 0, SEEK_SET); \
+            lseek(fileno(fp.get()), 0, SEEK_SET); \
         } \
     } while (0)
 

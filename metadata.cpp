@@ -548,13 +548,13 @@ namespace CAF {
     {
         std::vector<uint8_t> buf;
         util::FilePositionSaver _(fd);
-        if (_lseeki64(fd, 8, SEEK_SET) != 8)
+        if (lseek(fd, 8, SEEK_SET) != 8)
             return buf;
         uint64_t chunk_size;
         char chunk_name[4];
         while ((chunk_size = next_chunk(fd, chunk_name)) > 0) {
             if (std::memcmp(chunk_name, "info", 4)) {
-                if (_lseeki64(fd, chunk_size, SEEK_CUR) < 0)
+                if (lseek(fd, chunk_size, SEEK_CUR) < 0)
                     break;
             } else {
                 buf.resize(chunk_size);
