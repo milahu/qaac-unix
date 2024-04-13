@@ -1,4 +1,4 @@
-#include "SoXConvolverModule.h"
+#include "SoxConvolverModule.h"
 
 #define CHECK(expr) do { if (!(expr)) throw std::runtime_error("!!!"); } \
     while (0)

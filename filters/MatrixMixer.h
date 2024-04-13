@@ -4,7 +4,7 @@
 #include <complex>
 #include <deque>
 #include "FilterBase.h"
-#include "SoXConvolverModule.h"
+#include "SoxConvolverModule.h"
 #include "misc.h"
 
 class MatrixMixer: public FilterBase {
