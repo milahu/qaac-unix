@@ -131,11 +131,18 @@ namespace win32 {
         return true;
     }
 
-    inline std::string get_module_directory(HMODULE module=0)
-    {
+    inline std::string get_module_directory(void* module = nullptr) {
         std::string path = GetModuleFileNameX(module);
-        const char *fpos = PathFindFileNameW(path.c_str());
-        return path.substr(0, fpos - path.c_str());
+
+        // Find the last directory separator in the path
+        const char* lastSlash = std::strrchr(path.c_str(), '/');
+        if (lastSlash != nullptr) {
+            // Extract the directory path up to the last slash
+            return path.substr(0, lastSlash - path.c_str());
+        }
+
+        // If no slash is found, return an empty string
+        return "";
     }
 
     inline std::string prefixed_path(const char *path)
