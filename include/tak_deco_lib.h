@@ -33,7 +33,7 @@ extern "C" {
 #ifdef _MSC_VER
 typedef __int32      TtakInt32;
 typedef unsigned int TtakUInt32;
-typedef __int64      TtakInt64;
+typedef __int64_t      TtakInt64;
 typedef __int32      TtakBool;
 typedef char         TtakAnsiChar;
 typedef char      TtakWideChar;

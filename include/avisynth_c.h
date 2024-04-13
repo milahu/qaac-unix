@@ -69,7 +69,7 @@ typedef unsigned char BYTE;
 #ifdef __GNUC__
 typedef long long int INT64;
 #else
-typedef __int64 INT64;
+typedef __int64_t INT64;
 #endif
 
 

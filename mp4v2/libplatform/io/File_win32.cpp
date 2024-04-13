@@ -9,7 +9,7 @@
 #       define GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS       0x4
 #   endif
 
-    typedef int (*_fseeki64_type)(FILE*, __int64, int);
+    typedef int (*_fseeki64_type)(FILE*, __int64_t, int);
 
     static _fseeki64_type GetFileSeekFunction()
     {

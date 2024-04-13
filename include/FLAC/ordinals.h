@@ -42,10 +42,10 @@ typedef unsigned char FLAC__uint8;
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 typedef __int16 FLAC__int16;
 typedef __int32 FLAC__int32;
-typedef __int64 FLAC__int64;
+typedef __int64_t FLAC__int64;
 typedef unsigned __int16 FLAC__uint16;
 typedef unsigned __int32 FLAC__uint32;
-typedef unsigned __int64 FLAC__uint64;
+typedef unsigned __int64_t FLAC__uint64;
 #elif defined(__EMX__)
 typedef short FLAC__int16;
 typedef long FLAC__int32;
