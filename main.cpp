@@ -340,9 +340,8 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                             std::vector<std::shared_ptr<ISource> > &chain,
                             const Options &opts, bool normalize_pass=false)
 {
-    SYSTEM_INFO si;
-    GetSystemInfo(&si);
-    bool threading = opts.threading && si.dwNumberOfProcessors > 1;
+    long numProcessors = sysconf(_SC_NPROCESSORS_ONLN);
+    bool threading = opts.threading && numProcessors > 1;
 
     AudioStreamBasicDescription sasbd = src->getSampleFormat();
     manipulate_channels(chain, opts);
