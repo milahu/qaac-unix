@@ -37,12 +37,6 @@ public:
                 throw std::runtime_error("Log::enable_file(): failed to get fileno");
             }
 
-            // Set file descriptor to text mode
-            if (fcntl(fd, F_SETMODE, O_TEXT) == -1) {
-                std::fclose(fp);
-                throw std::runtime_error("Log::enable_file(): failed to set text mode");
-            }
-
             m_streams.push_back(std::shared_ptr<FILE>(fp, std::fclose));
         } catch (const std::runtime_error& e) {
             throw;
