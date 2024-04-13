@@ -64,11 +64,6 @@ namespace strutil {
         const char *p = std::strchr(s, ch);
         return p ? p - s : -1;
     }
-    inline ssize_t strindex(const char *s, int ch)
-    {
-        const char *p = std::wcschr(s, ch);
-        return p ? p - s : -1;
-    }
     template <typename T>
     void squeeze(T *str, const T *charset)
     {
