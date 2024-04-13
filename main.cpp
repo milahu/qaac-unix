@@ -621,9 +621,7 @@ void decode_file(const std::vector<std::shared_ptr<ISource> > &chain,
             cafsink->beginWrite();
         }
     } else if (opts.isWaveOut()) {
-        if (!chanmask)
-            chanmask = chanmap::defaultChannelMask(sf.mChannelsPerFrame);
-        sink = std::make_shared<WaveOutSink>(sf, chanmask);
+        throw std::runtime_error("WaveOutSink is not implemented");
     } else if (opts.isPeak())
         sink = std::make_shared<PeakSink>(sf);
 
