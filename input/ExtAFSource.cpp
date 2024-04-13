@@ -49,8 +49,8 @@ namespace audiofile {
     {
         std::map<std::string, std::string> tags;
 
-        if (af.getFileFormat() == 'caff') {
-            auto data = af.getUserData('info', 0);
+        if (af.getFileFormat() == *(int32_t*)"caff") {
+            auto data = af.getUserData(*(int32_t*)"info", 0);
             tags = CAF::fetchTags(data);
         } else {
             auto dict = af.getInfoDictionary();
@@ -77,14 +77,14 @@ ExtAFSource::ExtAFSource(const std::shared_ptr<FILE> &fp)
 
     auto aflist = m_af.getFormatList();
     m_iasbd = aflist[0].mASBD;
-    if (m_iasbd.mFormatID != 'lpcm' && m_iasbd.mFormatID != 'alac' &&
-        m_iasbd.mFormatID != '.mp3' && m_iasbd.mFormatID != 'aac ' &&
-        m_iasbd.mFormatID != 'aach' && m_iasbd.mFormatID != 'aacp')
+    if (m_iasbd.mFormatID != *(int32_t*)"lpcm" && m_iasbd.mFormatID != *(int32_t*)"alac" &&
+        m_iasbd.mFormatID != *(int32_t*)".mp3" && m_iasbd.mFormatID != *(int32_t*)"aac " &&
+        m_iasbd.mFormatID != *(int32_t*)"aach" && m_iasbd.mFormatID != *(int32_t*)"aacp")
         throw std::runtime_error("Not supported input format");
 
     uint32_t fcc = m_af.getFileFormat();
 
-    if (m_iasbd.mFormatID == 'lpcm') {
+    if (m_iasbd.mFormatID == *(int32_t*)"lpcm") {
         bool isfloat = m_iasbd.mFormatFlags & kAudioFormatFlagIsFloat;
         uint32_t bits = m_iasbd.mBytesPerFrame / m_iasbd.mChannelsPerFrame * 8;
         m_asbd = cautil::buildASBDForPCM2(m_iasbd.mSampleRate,
@@ -93,7 +93,7 @@ ExtAFSource::ExtAFSource(const std::shared_ptr<FILE> &fp)
                                           isfloat ? bits : 32,
                                           isfloat ? kAudioFormatFlagIsFloat
                                             : kAudioFormatFlagIsSignedInteger);
-    } else if (m_iasbd.mFormatID == 'alac') {
+    } else if (m_iasbd.mFormatID == *(int32_t*)"alac") {
         unsigned bits_per_channel;
         {
             unsigned tab[] = { 16, 20, 24, 32 };
@@ -116,9 +116,9 @@ ExtAFSource::ExtAFSource(const std::shared_ptr<FILE> &fp)
         m_chanmap = chanmap::getChannels(acl.get());
     } catch (...) {
         // getChannelLayout() will fail if chan chunk not present in CAF 
-        if (m_iasbd.mFormatID == 'aac ' ||
-            m_iasbd.mFormatID == 'aach' ||
-            m_iasbd.mFormatID == 'aacp')
+        if (m_iasbd.mFormatID == *(int32_t*)"aac " ||
+            m_iasbd.mFormatID == *(int32_t*)"aach" ||
+            m_iasbd.mFormatID == *(int32_t*)"aacp")
         {
             auto kuki = m_af.getMagicCookieData();
             auto asc = cautil::parseMagicCookieAAC(kuki);

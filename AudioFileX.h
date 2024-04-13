@@ -90,7 +90,7 @@ namespace afutil {
         // XXX
         // Workaround for CoreAudio bug. MPEG Layer 1 and 2 is reported as
         // Layer 3
-        if (asbd.mFormatID == '.mp1' || asbd.mFormatID == '.mp2') {
+        if (asbd.mFormatID == *(int32_t*)".mp1" || asbd.mFormatID == *(int32_t*)".mp2") {
             const char8_t *p;
             if ((p = std::wcsstr(ws.c_str(), L"Layer 3")) != 0)
                 ws[p - ws.c_str() + 6] = asbd.mFormatID & 0xff;

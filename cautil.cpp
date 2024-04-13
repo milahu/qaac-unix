@@ -51,7 +51,7 @@ namespace cautil {
                         unsigned alignment)
     {
         AudioStreamBasicDescription asbd = { 0 };
-        asbd.mFormatID = 'lpcm';
+        asbd.mFormatID = *(int32_t*)"lpcm";
         asbd.mFormatFlags = type;
         if (bits_per_channel & 0x7)
             asbd.mFormatFlags |= alignment;
@@ -73,7 +73,7 @@ namespace cautil {
                          unsigned type, unsigned alignment)
     {
         AudioStreamBasicDescription asbd = { 0 };
-        asbd.mFormatID = 'lpcm';
+        asbd.mFormatID = *(int32_t*)"lpcm";
         asbd.mFormatFlags = type;
         if (valid_bits != pack_bits)
             asbd.mFormatFlags |= alignment;
@@ -359,8 +359,8 @@ namespace cautil {
         }
         memset(asbd, 0, sizeof(AudioStreamBasicDescription));
         asbd->mSampleRate = sample_rate;
-        asbd->mFormatID   = (aot == 2) ? 'aac '
-                                       : (aot == 5) ? 'aach' : 'aacp';
+        asbd->mFormatID   = (aot == 2) ? *(int32_t*)"aac "
+                                       : (aot == 5) ? *(int32_t*)"aach" : *(int32_t*)"aacp";
         asbd->mFramesPerPacket  = (aot == 2) ? 1024 : 2048;
         asbd->mChannelsPerFrame = channels->size();
     }

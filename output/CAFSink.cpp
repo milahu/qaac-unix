@@ -17,7 +17,7 @@ void CAFSink::init(const std::shared_ptr<FILE> &file,
     m_magic_cookie.assign(cookie.begin(), cookie.end());
     m_asbd = asbd;
     m_seekable = win32::is_seekable(fileno(m_file.get()));
-    if (asbd.mFormatID != 'lpcm' && !m_seekable) {
+    if (asbd.mFormatID != *(int32_t*)"lpcm" && !m_seekable) {
         throw std::runtime_error("piped output of CAF is only available for "
                                  "LPCM");
     }
@@ -31,7 +31,7 @@ void CAFSink::beginWrite()
         chan();
     if (m_magic_cookie.size())
         kuki();
-    if (m_asbd.mFormatID == 'aach')
+    if (m_asbd.mFormatID == *(int32_t*)"aach")
         ldsc();
     if (m_tags.size())
         info();
@@ -82,9 +82,9 @@ void CAFSink::writeBER(uint32_t n)
 void CAFSink::writeASBD(uint32_t format)
 {
     uint32_t flags = m_asbd.mFormatFlags;
-    bool downsampled = m_asbd.mFormatID == 'aach' && format == 'aac ';
+    bool downsampled = m_asbd.mFormatID == *(int32_t*)"aach" && format == *(int32_t*)"aac ";
 
-    if (format == 'lpcm')
+    if (format == *(int32_t*)"lpcm")
         flags = (2 | (m_asbd.mFormatFlags & kAudioFormatFlagIsFloat));
 
     writef64(downsampled ? m_asbd.mSampleRate / 2.0 : m_asbd.mSampleRate);
@@ -101,7 +101,7 @@ void CAFSink::desc()
 {
     write("desc", 4);
     write64(32);
-    writeASBD(m_asbd.mFormatID == 'aach' ? 'aac ' : m_asbd.mFormatID);
+    writeASBD(m_asbd.mFormatID == *(int32_t*)"aach" ? *(int32_t*)"aac " : m_asbd.mFormatID);
 }
 
 void CAFSink::chan()
@@ -109,7 +109,7 @@ void CAFSink::chan()
     write("chan", 4);
     write64(12);
 
-    if (m_asbd.mFormatID == 'lpcm') {
+    if (m_asbd.mFormatID == *(int32_t*)"lpcm") {
         write32(kAudioChannelLayoutTag_UseChannelBitmap);
         write32(m_channel_layout);
     } else {
@@ -130,9 +130,9 @@ void CAFSink::ldsc()
 {
     write("ldsc", 4);
     write64(36 * 2);
-    writeASBD('aach');
+    writeASBD(*(int32_t*)"aach");
     write32(m_channel_layout);
-    writeASBD('aac ');
+    writeASBD(*(int32_t*)"aac ");
     write32(m_channel_layout);
 }
 

@@ -14,24 +14,24 @@ typedef struct OpaqueExtAudioFileID *ExtAudioFileRef;
 typedef UInt32 ExtAudioFilePropertyID;
 
 enum {
-   kExtAudioFileProperty_FileDataFormat       = 'ffmt',
-   kExtAudioFileProperty_FileChannelLayout    = 'fclo',
-   kExtAudioFileProperty_ClientDataFormat     = 'cfmt',
-   kExtAudioFileProperty_ClientChannelLayout  = 'cclo',
-   kExtAudioFileProperty_CodecManufacturer    = 'cman',
+   kExtAudioFileProperty_FileDataFormat       = *(int32_t*)"ffmt",
+   kExtAudioFileProperty_FileChannelLayout    = *(int32_t*)"fclo",
+   kExtAudioFileProperty_ClientDataFormat     = *(int32_t*)"cfmt",
+   kExtAudioFileProperty_ClientChannelLayout  = *(int32_t*)"cclo",
+   kExtAudioFileProperty_CodecManufacturer    = *(int32_t*)"cman",
    
    // read-only properties:
-   kExtAudioFileProperty_AudioConverter       = 'acnv',
-   kExtAudioFileProperty_AudioFile            = 'afil',
-   kExtAudioFileProperty_FileMaxPacketSize    = 'fmps',
-   kExtAudioFileProperty_ClientMaxPacketSize  = 'cmps',
-   kExtAudioFileProperty_FileLengthFrames     = '#frm',
+   kExtAudioFileProperty_AudioConverter       = *(int32_t*)"acnv",
+   kExtAudioFileProperty_AudioFile            = *(int32_t*)"afil",
+   kExtAudioFileProperty_FileMaxPacketSize    = *(int32_t*)"fmps",
+   kExtAudioFileProperty_ClientMaxPacketSize  = *(int32_t*)"cmps",
+   kExtAudioFileProperty_FileLengthFrames     = *(int32_t*)"#frm",
    
    // read/write properties:
-   kExtAudioFileProperty_ConverterConfig      = 'accf',
-   kExtAudioFileProperty_IOBufferSizeBytes    = 'iobs',
-   kExtAudioFileProperty_IOBuffer             = 'iobf',
-   kExtAudioFileProperty_PacketTable          = 'xpti'
+   kExtAudioFileProperty_ConverterConfig      = *(int32_t*)"accf",
+   kExtAudioFileProperty_IOBufferSizeBytes    = *(int32_t*)"iobs",
+   kExtAudioFileProperty_IOBuffer             = *(int32_t*)"iobf",
+   kExtAudioFileProperty_PacketTable          = *(int32_t*)"xpti"
 };
 
 OSStatus ExtAudioFileCreateWithURL (

@@ -115,7 +115,7 @@ typedef size_t (*FLAC__IOCallback_Write) (const void *ptr, size_t size, size_t n
 
 /** Signature for the seek callback.
  *  The signature and semantics mostly match POSIX fseek() WITH ONE IMPORTANT
- *  EXCEPTION: the offset is a 64-bit type whereas fseek() is generally 'long'
+ *  EXCEPTION: the offset is a 64-bit type whereas fseek() is generally *(int32_t*)"long"
  *  and 32-bits wide.
  *
  * \param  handle   The handle to the data source.
@@ -128,7 +128,7 @@ typedef int (*FLAC__IOCallback_Seek) (FLAC__IOHandle handle, FLAC__int64 offset,
 
 /** Signature for the tell callback.
  *  The signature and semantics mostly match POSIX ftell() WITH ONE IMPORTANT
- *  EXCEPTION: the offset is a 64-bit type whereas ftell() is generally 'long'
+ *  EXCEPTION: the offset is a 64-bit type whereas ftell() is generally *(int32_t*)"long"
  *  and 32-bits wide.
  *
  * \param  handle   The handle to the data source.

@@ -108,7 +108,7 @@ void FLACPacketDecoder::metadataCallback(const FLAC__StreamMetadata *metadata)
     if (metadata->type == FLAC__METADATA_TYPE_STREAMINFO) {
         auto si = metadata->data.stream_info;
         m_iasbd.mSampleRate = si.sample_rate;
-        m_iasbd.mFormatID = 'fLaC';
+        m_iasbd.mFormatID = *(int32_t*)"fLaC";
         if (si.max_blocksize == si.min_blocksize)
             m_iasbd.mFramesPerPacket = si.max_blocksize;
         m_iasbd.mChannelsPerFrame = si.channels;

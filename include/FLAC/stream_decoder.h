@@ -1000,7 +1000,7 @@ FLAC_API unsigned FLAC__stream_decoder_get_blocksize(const FLAC__StreamDecoder *
  *    \code position != NULL \endcode
  * \retval FLAC__bool
  *    \c true if successful, \c false if the stream is not native FLAC,
- *    or there was an error from the 'tell' callback or it returned
+ *    or there was an error from the *(int32_t*)"tell" callback or it returned
  *    \c FLAC__STREAM_DECODER_TELL_STATUS_UNSUPPORTED.
  */
 FLAC_API FLAC__bool FLAC__stream_decoder_get_decode_position(const FLAC__StreamDecoder *decoder, FLAC__uint64 *position);
@@ -1492,7 +1492,7 @@ FLAC_API FLAC__bool FLAC__stream_decoder_process_until_end_of_metadata(FLAC__Str
 FLAC_API FLAC__bool FLAC__stream_decoder_process_until_end_of_stream(FLAC__StreamDecoder *decoder);
 
 /** Skip one audio frame.
- *  This version instructs the decoder to 'skip' a single frame and stop,
+ *  This version instructs the decoder to *(int32_t*)"skip" a single frame and stop,
  *  unless the callbacks return a fatal error or the read callback returns
  *  \c FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM.
  *

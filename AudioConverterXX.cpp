@@ -72,7 +72,7 @@ void AudioConverterXX::setOutputChannelLayout(const AudioChannelLayout &acl)
 bool AudioConverterXX::isOutputAAC()
 {
     auto asbd = getOutputStreamDescription();
-    return (asbd.mFormatID == 'aac ' || asbd.mFormatID == 'aach');
+    return (asbd.mFormatID == *(int32_t*)"aac " || asbd.mFormatID == *(int32_t*)"aach");
 }
 
 double AudioConverterXX::getClosestAvailableBitRate(double value)
@@ -132,13 +132,13 @@ std::string AudioConverterXX::getConfigAsString()
     std::string s;
     auto asbd = getOutputStreamDescription();
     UInt32 codec = asbd.mFormatID;
-    if (codec == 'aac ')
+    if (codec == *(int32_t*)"aac ")
         s = "AAC-LC Encoder";
-    else if (codec == 'aach')
+    else if (codec == *(int32_t*)"aach")
         s = "AAC-HE Encoder";
     else
         s = "Apple Lossless Encoder";
-    if (codec != 'aac ' && codec != 'aach')
+    if (codec != *(int32_t*)"aac " && codec != *(int32_t*)"aach")
         return s;
     UInt32 value = getBitRateControlMode();
     const char * strategies[] = { "CBR", "ABR", "CVBR", "TVBR" };
@@ -161,7 +161,7 @@ std::string AudioConverterXX::getEncodingParamsTag()
     UInt32 bitrate = getEncodeBitRate();
     auto asbd = getOutputStreamDescription();
     UInt32 codec = asbd.mFormatID;
-    AudioComponentDescription cd = { 'aenc', codec, 'appl', 0, 0 };
+    AudioComponentDescription cd = { *(int32_t*)"aenc", codec, *(int32_t*)"appl", 0, 0 };
     auto ac = AudioComponentFindNext(nullptr, &cd);
     UInt32 vers = 0;
     AudioComponentGetVersion(ac, &vers);

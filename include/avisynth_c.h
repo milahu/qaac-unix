@@ -512,7 +512,7 @@ AVSC_INLINE AVS_VideoFrame * avs_copy_frame(AVS_VideoFrame * f)
 // AVS_Value is layed out identicly to AVSValue
 typedef struct AVS_Value AVS_Value;
 struct AVS_Value {
-  short type;  // 'a'rray, 'c'lip, 'b'ool, 'i'nt, 'f'loat, 's'tring, 'v'oid, or 'l'ong
+  short type;  // 'a'rray, 'c'lip, 'b'ool, 'i*(int32_t*)"nt, "f'loat, 's'tring, 'v'oid, or 'l'ong
                // for some function e'rror
   short array_size;
   union {

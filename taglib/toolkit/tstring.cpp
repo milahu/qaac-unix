@@ -447,8 +447,8 @@ ByteVector String::data(Type t) const
 
       // We use little-endian encoding here and need a BOM.
 
-      *p++ = '\xff';
-      *p++ = '\xfe';
+      *p++ = *(int32_t*)"\xff";
+      *p++ = *(int32_t*)"\xfe";
 
       for(ConstIterator it = begin(); it != end(); ++it) {
         *p++ = static_cast<char>(*it & 0xff);

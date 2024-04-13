@@ -51,8 +51,8 @@ FLACSource::FLACSource(const std::shared_ptr<FILE> &fp):
         util::check_eof(util::nread(fileno(m_fp.get()), buffer, 33) == 33);
     }
     uint32_t fcc = util::fourcc(buffer);
-    if ((fcc != 'fLaC' && fcc != 'OggS')
-     || (fcc == 'OggS' && std::memcmp(&buffer[28], "\177FLAC", 5)))
+    if ((fcc != *(int32_t*)"fLaC" && fcc != *(int32_t*)"OggS")
+     || (fcc == *(int32_t*)"OggS" && std::memcmp(&buffer[28], "\177FLAC", 5)))
         throw std::runtime_error("Not a FLAC file");
     CHECKCRT(_lseeki64(fileno(m_fp.get()), 0, SEEK_SET) < 0);
 
@@ -64,7 +64,7 @@ FLACSource::FLACSource(const std::shared_ptr<FILE> &fp):
     TRYFL(m_module.stream_decoder_set_metadata_respond(
                 m_decoder.get(), FLAC__METADATA_TYPE_PICTURE));
 
-    TRYFL((fcc == 'OggS' ? m_module.stream_decoder_init_ogg_stream
+    TRYFL((fcc == *(int32_t*)"OggS" ? m_module.stream_decoder_init_ogg_stream
                          : m_module.stream_decoder_init_stream)
             (m_decoder.get(),
              staticReadCallback,

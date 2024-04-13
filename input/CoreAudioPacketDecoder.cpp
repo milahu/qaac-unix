@@ -10,7 +10,7 @@ CoreAudioPacketDecoder(IPacketFeeder *feeder,
     int valid_bits;
 
     switch (asbd.mFormatID) {
-    case 'alac':
+    case *(int32_t*)"alac":
         switch (asbd.mFormatFlags) {
         case 1: valid_bits = 16; break;
         case 2: valid_bits = 20; break;
@@ -18,12 +18,12 @@ CoreAudioPacketDecoder(IPacketFeeder *feeder,
         case 4: valid_bits = 32; break;
         }
         break;
-    case 'aac ':
-    case 'aach':
-    case 'aacp':
-    case '.mp1':
-    case '.mp2':
-    case '.mp3':
+    case *(int32_t*)"aac ":
+    case *(int32_t*)"aach":
+    case *(int32_t*)"aacp":
+    case *(int32_t*)".mp1":
+    case *(int32_t*)".mp2":
+    case *(int32_t*)".mp3":
         valid_bits = 32;
         is_float = true;
         break;

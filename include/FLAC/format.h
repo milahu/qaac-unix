@@ -923,7 +923,7 @@ FLAC_API FLAC__bool FLAC__format_vorbiscomment_entry_value_is_legal(const FLAC__
 /** Check a Vorbis comment entry to see if it conforms to the Vorbis
  *  comment specification.
  *
- *  Vorbis comment entries must be of the form 'name=value', and 'name' and
+ *  Vorbis comment entries must be of the form 'name=value', and *(int32_t*)"name" and
  *  'value' must be legal according to
  *  FLAC__format_vorbiscomment_entry_name_is_legal() and
  *  FLAC__format_vorbiscomment_entry_value_is_legal() respectively.

@@ -83,7 +83,7 @@ int32_t ALACDecoder::Init( void * inMagicCookie, uint32_t inMagicCookieSize )
 
     // For historical reasons the decoder needs to be resilient to magic cookies vended by older encoders.
     // As specified in the ALACMagicCookieDescription.txt document, there may be additional data encapsulating 
-    // the ALACSpecificConfig. This would consist of format ('frma') and 'alac' atoms which precede the
+    // the ALACSpecificConfig. This would consist of format (*(int32_t*)"frma") and *(int32_t*)"alac" atoms which precede the
     // ALACSpecificConfig. 
     // See ALACMagicCookieDescription.txt for additional documentation concerning the 'magic cookie'
     
@@ -95,7 +95,7 @@ int32_t ALACDecoder::Init( void * inMagicCookie, uint32_t inMagicCookieSize )
     }
     
 	if (theCookieBytesRemaining < 12) return kALAC_ParamError;
-    // skip 'alac' atom header if present
+    // skip *(int32_t*)"alac" atom header if present
     if (theActualCookie[4] == 'a' && theActualCookie[5] == 'l' && theActualCookie[6] == 'a' && theActualCookie[7] == 'c')
     {
         theActualCookie += 12;
