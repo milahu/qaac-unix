@@ -15,6 +15,7 @@
 #include <cstdio>
 #include <cerrno> // for errno
 #include <sys/file.h> // flock
+#include <sys/stat.h>
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -251,11 +252,25 @@ namespace win32 {
 
     int create_named_pipe(const char *path);
 
-    bool is_same_file(HANDLE ha, HANDLE hb);
+    // Check if two file descriptors refer to the same file (Unix implementation)
+    inline bool is_same_file(int fda, int fdb) {
+        // Retrieve file information for the first file descriptor
+        struct stat statA;
+        if (fstat(fda, &statA) == -1) {
+            // Error occurred while retrieving file information for the first file descriptor
+            return false;
+        }
 
-    inline bool is_same_file(int fda, int fdb)
-    {
-        return is_same_file(get_handle(fda), get_handle(fdb));
+        // Retrieve file information for the second file descriptor
+        struct stat statB;
+        if (fstat(fdb, &statB) == -1) {
+            // Error occurred while retrieving file information for the second file descriptor
+            return false;
+        }
+
+        // Compare inode numbers and device IDs to determine if the files are the same
+        return statA.st_dev == statB.st_dev && statA.st_ino == statB.st_ino;
     }
+
 }
 #endif
