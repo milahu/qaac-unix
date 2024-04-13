@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <vector>
+#include <cstdio> // stderr
 #include "win32util.h"
 
 class Log {
@@ -14,8 +15,7 @@ public:
     bool is_enabled() { return m_streams.size() != 0; }
     void enable_stderr()
     {
-        if (GetFileType(win32::get_handle(2)) != FILE_TYPE_UNKNOWN)
-            m_streams.push_back(std::shared_ptr<FILE>(stderr, [](FILE*){}));
+        m_streams.push_back(std::shared_ptr<FILE>(stderr, [](FILE*){}));
     }
     void enable_file(const char *filename)
     {
