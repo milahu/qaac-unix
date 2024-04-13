@@ -1256,7 +1256,7 @@ int wmain1(int argc, char **argv)
         if (opts.tmpdir) {
             std::string env("TMP=");
             env += opts.tmpdir;
-            _wputenv(env.c_str());
+            putenv((char*) env.c_str());
         }
 
         if (opts.ofilename) {
