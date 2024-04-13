@@ -90,7 +90,7 @@ namespace win32 {
         }
     }
 
-    std::string GetModuleFileNameX(void* module) {
+    std::string GetModuleFileNameX(void* module = nullptr) {
         // the "module" paramter is not supported
         // always return name of this exe
         char buffer[PATH_MAX];
