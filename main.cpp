@@ -1,6 +1,7 @@
 #include <clocale>
 #include <numeric>
 #include <regex>
+#include <csignal> // signal
 #include "win32util.h"
 #include "options.h"
 #include "InputFactory.h"
@@ -47,13 +48,11 @@
 #define PROGNAME "qaac"
 #endif
 
-static volatile bool g_interrupted = false;
+static volatile sig_atomic_t g_interrupted = 0;
 
-static
-BOOL WINAPI console_interrupt_handler(uint32_t type)
+void console_interrupt_handler(int type)
 {
-    g_interrupted = true;
-    return TRUE;
+    g_interrupted = 1;
 }
 
 inline
@@ -1343,7 +1342,9 @@ int wmain1(int argc, char **argv)
                           return std::wcscmp(a, b) < 0;
                       });
         }
-        SetConsoleCtrlHandler(console_interrupt_handler, TRUE);
+
+        // Set up signal handler for SIGINT (Ctrl+C)
+        signal(SIGINT, console_interrupt_handler);
 
         if (opts.is_raw) {
             InputFactory::instance().setRawFormat(getRawFormat(opts));
