@@ -128,7 +128,7 @@ namespace misc
             }
             auto val = strutil::us2w(iter->second);
             return strutil::strtransform(val, [](char c)->char {
-                return std::wcschr(":/\\?|<>*\"", c) ? '_' : c;
+                return std::strchr(":/\\?|<>*\"", c) ? '_' : c;
             });
         }
     };
