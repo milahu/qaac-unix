@@ -3,7 +3,7 @@
 
 #include "FilterBase.h"
 #include "win32util.h"
-#include <process.h>
+#include <unistd.h>
 
 class PipedReader: public FilterBase {
     std::shared_ptr<FILE> m_readPipe;
