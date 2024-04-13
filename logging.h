@@ -1,7 +1,9 @@
-#include <cstdio>
+#include <cstdio> // stderr, FILE
 #include <cstdarg>
 #include <vector>
-#include <cstdio> // stderr
+#include <cstdlib> // std::setbuf
+#include <fcntl.h> // open
+#include <unistd.h> // fileno
 #include "win32util.h"
 
 class Log {
@@ -20,11 +22,31 @@ public:
     void enable_file(const char *filename)
     {
         try {
-            FILE *fp = win32::wfopenx(filename, "w");
-            _setmode(_fileno(fp), _O_U8TEXT);
-            std::setbuf(fp, 0);
+            FILE *fp = std::fopen(filename, "w");
+            if (fp == nullptr) {
+                throw std::runtime_error("Log::enable_file(): failed to open file for writing");
+            }
+
+            // Set file stream buffer to unbuffered
+            std::setbuf(fp, nullptr);
+
+            // Convert FILE pointer to file descriptor
+            int fd = fileno(fp);
+            if (fd == -1) {
+                std::fclose(fp);
+                throw std::runtime_error("Log::enable_file(): failed to get fileno");
+            }
+
+            // Set file descriptor to text mode
+            if (fcntl(fd, F_SETMODE, O_TEXT) == -1) {
+                std::fclose(fp);
+                throw std::runtime_error("Log::enable_file(): failed to set text mode");
+            }
+
             m_streams.push_back(std::shared_ptr<FILE>(fp, std::fclose));
-        } catch (...) {}
+        } catch (const std::runtime_error& e) {
+            throw;
+        }
     }
     void vwprintf(const char *fmt, va_list args)
     {
