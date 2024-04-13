@@ -1,6 +1,7 @@
 #ifndef AudioCodecX_H
 #define AudioCodecX_H
 
+#include <cfloat> // DBL_MAX
 #include "CoreAudio/AudioCodec.h"
 #include "cautil.h"
 
