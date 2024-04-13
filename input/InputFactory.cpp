@@ -6,7 +6,6 @@
 #include "FLACSource.h"
 #include "LibSndfileSource.h"
 #include "RawSource.h"
-#include "TakSource.h"
 #include "WaveSource.h"
 #include "WavpackSource.h"
 #include "MP4Source.h"

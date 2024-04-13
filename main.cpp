@@ -29,7 +29,6 @@
 #include "wicimage.h"
 #include "FLACModule.h"
 #include "LibSndfileSource.h"
-#include "TakSource.h"
 #include "WavpackSource.h"
 #include "AvisynthSource.h"
 #include "OpusPacketDecoder.h"
