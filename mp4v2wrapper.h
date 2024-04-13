@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <stdint.h>
 #include <cstdio> // FILE
+#include <unistd.h> // ftruncate
 #undef FindAtom
 #include "src/impl.h"
 #include "util.h"
@@ -136,12 +137,13 @@ struct MP4StdIOCallbacks: public MP4IOCallbacks
         *nout = fwrite(buffer, 1, size, fp);
         return ferror(fp);
     }
-    static int truncate(void *handle, int64_t size)
-    {
+
+    static int truncate(void *handle, int64_t size) {
         FILE *fp = static_cast<FILE*>(handle);
         fflush(fp);
-        return _chsize(_fileno(fp), size) < 0;
+        return ftruncate(fileno(fp), size) < 0;
     }
+
 };
 
 #endif
