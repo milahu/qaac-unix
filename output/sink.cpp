@@ -67,15 +67,15 @@ MP4SinkBase::MP4SinkBase(const std::string &path, bool temp)
 {
     static const char * const compatibleBrands[] =
         { "M4A ", "mp42", "isom", "" };
-    if (temp) m_filename = L"qaac.int";
+    if (temp) m_filename = "qaac.int";
     try {
         static MP4StdIOCallbacks callbacks;
-        if (path == L"-") {
+        if (path == "-") {
             m_fp = std::shared_ptr<FILE>(stdout, [](FILE *){});
         } else if (temp) {
             m_fp = std::shared_ptr<FILE>(win32::tmpfile(m_filename.c_str()), fclose);
         } else {
-            m_fp = std::shared_ptr<FILE>(win32::wfopenx(m_filename.c_str(), L"wb"), fclose);
+            m_fp = std::shared_ptr<FILE>(win32::wfopenx(m_filename.c_str(), "wb"), fclose);
         }
 
         m_mp4file.Create((m_filename).c_str(),
@@ -445,7 +445,7 @@ ALACSink::ALACSink(const std::string &path,
 ADTSSink::ADTSSink(const std::string &path,
                    const std::vector<uint8_t> &cookie,
                    bool append)
-    : m_fp(win32::fopen(path, append ? L"ab" : L"wb"))
+    : m_fp(win32::fopen(path, append ? "ab" : "wb"))
 {
     init(cookie);
 }

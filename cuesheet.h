@@ -49,8 +49,8 @@ public:
     std::string name() const
     {
         std::map<std::string, std::string>::const_iterator
-            it = m_meta.find(L"TITLE");
-        return it == m_meta.end() ? L"" : it->second;
+            it = m_meta.find("TITLE");
+        return it == m_meta.end() ? "" : it->second;
     }
     unsigned number() const { return m_number; }
     void addSegment(const CueSegment &seg);

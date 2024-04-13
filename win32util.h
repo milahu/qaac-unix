@@ -110,10 +110,10 @@ namespace win32 {
         std::string fullpath = GetFullPathNameX(path);
         if (fullpath.size() < 256)
             return fullpath;
-        if (fullpath.size() > 2 && fullpath.substr(0, 2) == L"\\\\")
-            fullpath.insert(2, L"?\\UNC\\");
+        if (fullpath.size() > 2 && fullpath.substr(0, 2) == "\\\\")
+            fullpath.insert(2, "?\\UNC\\");
         else
-            fullpath.insert(0, L"\\\\?\\");
+            fullpath.insert(0, "\\\\?\\");
         return fullpath;
     }
 
@@ -134,7 +134,7 @@ namespace win32 {
                                        const char *mode)
     {
         auto noop_close = [](FILE *){};
-        if (path != L"-")
+        if (path != "-")
             return std::shared_ptr<FILE>(wfopenx(path.c_str(), mode),
                                          std::fclose);
         else if (std::wcschr(mode, L'r'))

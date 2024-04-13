@@ -12,8 +12,8 @@ class LibOpusModule {
     DL m_dl;
 private:    
     LibOpusModule() {
-        load(L"opus.dll");
-        if (!loaded()) load(L"libopus-0.dll");
+        load("opus.dll");
+        if (!loaded()) load("libopus-0.dll");
     }
     LibOpusModule(const LibOpusModule&);
     LibOpusModule& operator=(const LibOpusModule&);

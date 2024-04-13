@@ -8,7 +8,7 @@ namespace chanmap {
 const char *getChannelName(uint32_t n)
 {
     const char *tab[] = {
-        "?","L","R","C","LFE","Ls","Rs","Lc","Rc","Cs",
+        "?","","R","C","LFE","Ls","Rs","Lc","Rc","Cs",
         "Lsd","Rsd","Ts","Vhl","Vhc","Vhr","Tbl","Tbc","Tbr"
     };
     if (n <= 18) return tab[n];

@@ -18,21 +18,21 @@ namespace win32 {
                        0);
         std::string ss;
         if (pszMsg) {
-            strutil::squeeze(pszMsg, L"\r\n");
-            ss = strutil::format(L"%s: %s", msg.c_str(), pszMsg);
+            strutil::squeeze(pszMsg, "\r\n");
+            ss = strutil::format("%s: %s", msg.c_str(), pszMsg);
             LocalFree(pszMsg);
         }
         else if (code < 0xfe00)
-            ss = strutil::format(L"%d: %s", code, msg.c_str());
+            ss = strutil::format("%d: %s", code, msg.c_str());
         else
-            ss = strutil::format(L"%08x: %s", code, msg.c_str());
+            ss = strutil::format("%08x: %s", code, msg.c_str());
         throw std::runtime_error((ss));
     }
 
     FILE *tmpfile(const char *prefix)
     {
         std::string sprefix =
-            strutil::format(L"%s.%d.", prefix, GetCurrentProcessId());
+            strutil::format("%s.%d.", prefix, GetCurrentProcessId());
         char *tmpname = _wtempnam(0, sprefix.c_str());
         std::shared_ptr<char> tmpname_p(tmpname, std::free);
         HANDLE fh = CreateFileW(prefixed_path(tmpname).c_str(),

@@ -38,8 +38,8 @@ struct Options {
         artwork_size(0), native_resampler_complexity(0), textcp(0),
         gapless_mode(0),
 
-        ofilename(0), outdir(0), raw_format(L"S16LE"),
-        fname_format(L"${tracknumber}${title& }${title}"),
+        ofilename(0), outdir(0), raw_format("S16LE"),
+        fname_format("${tracknumber}${title& }${title}"),
         chapter_file(0), logfilename(0), remix_preset(0), remix_file(0),
         tmpdir(0), start(0), end(0), delay(0),
 
@@ -88,11 +88,11 @@ struct Options {
     }
     const char *extension() const
     {
-        if (is_caf) return L".caf";
-        else if (isMP4()) return L".m4a";
-        else if (isLPCM()) return L".wav";
-        else if (isWaveOut() || isPeak()) return L"";
-        else return L".aac";
+        if (is_caf) return ".caf";
+        else if (isMP4()) return ".m4a";
+        else if (isLPCM()) return ".wav";
+        else if (isWaveOut() || isPeak()) return "";
+        else return ".aac";
     }
 
     int32_t method, quality;

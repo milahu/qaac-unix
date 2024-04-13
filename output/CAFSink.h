@@ -23,7 +23,7 @@ public:
             uint32_t channel_layout,
             const std::vector<uint8_t> &cookie)
     {
-        init(win32::fopen(filename, L"wb"), asbd, channel_layout, cookie);
+        init(win32::fopen(filename, "wb"), asbd, channel_layout, cookie);
     }
     CAFSink(const std::shared_ptr<FILE> &file,
             const AudioStreamBasicDescription &asbd,

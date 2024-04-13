@@ -512,7 +512,7 @@ int String::toInt(bool *ok) const
 
 String String::stripWhiteSpace() const
 {
-  static const char *WhiteSpaceChars = L"\t\n\f\r ";
+  static const char *WhiteSpaceChars = "\t\n\f\r ";
 
   const size_t pos1 = d->data.find_first_not_of(WhiteSpaceChars);
   if(pos1 == std::string::npos)

@@ -50,7 +50,7 @@ namespace cautil {
     inline std::string CF2W(CFStringRef str)
     {
         CFIndex length = CFStringGetLength(str);
-        if (!length) return L"";
+        if (!length) return "";
         std::vector<UniChar> buffer(length);
         CFRange range = { 0, length };
         CFStringGetCharacters(str, range, &buffer[0]);

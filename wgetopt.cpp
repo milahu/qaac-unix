@@ -95,7 +95,7 @@ const char *optarg;        /* argument associated with option */
 #define BADARG      ((*options == ':') ? (int)':' : (int)'?')
 #define INORDER     (int)1
 
-#define EMSG        L""
+#define EMSG        ""
 
 #ifdef GNU_COMPATIBLE
 #define NO_PREFIX   (-1)
@@ -118,21 +118,21 @@ static int nonopt_start = -1; /* first non option argument (for permute) */
 static int nonopt_end = -1;   /* first option after non options (for permute) */
 
 /* Error messages */
-static const char recargchar[] = L"option requires an argument -- %c";
-static const char illoptchar[] = L"illegal option -- %c"; /* From P1003.2 */
+static const char recargchar[] = "option requires an argument -- %c";
+static const char illoptchar[] = "illegal option -- %c"; /* From P1003.2 */
 #ifdef GNU_COMPATIBLE
 static int dash_prefix = NO_PREFIX;
-static const char gnuoptchar[] = L"invalid option -- %c";
+static const char gnuoptchar[] = "invalid option -- %c";
 
-static const char recargstring[] = L"option `%s%s' requires an argument";
-static const char ambig[] = L"option `%s%.*s' is ambiguous";
-static const char noarg[] = L"option `%s%.*s' doesn't allow an argument";
-static const char illoptstring[] = L"unrecognized option `%s%s'";
+static const char recargstring[] = "option `%s%s' requires an argument";
+static const char ambig[] = "option `%s%.*s' is ambiguous";
+static const char noarg[] = "option `%s%.*s' doesn't allow an argument";
+static const char illoptstring[] = "unrecognized option `%s%s'";
 #else
-static const char recargstring[] = L"option requires an argument -- %s";
-static const char ambig[] = L"ambiguous option -- %.*s";
-static const char noarg[] = L"option doesn't take an argument -- %.*s";
-static const char illoptstring[] = L"unknown option -- %s";
+static const char recargstring[] = "option requires an argument -- %s";
+static const char ambig[] = "ambiguous option -- %.*s";
+static const char noarg[] = "option doesn't take an argument -- %.*s";
+static const char illoptstring[] = "unknown option -- %s";
 #endif
 
 static void
@@ -220,16 +220,16 @@ parse_long_options(char * const *nargv, const char *options,
 #ifdef GNU_COMPATIBLE
     switch (dash_prefix) {
         case D_PREFIX:
-            current_dash = L"-";
+            current_dash = "-";
             break;
         case DD_PREFIX:
-            current_dash = L"--";
+            current_dash = "--";
             break;
         case W_PREFIX:
-            current_dash = L"-W ";
+            current_dash = "-W ";
             break;
         default:
-            current_dash = L"";
+            current_dash = "";
             break;
     }
 #endif

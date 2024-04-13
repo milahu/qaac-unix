@@ -20,7 +20,7 @@ public:
     void enable_file(const char *filename)
     {
         try {
-            FILE *fp = win32::wfopenx(filename, L"w");
+            FILE *fp = win32::wfopenx(filename, "w");
             _setmode(_fileno(fp), _O_U8TEXT);
             std::setbuf(fp, 0);
             m_streams.push_back(std::shared_ptr<FILE>(fp, std::fclose));

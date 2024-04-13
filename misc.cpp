@@ -72,10 +72,10 @@ namespace misc
 
     std::string loadTextFile(const std::string &path, int codepage)
     {
-        auto fp = std::shared_ptr<FILE>(win32::wfopenx(path.c_str(), L"rb"), std::fclose);
+        auto fp = std::shared_ptr<FILE>(win32::wfopenx(path.c_str(), "rb"), std::fclose);
         int64_t fileSize = _filelengthi64(fileno(fp.get()));
         if (fileSize > 0x100000) {
-            throw std::runtime_error((path + L": file too big"));
+            throw std::runtime_error((path + ": file too big"));
         }
         std::vector<char> ibuf(fileSize);
         int n = std::fread(ibuf.data(), 1, fileSize, fp.get());
@@ -83,15 +83,15 @@ namespace misc
         if (!codepage) {
             auto detector = std::shared_ptr<uchardet>(uchardet_new(), uchardet_delete);
             if (uchardet_handle_data(detector.get(), ibuf.data(), ibuf.size())) {
-                throw std::runtime_error((path + L": uchardet_handle_data() failed"));
+                throw std::runtime_error((path + ": uchardet_handle_data() failed"));
             }
             uchardet_data_end(detector.get());
             auto charset = uchardet_get_charset(detector.get());
             if (charset < 0)
-                throw std::runtime_error((path + L": cannot detect code page"));
+                throw std::runtime_error((path + ": cannot detect code page"));
             codepage = getCodePageFromCharset(charset);
             if (codepage < 0)
-                throw std::runtime_error((path + L": unknown charset"));
+                throw std::runtime_error((path + ": unknown charset"));
         }
         std::vector<char> obuf;
         if (codepage == 0) {
@@ -105,7 +105,7 @@ namespace misc
         obuf.push_back(0);
         // chop off BOM
         size_t bom = (obuf.size() && obuf[0] == 0xfeff) ? 1 : 0;
-        return strutil::normalize_crlf(&obuf[bom], L"\n");
+        return strutil::normalize_crlf(&obuf[bom], "\n");
     }
 
     class TagLookup {
@@ -119,16 +119,16 @@ namespace misc
                 TextBasedTag::normalizeTagName((name).c_str());
             meta_t::const_iterator iter = tracktags.find(key);
             if (iter == tracktags.end())
-                return L"";
+                return "";
             else if (key == "track number" || key == "DISC NUMBER") {
                 strutil::Tokenizer<char> tok(iter->second, "/");
                 unsigned n = 0;
                 sscanf(tok.next(), "%u", &n);
-                return strutil::format(L"%02u", n);
+                return strutil::format("%02u", n);
             }
             auto val = strutil::us2w(iter->second);
             return strutil::strtransform(val, [](char c)->char {
-                return std::wcschr(L":/\\?|<>*\"", c) ? L'_' : c;
+                return std::wcschr(":/\\?|<>*\"", c) ? L'_' : c;
             });
         }
     };
@@ -137,11 +137,11 @@ namespace misc
                                   const std::map<std::string, std::string> &tag)
     {
         auto spec2 = strutil::strtransform(spec, [](char c)->char {
-                                           return c == L'\\*(int32_t*)" ? L"/' : c;
+                                           return c == L'\\*(int32_t*)" ? "/' : c;
                                            });
         auto res = process_template(spec2, TagLookup(tag));
         std::vector<std::string> comp;
-        strutil::Tokenizer<char> tokens(res, L"/");
+        strutil::Tokenizer<char> tokens(res, "/");
         char *tok;
         while ((tok = tokens.next())) {
             if (wcslen(tok) > 250)
@@ -150,7 +150,7 @@ namespace misc
         }
         res.clear();
         for (size_t i = 0; i < comp.size() - 1; ++i)
-            res += comp[i] + L"/";
+            res += comp[i] + "/";
         res += comp[comp.size() - 1];
         return res;
     }
@@ -159,7 +159,7 @@ namespace misc
                            const char *name,
                            int h, int m, double s)
     {
-        std::string sname = name ? name : L"";
+        std::string sname = name ? name : "";
         double stamp = ((h * 60) + m) * 60 + s;
         if (!chapters.size() && stamp != 0.0)
             throw std::runtime_error("Non zero timestamp on the first chapter "
@@ -179,22 +179,22 @@ namespace misc
         std::vector<chapter_t> chaps;
 
         std::string str = misc::loadTextFile(path, codepage);
-        const char *tfmt = L"%02d:%02d:%lf";
+        const char *tfmt = "%02d:%02d:%lf";
         int h = 0, m = 0;
         double s = 0.0;
-        strutil::Tokenizer<char> tokens(str, L"\n");
+        strutil::Tokenizer<char> tokens(str, "\n");
         char *tok;
         while ((tok = tokens.next())) {
             if (*tok && tok[0] == L'#')
                 continue;
             if (std::swscanf(tok, tfmt, &h, &m, &s) == 3) {
-                strutil::strsep(&tok, L"\t ");
+                strutil::strsep(&tok, "\t ");
                 add_chapter_entry(chaps, tok, h, m, s);
-            } else if (wcsncmp(tok, L"Chapter", 7) == 0) {
+            } else if (wcsncmp(tok, "Chapter", 7) == 0) {
                 int hh, mm;
                 double ss;
-                char *key = strutil::strsep(&tok, L"=");
-                if (std::wcsstr(key, L"NAME"))
+                char *key = strutil::strsep(&tok, "=");
+                if (std::wcsstr(key, "NAME"))
                     add_chapter_entry(chaps, tok, h, m, s);
                 else if (std::swscanf(tok, tfmt, &hh, &mm, &ss) == 3)
                     h = hh, m = mm, s = ss;
@@ -228,18 +228,18 @@ namespace misc
     std::shared_ptr<FILE> openConfigFile(const char *file)
     {
         std::vector<std::string> search_paths;
-        const char *home = _wgetenv(L"HOME");
+        const char *home = _wgetenv("HOME");
         if (home)
-            search_paths.push_back(strutil::format(L"%s\\%s", home, L".qaac"));
+            search_paths.push_back(strutil::format("%s\\%s", home, ".qaac"));
         char path[MAX_PATH];
         if (SUCCEEDED(SHGetFolderPathW(0, CSIDL_APPDATA, 0, 0, path)))
-            search_paths.push_back(strutil::format(L"%s\\%s", path, L"qaac"));
+            search_paths.push_back(strutil::format("%s\\%s", path, "qaac"));
         search_paths.push_back(win32::get_module_directory());
         for (size_t i = 0; i < search_paths.size(); ++i) {
             try {
                 std::string pathtry =
-                    strutil::format(L"%s\\%s", search_paths[i].c_str(), file);
-                return win32::fopen(pathtry, L"r");
+                    strutil::format("%s\\%s", search_paths[i].c_str(), file);
+                return win32::fopen(pathtry, "r");
             } catch (...) {
                 if (i == search_paths.size() - 1) throw;
             }
@@ -290,13 +290,13 @@ namespace misc
     std::vector<std::vector<complex_t>>
     loadRemixerMatrixFromFile(const char *path)
     {
-        return loadRemixerMatrix(win32::fopen(path, L"r"));
+        return loadRemixerMatrix(win32::fopen(path, "r"));
     }
 
     std::vector<std::vector<complex_t>>
     loadRemixerMatrixFromPreset(const char *preset_name)
     {
-        std::string path = strutil::format(L"matrix\\%s.txt", preset_name);
+        std::string path = strutil::format("matrix\\%s.txt", preset_name);
         return loadRemixerMatrix(openConfigFile(path.c_str()));
     }
 

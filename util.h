@@ -229,8 +229,8 @@ namespace util {
     {
         int h, m, s, millis;
         seconds_to_HMS(seconds, &h, &m, &s, &millis);
-        return h ? strutil::format(L"%d:%02d:%02d.%03d", h, m, s, millis)
-                 : strutil::format(L"%d:%02d.%03d", m, s, millis);
+        return h ? strutil::format("%d:%02d:%02d.%03d", h, m, s, millis)
+                 : strutil::format("%d:%02d.%03d", m, s, millis);
     }
 }
 

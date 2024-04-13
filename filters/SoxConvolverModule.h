@@ -9,9 +9,9 @@ class SoXConvolverModule {
 private:
     SoXConvolverModule() {
 #ifdef _WIN64
-        load(L"libsoxconvolver64.dll");
+        load("libsoxconvolver64.dll");
 #else
-        load(L"libsoxconvolver.dll");
+        load("libsoxconvolver.dll");
 #endif
     }
     SoXConvolverModule(const SoXConvolverModule&);

@@ -155,20 +155,20 @@ namespace util {
         double ss;
         if (!spec || !*spec)
             return false;
-        if (std::swscanf(spec, L"%lld%c%c", result, &a, &b) == 2 && a == L's')
+        if (std::swscanf(spec, "%lld%c%c", result, &a, &b) == 2 && a == L's')
             return true;
         if (spec[0] == L'-') {
             sign = -1;
             ++spec;
         }
-        if (std::swscanf(spec, L"%d:%d:%d%c%c", &mm, &s, &ff, &a, &b) == 4 &&
+        if (std::swscanf(spec, "%d:%d:%d%c%c", &mm, &s, &ff, &a, &b) == 4 &&
             a == L'f')
             ss = mm * 60 + s + ff / 75.0;
-        else if (std::swscanf(spec, L"%d:%d:%lf%c", &hh, &mm, &ss, &a) == 3)
+        else if (std::swscanf(spec, "%d:%d:%lf%c", &hh, &mm, &ss, &a) == 3)
             ss = ss + ((hh * 60.0) + mm) * 60.0;
-        else if (std::swscanf(spec, L"%d:%lf%c", &mm, &ss, &a) == 2)
+        else if (std::swscanf(spec, "%d:%lf%c", &mm, &ss, &a) == 2)
             ss = ss + mm * 60.0;
-        else if (std::swscanf(spec, L"%lf%c", &ss, &a) != 1)
+        else if (std::swscanf(spec, "%lf%c", &ss, &a) != 1)
             return false;
 
         *result = sign * static_cast<int64_t>(sample_rate * ss + .5);

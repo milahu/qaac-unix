@@ -19,14 +19,14 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
         return pos->second;
 
     const char *ext = PathFindExtensionW(path);
-    std::shared_ptr<FILE> fp(win32::fopen(path, L"rb"));
+    std::shared_ptr<FILE> fp(win32::fopen(path, "rb"));
     if (m_is_raw) {
         std::shared_ptr<RawSource> src =
             std::make_shared<RawSource>(fp, m_raw_format);
         m_sources[path] = src;
         return src;
     }
-    if (strutil::wslower(ext) == L".avs")
+    if (strutil::wslower(ext) == ".avs")
         return std::make_shared<AvisynthSource>(path);
 
 #define TRY_MAKE_SHARED(type, ...) \

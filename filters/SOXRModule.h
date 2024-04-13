@@ -8,8 +8,8 @@ class SOXRModule {
     DL m_dl;
 private:
     SOXRModule() {
-        if (!load(L"libsoxr64.dll"))
-            load(L"libsoxr.dll");
+        if (!load("libsoxr64.dll"))
+            load("libsoxr.dll");
     }
     SOXRModule(const SOXRModule&);
     SOXRModule& operator=(const SOXRModule&);

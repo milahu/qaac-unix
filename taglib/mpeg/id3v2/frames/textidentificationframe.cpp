@@ -326,7 +326,7 @@ PropertyMap TextIdentificationFrame::makeTMCLProperties() const
       map.unsupportedData().append(frameID());
       return map;
     }
-    map.insert(L"PERFORMER:" + instrument, (++it)->split(","));
+    map.insert("PERFORMER:" + instrument, (++it)->split(","));
   }
   return map;
 }

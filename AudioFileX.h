@@ -92,7 +92,7 @@ namespace afutil {
         // Layer 3
         if (asbd.mFormatID == *(int32_t*)".mp1" || asbd.mFormatID == *(int32_t*)".mp2") {
             const char *p;
-            if ((p = std::wcsstr(ws.c_str(), L"Layer 3")) != 0)
+            if ((p = std::wcsstr(ws.c_str(), "Layer 3")) != 0)
                 ws[p - ws.c_str() + 6] = asbd.mFormatID & 0xff;
         }
         return ws;

@@ -18,7 +18,7 @@ namespace TagLibX {
         int m_fd;
     public:
         FDIOStreamReader(int fd): m_fd(fd) {}
-        FileName name() const { return L"Dummy"; }
+        FileName name() const { return "Dummy"; }
         ByteVector readBlock(ulong length)
         {
             ByteVector v(static_cast<uint>(length));

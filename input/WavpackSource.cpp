@@ -117,8 +117,8 @@ WavpackSource::WavpackSource(const std::string &path)
         nullptr, nullptr
     };
     if (!m_module.loaded()) throw std::runtime_error("libwavpack not loaded");
-    m_fp = win32::fopen(path, L"rb");
-    try { m_cfp = win32::fopen(path + L"c", L"rb"); } catch(...) {}
+    m_fp = win32::fopen(path, "rb");
+    try { m_cfp = win32::fopen(path + "c", "rb"); } catch(...) {}
 
     int flags = OPEN_TAGS | OPEN_NORMALIZE | OPEN_DSD_AS_PCM
               | (m_cfp.get() ? OPEN_WVC : 0);
