@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
-#include <windows.h>
+
 #include <mmsystem.h>
 #include "CoreAudio/CoreAudioTypes.h"
 #include "ISink.h"

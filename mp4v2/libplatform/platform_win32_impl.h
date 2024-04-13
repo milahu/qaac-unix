@@ -2,7 +2,7 @@
 // called FindAtom, which mp4v2 also defines.  In older versions of visual studio, this actually causes
 // some pretty seriously issues with naming collisions and the defined macros (think infamous min/max macro
 // of windows.h vs stdc++'s min/max template functions)
-#include <windows.h>
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

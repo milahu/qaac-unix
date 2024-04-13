@@ -759,7 +759,7 @@ void	sf_write_sync	(SNDFILE *sndfile) ;
 **
 ** In order for this to work, you need to do the following:
 **
-**		#include <windows.h>
+**		
 **		#define ENABLE_SNDFILE_WINDOWS_PROTOTYPES 1
 **		#including <sndfile.h>
 */
