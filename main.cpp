@@ -7,7 +7,6 @@
 #include "sink.h"
 #include "WaveSink.h"
 #include "CAFSink.h"
-#include "WaveOutSink.h"
 #include "PeakSink.h"
 #include "cuesheet.h"
 #include "CompositeSource.h"
