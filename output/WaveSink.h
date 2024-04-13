@@ -29,11 +29,11 @@ private:
         os->sputn(reinterpret_cast<char*>(&obj), sizeof obj);
     }
     std::string buildHeader();
-    void write(const void *data, size_t length)
-    {
-        std::fwrite(data, 1, length, m_file.get());
-        if (ferror(m_file.get()))
-            win32::throw_error("write failed", _doserrno);
+    void write(const void *data, size_t length) {
+        FILE *fp = m_file.get();
+        if (fwrite(data, 1, length, fp) < length) {
+            throw std::runtime_error("write failed");
+        }
     }
 };
 
