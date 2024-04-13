@@ -3,6 +3,13 @@
 #include <regex>
 #include <csignal> // signal
 #include <unistd.h> // isatty
+#include <cstring>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <filesystem> // C++17
 #include "win32util.h"
 #include "options.h"
 #include "InputFactory.h"
@@ -41,6 +48,8 @@
 #include "CoreAudioPaddedEncoder.h"
 #include "CoreAudioResampler.h"
 #endif
+
+namespace fs = std::filesystem;
 
 #ifdef REFALAC
 #define PROGNAME "refalac"
@@ -1058,14 +1067,24 @@ static
 void load_track(const char *ifilename, const Options &opts,
                 std::vector<workItem> &tracks)
 {
-    if (strutil::wslower(PathFindExtensionW(ifilename)) == ".cue") {
-        const char *base_p = PathFindFileNameW(ifilename);
-        std::string cuedir =
-            (base_p == ifilename ? "." : std::string(ifilename, base_p));
-        cuedir = win32::GetFullPathNameX(cuedir);
-        std::string cuetext = misc::loadTextFile(ifilename, opts.textcp);
-        std::wstringbuf istream(cuetext);
-        load_cue_tracks(opts, &istream, false, cuedir, tracks);
+    fs::path filepath(ifilename);
+    if (filepath.extension() == ".cue") {
+        auto basename = filepath.filename();
+        fs::path cuedir = filepath.has_parent_path() ? filepath.parent_path() : ".";
+
+        // Convert path to absolute path
+        cuedir = fs::absolute(cuedir);
+
+        std::ifstream file(ifilename);
+        if (!file.is_open()) {
+            std::cerr << "Failed to open file: " << ifilename << std::endl;
+            return;
+        }
+
+        std::string cuetext((std::istreambuf_iterator<char>(file)),
+                             std::istreambuf_iterator<char>());
+        std::stringbuf istream(cuetext);
+        load_cue_tracks(opts, &istream, false, cuedir.string(), tracks);
         return;
     }
 
