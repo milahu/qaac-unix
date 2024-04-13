@@ -1262,8 +1262,6 @@ int wmain1(int argc, char **argv)
         if (opts.ofilename) {
             std::string fullpath = win32::GetFullPathNameX(opts.ofilename);
             const char *ws = fullpath.c_str();
-            if (!std::strcmp(opts.ofilename, "-"))
-                _setmode(1, _O_BINARY);
         }
 
         if (opts.sort_args) {
