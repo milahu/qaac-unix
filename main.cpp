@@ -1172,18 +1172,6 @@ std::string get_output_filename(const std::string &ifilename,
     return outputPath.string();
 }
 
-struct ConsoleTitleSaver {
-    char title[1024];
-    ConsoleTitleSaver()
-    {
-        GetConsoleTitleW(title, sizeof(title)/sizeof(char));
-    }
-    ~ConsoleTitleSaver()
-    {
-        SetConsoleTitleW(title);
-    }
-};
-
 struct COMInitializer {
     COMInitializer()
     {
@@ -1230,8 +1218,6 @@ int wmain1(int argc, char **argv)
     Log &logger = Log::instance();
 
     try {
-        ConsoleTitleSaver consoleTitle;
-
         if (opts.verbose)
             logger.enable_stderr();
         if (opts.logfilename)
