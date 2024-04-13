@@ -80,13 +80,14 @@ namespace win32 {
         return path + "." + newExtension;
     }
 
-    // XXX: limited to PATH_MAX
-    inline std::string PathCombineX(const std::string &basedir,
-                                     const std::string &filename)
-    {
-        char buffer[PATH_MAX];
-        PathCombineW(buffer, basedir.c_str(), filename.c_str());
-        return buffer;
+    inline std::string PathCombineX(const std::string &basedir, const std::string &filename) {
+        if (basedir.empty() || basedir.back() == '/') {
+            // If basedir is empty or already ends with '/', just concatenate
+            return basedir + filename;
+        } else {
+            // If basedir does not end with '/', add a '/' before concatenating
+            return basedir + "/" + filename;
+        }
     }
 
     inline std::string GetModuleFileNameX(HMODULE module)
