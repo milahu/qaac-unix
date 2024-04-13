@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 
-#include <mmsystem.h>
 #include "CoreAudio/CoreAudioTypes.h"
 #include "ISink.h"
 
