@@ -2,6 +2,7 @@
 #include <numeric>
 #include <regex>
 #include <csignal> // signal
+#include <unistd.h> // isatty
 #include "win32util.h"
 #include "options.h"
 #include "InputFactory.h"
@@ -61,6 +62,12 @@ std::string errormsg(const std::exception &ex)
     return strutil::us2w(ex.what());
 }
 
+bool is_console_visible()
+{
+    // Check if standard output (stdout) is connected to a terminal
+    return isatty(STDOUT_FILENO) != 0;
+}
+
 class PeriodicDisplay {
     uint32_t m_interval;
     uint32_t m_last_tick_title;
@@ -73,7 +80,7 @@ public:
         : m_interval(interval),
           m_verbose(verbose)
     {
-        m_console_visible = IsWindowVisible(GetConsoleWindow());
+        m_console_visible = is_console_visible();
         m_last_tick_title = m_last_tick_stderr = GetTickCount();
     }
     void put(const std::string &message) {
