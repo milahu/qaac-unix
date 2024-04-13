@@ -23,7 +23,7 @@ public:
     int64_t getPosition() { return m_position; }
 private:
     void inputThreadProc();
-    static unsigned __stdcall staticInputThreadProc(void *arg)
+    static unsigned  staticInputThreadProc(void *arg)
     {
         PipedReader *self = static_cast<PipedReader*>(arg);
         self->inputThreadProc();

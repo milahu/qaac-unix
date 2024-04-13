@@ -48,7 +48,7 @@
 #ifndef AVSC_USE_STDCALL
 #  define AVSC_CC __cdecl
 #else
-#  define AVSC_CC __stdcall
+#  define AVSC_CC 
 #endif
 
 #define AVSC_INLINE static __inline

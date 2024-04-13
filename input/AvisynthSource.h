@@ -21,16 +21,16 @@ public:
     bool load(const std::string &path);
     bool loaded() const { return m_dl.loaded(); }
 
-    AVS_ScriptEnvironment * (__stdcall *create_script_environment)(int);
-    void (__stdcall *delete_script_environment)(AVS_ScriptEnvironment *);
-    int (__stdcall *get_audio)(AVS_Clip *, void *, INT64, INT64);
-    const char * (__stdcall *get_error)(AVS_ScriptEnvironment *);
-    const AVS_VideoInfo * (__stdcall *get_video_info)(AVS_Clip *);
-    AVS_Value (__stdcall *invoke)(AVS_ScriptEnvironment *, const char *,
+    AVS_ScriptEnvironment * ( *create_script_environment)(int);
+    void ( *delete_script_environment)(AVS_ScriptEnvironment *);
+    int ( *get_audio)(AVS_Clip *, void *, INT64, INT64);
+    const char * ( *get_error)(AVS_ScriptEnvironment *);
+    const AVS_VideoInfo * ( *get_video_info)(AVS_Clip *);
+    AVS_Value ( *invoke)(AVS_ScriptEnvironment *, const char *,
                                   AVS_Value, const char **);
-    void (__stdcall *release_clip)(AVS_Clip *);
-    void (__stdcall *release_value)(AVS_Value);
-    AVS_Clip * (__stdcall *take_clip)(AVS_Value, AVS_ScriptEnvironment *);
+    void ( *release_clip)(AVS_Clip *);
+    void ( *release_value)(AVS_Value);
+    AVS_Clip * ( *take_clip)(AVS_Value, AVS_ScriptEnvironment *);
 };
 
 class AvisynthSource: public ISeekableSource
