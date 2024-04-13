@@ -237,9 +237,12 @@ namespace win32 {
             return std::shared_ptr<FILE>(stdout, noop_close);
     }
 
-    inline bool is_seekable(int fd)
-    {
-        return is_seekable(get_handle(fd));
+    // Check if a given file descriptor represents a seekable file (Unix implementation)
+    inline bool is_seekable(int fd) {
+        // Attempt to seek to the current position (0 bytes from the current position)
+        off_t currentPosition = lseek(fd, 0, SEEK_CUR);
+        // If lseek succeeds, the file descriptor is seekable
+        return currentPosition != -1;
     }
 
     FILE *tmpfile(const char *prefix);
