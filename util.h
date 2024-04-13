@@ -36,7 +36,7 @@ inline int lrint(double x)
 #endif
 
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
-inline int _wtoi(const char *s) { return std::wcstol(s, 0, 10); }
+inline int _wtoi(const char *s) { return std::strtol(s, 0, 10); }
 #endif
 
 #ifdef _MSC_VER
