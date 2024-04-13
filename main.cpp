@@ -581,7 +581,7 @@ void set_tags(ISource *src, ISink *sink, const Options &opts,
         }
     }
     tagstore->setTag("encoding application",
-        strutil::w2us(opts.encoder_name + L", " + encoder_config));
+        (opts.encoder_name + L", " + encoder_config));
 
     for (auto uwi = opts.tagopts.begin(); uwi != opts.tagopts.end(); ++uwi) {
         const char *name = M4A::getTagNameFromFourCC(uwi->first);
@@ -718,7 +718,7 @@ static void do_optimize(MP4FileX *file, const std::string &dst, bool verbose)
     try {
         file->FinishWriteX();
         MP4FileCopy optimizer(file);
-        optimizer.start(strutil::w2us(dst).c_str());
+        optimizer.start((dst).c_str());
         uint64_t total = optimizer.getTotalChunks();
         PeriodicDisplay disp(100, verbose);
         for (uint64_t i = 1; optimizer.copyNextChunk(); ++i) {
@@ -1146,7 +1146,7 @@ void load_metadata_files(Options *opts)
     for (auto it = opts->ftagopts.begin(); it != opts->ftagopts.end(); ++it) {
         try {
             opts->tagopts[it->first] =
-                strutil::w2us(misc::loadTextFile(it->second, opts->textcp));
+                (misc::loadTextFile(it->second, opts->textcp));
         } catch (const std::exception &e) {
             LOG(L"WARNING: %s\n", errormsg(e).c_str());
         }

@@ -75,7 +75,7 @@ namespace misc
         auto fp = std::shared_ptr<FILE>(win32::wfopenx(path.c_str(), L"rb"), std::fclose);
         int64_t fileSize = _filelengthi64(fileno(fp.get()));
         if (fileSize > 0x100000) {
-            throw std::runtime_error(strutil::w2us(path + L": file too big"));
+            throw std::runtime_error((path + L": file too big"));
         }
         std::vector<char> ibuf(fileSize);
         int n = std::fread(ibuf.data(), 1, fileSize, fp.get());
@@ -83,15 +83,15 @@ namespace misc
         if (!codepage) {
             auto detector = std::shared_ptr<uchardet>(uchardet_new(), uchardet_delete);
             if (uchardet_handle_data(detector.get(), ibuf.data(), ibuf.size())) {
-                throw std::runtime_error(strutil::w2us(path + L": uchardet_handle_data() failed"));
+                throw std::runtime_error((path + L": uchardet_handle_data() failed"));
             }
             uchardet_data_end(detector.get());
             auto charset = uchardet_get_charset(detector.get());
             if (charset < 0)
-                throw std::runtime_error(strutil::w2us(path + L": cannot detect code page"));
+                throw std::runtime_error((path + L": cannot detect code page"));
             codepage = getCodePageFromCharset(charset);
             if (codepage < 0)
-                throw std::runtime_error(strutil::w2us(path + L": unknown charset"));
+                throw std::runtime_error((path + L": unknown charset"));
         }
         std::vector<char> obuf;
         if (codepage == 0) {
@@ -116,7 +116,7 @@ namespace misc
 
         std::string operator()(const std::string &name) {
             std::string key =
-                TextBasedTag::normalizeTagName(strutil::w2us(name).c_str());
+                TextBasedTag::normalizeTagName((name).c_str());
             meta_t::const_iterator iter = tracktags.find(key);
             if (iter == tracktags.end())
                 return L"";

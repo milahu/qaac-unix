@@ -179,7 +179,7 @@ void TakSource::fetchTags()
         std::string key = it->first.toCString();
         if (it->second.type() == TagLib::APE::Item::Text) {
             std::string value = it->second.toString().toWString();
-            tags[key] = strutil::w2us(value);
+            tags[key] = (value);
         } else if (it->second.type() == TagLib::APE::Item::Binary) {
             if (strcasecmp(key.c_str(), "Cover Art (Front)"))
                 continue;

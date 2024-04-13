@@ -8,7 +8,7 @@ inline void mm_try(MMRESULT expr, const char *msg)
         char text[1024];
         waveOutGetErrorTextW(expr, text, 1024);
 	throw std::runtime_error(strutil::format("WaveOut: %s",
-                                                 strutil::w2us(text).c_str()));
+                                                 (text).c_str()));
     }
 } 
 #define TRYMM(expr) (void)(mm_try(expr, #expr))

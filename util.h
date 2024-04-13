@@ -178,7 +178,7 @@ namespace util {
     inline void throw_crt_error(const std::string &message)
     {
         std::stringstream ss;
-        ss << strutil::w2us(message) << ": " << std::strerror(errno);
+        ss << (message) << ": " << std::strerror(errno);
         throw std::runtime_error(ss.str());
     }
 

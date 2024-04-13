@@ -26,7 +26,7 @@ namespace win32 {
             ss = strutil::format(L"%d: %s", code, msg.c_str());
         else
             ss = strutil::format(L"%08x: %s", code, msg.c_str());
-        throw std::runtime_error(strutil::w2us(ss));
+        throw std::runtime_error((ss));
     }
 
     FILE *tmpfile(const char *prefix)

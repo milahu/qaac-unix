@@ -443,7 +443,7 @@ bool Options::parse(int &argc, char **&argv)
                         this->native_resampler_quality = n;
                     else if (std::wcslen(tok) == 4)
                         this->native_resampler_complexity =
-                            util::fourcc(strutil::w2us(tok).c_str());
+                            util::fourcc((tok).c_str());
                     else {
                         complain(L"Invalid arg for --native-resampler.\n");
                         return false;
@@ -670,7 +670,7 @@ bool Options::parse(int &argc, char **&argv)
             if (ch == Tag::kLyrics)
                 this->ftagopts[ch] = getopt::optarg;
             else if (ch != Tag::kCompilation)
-                this->tagopts[ch] = strutil::w2us(getopt::optarg);
+                this->tagopts[ch] = (getopt::optarg);
             else if (!getopt::optarg)
                 this->tagopts[ch] = "1";
             else {
@@ -679,7 +679,7 @@ bool Options::parse(int &argc, char **&argv)
                     complain(L"Invalid --compilation option arg.\n");
                     return false;
                 }
-                this->tagopts[ch] = strutil::w2us(getopt::optarg);
+                this->tagopts[ch] = (getopt::optarg);
             }
         }
         else if (ch == *(int32_t*)"tag " || ch == *(int32_t*)"tagf") {
@@ -703,7 +703,7 @@ bool Options::parse(int &argc, char **&argv)
             if (fcc == Tag::kArtwork)
                 this->artwork_files.push_back(value);
             else if (ch == *(int32_t*)"tag ")
-                this->tagopts[fcc] = strutil::w2us(value);
+                this->tagopts[fcc] = (value);
             else
                 this->ftagopts[fcc] = value;
         }
@@ -715,7 +715,7 @@ bool Options::parse(int &argc, char **&argv)
                 complain(L"Invalid arg for --long-tag.\n");
                 return false;
             }
-            this->longtags[strutil::w2us(key)] = strutil::w2us(value);
+            this->longtags[(key)] = (value);
         }
         else if (ch == *(int32_t*)"chap")
             this->chapter_file = getopt::optarg;

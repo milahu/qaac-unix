@@ -215,7 +215,7 @@ void LibSndfileSource::fetchVorbisTags(int codec)
     for (auto it = map.begin(); it != map.end(); ++it) {
         std::string key = it->first.toCString();
         std::string value = it->second.toString().toWString();
-        tags[key] = strutil::w2us(value);
+        tags[key] = (value);
     }
     m_tags = TextBasedTag::normalizeTags(tags);
 

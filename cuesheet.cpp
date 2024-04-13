@@ -99,10 +99,10 @@ std::map<std::string, std::string> CueTrack::getTags() const
     auto result = m_cuesheet->getTags();
     std::for_each(m_meta.begin(), m_meta.end(),
                   [&](decltype(*m_meta.begin()) &tag) {
-                      auto key = strutil::w2us(tag.first);
+                      auto key = (tag.first);
                       if (key == "PERFORMER")
                           key = "artist";
-                      result[key] = strutil::w2us(tag.second);
+                      result[key] = (tag.second);
                   });
     result["track number"]
         = strutil::format("%u/%u", number(), m_cuesheet->count());
@@ -210,8 +210,8 @@ std::map<std::string, std::string> CueSheet::getTags() const
     std::map<std::string, std::string> result;
     std::for_each(m_meta.begin(), m_meta.end(),
                   [&](decltype(*m_meta.begin()) &tag) {
-        std::string key = strutil::w2us(tag.first);
-        std::string val = strutil::w2us(tag.second);
+        std::string key = (tag.first);
+        std::string val = (tag.second);
 
         if (key == "PERFORMER") {
             result["artist"] = val;

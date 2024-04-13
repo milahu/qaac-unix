@@ -78,7 +78,7 @@ MP4SinkBase::MP4SinkBase(const std::string &path, bool temp)
             m_fp = std::shared_ptr<FILE>(win32::wfopenx(m_filename.c_str(), L"wb"), fclose);
         }
 
-        m_mp4file.Create(strutil::w2us(m_filename).c_str(),
+        m_mp4file.Create((m_filename).c_str(),
                          &callbacks,
                          m_fp.get(),
                          0, // flags
@@ -124,7 +124,7 @@ void MP4SinkBase::writeTags()
             double off = static_cast<double>(m_edit_start) / timeScale;
             std::vector<misc::chapter_t>::const_iterator chap;
             for (chap = m_chapters.begin(); chap != m_chapters.end(); ++chap) {
-                std::string name = strutil::w2us(chap->first);
+                std::string name = (chap->first);
                 const char *namep = name.c_str();
                 m_mp4file.AddChapter(track, chap->second * timeScale + 0.5,
                                      namep);
