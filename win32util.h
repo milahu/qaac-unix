@@ -103,16 +103,32 @@ namespace win32 {
         return std::string(buffer);
     }
 
-    inline bool MakeSureDirectoryPathExistsX(const std::string &path)
-    {
-        // SHCreateDirectoryEx() doesn't work with relative path
-        std::string fullpath = GetFullPathNameX(path);
-        std::vector<char> buf(fullpath.begin(), fullpath.end());
-        buf.push_back(0);
-        char *pos = PathFindFileNameW(buf.data());
-        *pos = 0;
-        int rc = SHCreateDirectoryExW(nullptr, buf.data(), nullptr);
-        return rc == ERROR_SUCCESS;
+    inline bool MakeSureDirectoryPathExistsX(const std::string &path) {
+        std::string fullpath = path;
+
+        // If the path is relative, convert it to an absolute path
+        if (path.front() != '/') {
+            fullpath = GetFullPathNameX(path);
+        }
+
+        // Find the last directory separator in the path
+        size_t lastSlash = fullpath.find_last_of('/');
+        if (lastSlash != std::string::npos) {
+            // Create the parent directories if they don't exist
+            std::string parentPath = fullpath.substr(0, lastSlash);
+            if (mkdir(parentPath.c_str(), 0777) == -1 && errno != EEXIST) {
+                // Error handling: failed to create parent directories
+                return false;
+            }
+        }
+
+        // Create the final directory if it doesn't exist
+        if (mkdir(fullpath.c_str(), 0777) == -1 && errno != EEXIST) {
+            // Error handling: failed to create the final directory
+            return false;
+        }
+
+        return true;
     }
 
     inline std::string get_module_directory(HMODULE module=0)
