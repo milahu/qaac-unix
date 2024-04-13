@@ -1282,7 +1282,6 @@ int wmain1(int argc, char **argv)
         struct CleanupScope {
             ~CleanupScope() {
                 InputFactory::instance().close();
-                WaveOutDevice::instance().close();
             }
         } __cleanup__;
 
