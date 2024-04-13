@@ -1156,28 +1156,20 @@ std::string get_output_filename(const std::string &ifilename,
     if (opts.ofilename) return opts.ofilename;
 
     const char *ext = opts.extension();
-    const char *outdir = opts.outdir ? opts.outdir : ".";
-    if (!std::strcmp(ifilename.c_str(), "-"))
-        return std::string("stdin") + ext;
+    fs::path outdir = opts.outdir ? opts.outdir : ".";
 
-    std::string obasename =
-        win32::PathReplaceExtension(PathFindFileNameW(ifilename.c_str()), ext);
-    std::string ofilename = strutil::format("%s/%s", outdir,
-                                             obasename.c_str());
+    if (ifilename == "-")
+        return "stdin" + std::string(ext);
 
-    /* test if ifilename and ofilename refer to the same file */
-    std::shared_ptr<FILE> ifp, ofp;
-    try {
-        ifp = win32::fopen(ifilename, "rb");
-        ofp = win32::fopen(ofilename, "rb");
-    } catch (...) {
-        return ofilename;
+    fs::path inputPath(ifilename);
+    fs::path outputPath = outdir / (inputPath.stem().string() + ext);
+
+    // Test if ifilename and ofilename refer to the same file
+    if (fs::exists(outputPath) && fs::exists(inputPath) && fs::equivalent(inputPath, outputPath)) {
+        outputPath.replace_filename(inputPath.stem().string() + "_" + ext);
     }
-    if (!win32::is_same_file(_fileno(ifp.get()), _fileno(ofp.get())))
-        return ofilename;
 
-    std::string tl = strutil::format("_%s", ext);
-    return win32::PathReplaceExtension(ofilename, tl.c_str());
+    return outputPath.string();
 }
 
 struct ConsoleTitleSaver {
