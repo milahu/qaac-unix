@@ -1239,14 +1239,6 @@ int wmain1(int argc, char **argv)
             if (WavpackModule::instance().loaded())
                 LOG("wavpackdll %s\n",
                     WavpackModule::instance().GetLibraryVersionString());
-            if (TakModule::instance().loaded()) {
-                TtakInt32 var, comp;
-                TakModule::instance().GetLibraryVersion(&var, &comp);
-                LOG("tak_deco_lib %u.%u.%u %s\n",
-                        var >> 16, (var >> 8) & 0xff, var & 0xff,
-                        TakModule::instance().compatible() ? "compatible"
-                                                          : "incompatible");
-            }
             if (LibOpusModule::instance().loaded())
                 LOG("%s\n", LibOpusModule::instance().get_version_string());
             return 0;
