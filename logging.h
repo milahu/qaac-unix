@@ -44,7 +44,7 @@ public:
             throw;
         }
     }
-    void vwprintf(const char *fmt, va_list args)
+    void vprintf(const char *fmt, va_list args)
     {
         va_list args_copy;
         va_copy(args_copy, args);
@@ -67,11 +67,11 @@ public:
             std::fputs(buffer.data(), m_streams[i].get());
         }
     }
-    void wprintf(const char *fmt, ...)
+    void printf(const char *fmt, ...)
     {
         va_list ap;
         va_start(ap, fmt);
-        vwprintf(fmt, ap);
+        vprintf(fmt, ap);
         va_end(ap);
     }
 private:
@@ -80,4 +80,4 @@ private:
     Log& operator=(const Log&);
 };
 
-#define LOG(fmt, ...) Log::instance().wprintf(fmt, __VA_ARGS__)
+#define LOG(fmt, ...) Log::instance().printf(fmt, __VA_ARGS__)
