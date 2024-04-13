@@ -6,9 +6,12 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <unistd.h>
+#include <unistd.h> // realpath
 #include <fcntl.h>
 #include <ctime>
+#include <cstdlib>
+#include <cstring>
+#include <limits.h> // PATH_MAX
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -51,13 +54,19 @@ namespace win32 {
         throw_error(strutil::us2w(msg), error);
     }
 
+    inline std::string GetFullPathName(const std::string &path) {
+        char resolved_path[PATH_MAX];
+        if (realpath(path.c_str(), resolved_path) != nullptr) {
+            return std::string(resolved_path);
+        } else {
+            // Handle error, e.g., file not found
+            return "";
+        }
+    }
+
     inline std::string GetFullPathNameX(const std::string &path)
     {
-        uint32_t length = GetFullPathNameW(path.c_str(), 0, 0, 0);
-        std::vector<char> vec(length);
-        length = GetFullPathNameW(path.c_str(), static_cast<uint32_t>(vec.size()),
-                                  &vec[0], 0);
-        return std::string(&vec[0], &vec[length]);
+        return GetFullPathName(path);
     }
 
     inline std::string PathReplaceExtension(const std::string &path,
