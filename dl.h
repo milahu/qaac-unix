@@ -2,40 +2,39 @@
 #define DL_H
 
 #include <string>
-#include <stdexcept>
-#include "win32util.h"
-#include "strutil.h"
+#include <memory>
+#include <dlfcn.h> // dlopen
 
 class AutoCast {
-    FARPROC m_pointer;
+    void* m_pointer;
 public:
-    AutoCast(FARPROC p): m_pointer(p) {}
+    AutoCast(void* p): m_pointer(p) {}
     template <typename U>
     operator U*() { return reinterpret_cast<U*>(m_pointer); }
 };
 
 class DL {
-    std::shared_ptr<HINSTANCE__> m_module;
+    std::shared_ptr<void> m_handle;
 public:
     DL() {}
-    DL(HMODULE handle, bool own=true)
+    DL(void* handle, bool own=true)
     {
         if (own)
-            m_module.reset(handle, FreeLibrary);
+            m_handle.reset(handle, dlclose);
         else
-            m_module.reset(handle, [](HMODULE){});
+            m_handle.reset(handle, [](void*){});
     }
     bool load(const std::string &path)
     {
-        HMODULE handle = LoadLibraryW(path.c_str());
-        if (handle) m_module.reset(handle, FreeLibrary);
+        void* handle = dlopen(path.c_str(), RTLD_LAZY);
+        if (handle) m_handle.reset(handle, dlclose);
         return loaded();
     }
-    bool loaded() const { return m_module.get() != 0; }
-    void reset() { m_module.reset(); }
+    bool loaded() const { return m_handle.get() != nullptr; }
+    void reset() { m_handle.reset(); }
     AutoCast fetch(const char *name)
     {
-        return AutoCast(GetProcAddress(m_module.get(), name));
+        return AutoCast(dlsym(m_handle.get(), name));
     }
 };
 
