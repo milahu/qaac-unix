@@ -825,10 +825,13 @@ void show_available_aac_settings()
     show_available_codec_setttings('aach');
 }
 
+// TODO is this also needed for 'aac '? or only for 'aach'?
+/*
 static
 void setup_aach_codec(void* hDll)
 {
     CFPlugInFactoryFunction aachFactory =
+        // FIXME error: ‘GetProcAddress’ was not declared in this scope
         AutoCast(GetProcAddress(hDll, "ACMP4AACHighEfficiencyEncoderFactory"));
     if (aachFactory) {
         AudioComponentDescription desc = { 'aenc', 'aach', 0 };
@@ -837,6 +840,7 @@ void setup_aach_codec(void* hDll)
                 0, aachFactory);
     }
 }
+*/
 
 /*
 static
@@ -1263,6 +1267,8 @@ int wmain1(int argc, char **argv)
         std::string encoder_name;
         encoder_name = strutil::format(PROGNAME " %s", get_qaac_version());
 #ifdef QAAC
+// TODO is this also needed for 'aac '? or only for 'aach'?
+/*
 //      decltype(__pfnDliNotifyHook2) __pfnDliFailureHook2 = DllImportHook;
         // TODO Replace "CoreAudioToolbox.so" with the actual path to your shared library
         void* hDll = dlopen("CoreAudioToolbox.so", RTLD_NOW);
@@ -1276,6 +1282,7 @@ int wmain1(int argc, char **argv)
             setup_aach_codec(hDll);
             dlclose(hDll);
         }
+*/
 #endif
         opts.encoder_name = strutil::us2w(encoder_name);
         if (!opts.print_available_formats)
