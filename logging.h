@@ -80,4 +80,4 @@ private:
     Log& operator=(const Log&);
 };
 
-#define LOG(fmt, ...) Log::instance().printf(fmt, __VA_ARGS__)
+#define LOG(fmt, ...) Log::instance().printf(fmt, ##__VA_ARGS__)
