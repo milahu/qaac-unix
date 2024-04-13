@@ -1047,7 +1047,7 @@ trim_input(std::shared_ptr<ISeekableSource> src, const Options & opts)
 typedef std::pair<std::string, std::shared_ptr<ISeekableSource>> workItem;
 
 static
-void load_cue_tracks(const Options &opts, std::wstreambuf *sb, bool is_embedded,
+void load_cue_tracks(const Options &opts, std::streambuf *sb, bool is_embedded,
                      const std::string &path, std::vector<workItem> &items)
 {
     CueSheet cue;

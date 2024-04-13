@@ -81,7 +81,7 @@ public:
     typedef std::vector<CueTrack>::const_iterator const_iterator;
 
     CueSheet(): m_has_multiple_files(false) {}
-    void parse(std::wstreambuf *src);
+    void parse(std::streambuf *src);
     std::vector<std::shared_ptr<ISeekableSource>>
         loadTracks(bool is_embedded,
                    const std::string &cue_or_container_path,

@@ -109,7 +109,7 @@ std::map<std::string, std::string> CueTrack::getTags() const
     return TextBasedTag::normalizeTags(result);
 }
 
-void CueSheet::parse(std::wstreambuf *src)
+void CueSheet::parse(std::streambuf *src)
 {
     static struct handler_t {
         const char *cmd;
