@@ -116,7 +116,7 @@ const char *get_qaac_version();
 static
 void usage()
 {
-    std::printf("%hs %hs\n%hs", PROGNAME, get_qaac_version(),
+    std::printf("%s %s\n%s", PROGNAME, get_qaac_version(),
 "Usage: " PROGNAME " [options] infiles....\n"
 "\n"
 "\"-\" as infile means stdin.\n"

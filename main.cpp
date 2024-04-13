@@ -249,7 +249,7 @@ void manipulate_channels(std::vector<std::shared_ptr<ISource> > &chain,
         const std::vector<uint32_t> *cs = chain.back()->getChannels();
         if (cs) {
             if (opts.verbose > 1) {
-                LOG("Input layout: %hs\n",
+                LOG("Input layout: %s\n",
                     chanmap::getChannelNames(*cs).c_str());
             }
             auto ccs = chanmap::convertFromAppleLayout(*cs);
@@ -369,7 +369,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                 std::shared_ptr<SoxrResampler>
                     resampler(new SoxrResampler(chain.back(), orate));
                 if (opts.verbose > 1 || opts.logfilename)
-                    LOG("Using libsoxr SRC: %hs\n", resampler->engine());
+                    LOG("Using libsoxr SRC: %s\n", resampler->engine());
                 chain.push_back(resampler);
             } else {
 #ifndef QAAC
@@ -398,7 +398,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                 if (opts.verbose > 1 || opts.logfilename) {
                     CoreAudioResampler *p =
                         dynamic_cast<CoreAudioResampler*>(chain.back().get());
-                    LOG("Using CoreAudio SRC: complexity %hs quality %u\n",
+                    LOG("Using CoreAudio SRC: complexity %s quality %u\n",
                         util::fourcc(p->getComplexity()).svalue,
                         p->getQuality());
                 }
@@ -481,7 +481,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
     }
     if (opts.verbose > 1) {
         auto asbd = chain.back()->getSampleFormat();
-        LOG("Format: %hs -> %hs\n",
+        LOG("Format: %s -> %s\n",
             pcm_format_str(sasbd).c_str(), pcm_format_str(asbd).c_str());
     }
 }
@@ -604,7 +604,7 @@ void decode_file(const std::vector<std::shared_ptr<ISource> > &chain,
     if (channels) {
         chanmask = chanmap::getChannelMask(*channels);
         if (opts.verbose > 1) {
-            LOG("Output layout: %hs\n",
+            LOG("Output layout: %s\n",
                 chanmap::getChannelNames(*channels).c_str());
         }
     }
@@ -668,7 +668,7 @@ uint32_t map_to_aac_channels(std::vector<std::shared_ptr<ISource> > &chain,
         AudioChannelLayout acl = { 0 };
         acl.mChannelLayoutTag = tag;
         auto vec = chanmap::getChannels(&acl);
-        LOG("Output layout: %hs\n", chanmap::getChannelNames(vec).c_str());
+        LOG("Output layout: %s\n", chanmap::getChannelNames(vec).c_str());
     }
     return tag;
 }
@@ -805,7 +805,7 @@ void show_available_codec_setttings(UInt32 fmt)
                     kAudioCodecBitRateControlMode_Constant);
             auto bits = converter.getApplicableEncodeBitRates();
 
-            std::printf("%hs %gHz %hs --",
+            std::printf("%s %gHz %s --",
                     fmt == 'aac ' ? "LC" : "HE",
                     srates[i].mMinimum, name.c_str());
             for (size_t k = 0; k < bits.size(); ++k) {
@@ -1283,27 +1283,27 @@ int wmain1(int argc, char **argv)
 
         if (opts.check_only) {
             if (SoXConvolverModule::instance().loaded())
-                LOG("libsoxconvolver %hs\n",
+                LOG("libsoxconvolver %s\n",
                     SoXConvolverModule::instance().version());
             if (SOXRModule::instance().loaded())
-                LOG("%hs\n", SOXRModule::instance().version());
+                LOG("%s\n", SOXRModule::instance().version());
             if (LibSndfileModule::instance().loaded())
-                LOG("%hs\n", LibSndfileModule::instance().version_string());
+                LOG("%s\n", LibSndfileModule::instance().version_string());
             if (FLACModule::instance().loaded())
-                LOG("libFLAC %hs\n", FLACModule::instance().VERSION_STRING);
+                LOG("libFLAC %s\n", FLACModule::instance().VERSION_STRING);
             if (WavpackModule::instance().loaded())
-                LOG("wavpackdll %hs\n",
+                LOG("wavpackdll %s\n",
                     WavpackModule::instance().GetLibraryVersionString());
             if (TakModule::instance().loaded()) {
                 TtakInt32 var, comp;
                 TakModule::instance().GetLibraryVersion(&var, &comp);
-                LOG("tak_deco_lib %u.%u.%u %hs\n",
+                LOG("tak_deco_lib %u.%u.%u %s\n",
                         var >> 16, (var >> 8) & 0xff, var & 0xff,
                         TakModule::instance().compatible() ? "compatible"
                                                           : "incompatible");
             }
             if (LibOpusModule::instance().loaded())
-                LOG("%hs\n", LibOpusModule::instance().get_version_string());
+                LOG("%s\n", LibOpusModule::instance().get_version_string());
             return 0;
         }
 #ifdef QAAC
