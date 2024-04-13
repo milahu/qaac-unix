@@ -175,13 +175,6 @@ namespace util {
         throw std::runtime_error(ss.str());
     }
 
-    inline void throw_crt_error(const std::string &message)
-    {
-        std::stringstream ss;
-        ss << (message) << ": " << std::strerror(errno);
-        throw std::runtime_error(ss.str());
-    }
-
     class FilePositionSaver
     {
     private:
