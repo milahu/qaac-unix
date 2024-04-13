@@ -15,7 +15,6 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
-#include <shlwapi.h>
 #pragma warning(push)
 #pragma warning(disable: 4091)
 #include <shlobj.h>
