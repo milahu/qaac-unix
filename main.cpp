@@ -110,7 +110,7 @@ public:
           m_total(total), m_rate(rate)
     {
         m_stderr_type = GetFileType(win32::get_handle(_fileno(stderr)));
-        m_console_visible = IsWindowVisible(GetConsoleWindow());
+        m_console_visible = is_console_visible();
         if (total != ~0ULL)
             m_tstamp = util::format_seconds(static_cast<double>(total) / rate);
     }
