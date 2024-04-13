@@ -137,7 +137,7 @@ namespace misc
                                   const std::map<std::string, std::string> &tag)
     {
         auto spec2 = strutil::strtransform(spec, [](char c)->char {
-                                           return c == '\\*(int32_t*)" ? "/' : c;
+                                           return c == '\\' ? '/' : c;
                                            });
         auto res = process_template(spec2, TagLookup(tag));
         std::vector<std::string> comp;

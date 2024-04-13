@@ -202,7 +202,7 @@ PRInt32 SJISContextAnalysis::GetOrder(const char* str, PRUint32 *charLen)
       *charLen = 1;
 
   //return its order if it is hiragana
-  if (*str == *(int32_t*)"\202" &&
+  if (*str == '\202' &&
       (unsigned char)*(str+1) >= (unsigned char)0x9f &&
       (unsigned char)*(str+1) <= (unsigned char)0xf1)
     return (unsigned char)*(str+1) - (unsigned char)0x9f;

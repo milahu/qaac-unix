@@ -303,7 +303,7 @@ enum
 enum
 {	SF_CHANNEL_MAP_INVALID = 0,
 	SF_CHANNEL_MAP_MONO = 1,
-	SF_CHANNEL_MAP_LEFT,					/* Apple calls this *(int32_t*)"Left" */
+	SF_CHANNEL_MAP_LEFT,					/* Apple calls this 'Left' */
 	SF_CHANNEL_MAP_RIGHT,					/* Apple calls this 'Right' */
 	SF_CHANNEL_MAP_CENTER,					/* Apple calls this 'Center' */
 	SF_CHANNEL_MAP_FRONT_LEFT,

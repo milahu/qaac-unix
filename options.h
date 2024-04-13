@@ -64,27 +64,27 @@ struct Options {
     }
     bool isAAC() const
     {
-        return output_format == *(int32_t*)"aac " || output_format == *(int32_t*)"aach";
+        return output_format == 'aac ' || output_format == 'aach';
     }
     bool isSBR() const
     {
-        return output_format == *(int32_t*)"aach";
+        return output_format == 'aach';
     }
     bool isALAC() const
     {
-        return output_format == *(int32_t*)"alac";
+        return output_format == 'alac';
     }
     bool isLPCM() const
     {
-        return output_format == *(int32_t*)"lpcm";
+        return output_format == 'lpcm';
     }
     bool isWaveOut() const
     {
-        return output_format == *(int32_t*)"play";
+        return output_format == 'play';
     }
     bool isPeak() const
     {
-        return output_format == *(int32_t*)"peak";
+        return output_format == 'peak';
     }
     const char *extension() const
     {

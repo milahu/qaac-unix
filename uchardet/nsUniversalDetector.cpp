@@ -122,28 +122,28 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
     {
       switch (aBuf[0])
         {
-        case *(int32_t*)"\xEF":
-          if ((*(int32_t*)"\xBB" == aBuf[1]) && (*(int32_t*)"\xBF" == aBuf[2]))
+        case '\xEF':
+          if (('\xBB' == aBuf[1]) && ('\xBF' == aBuf[2]))
           {
             /* EF BB BF: UTF-8 encoded BOM. */
             shortcutCharset = "UTF-8";
             shortcutConfidence = 0.99;
           }
         break;
-        case *(int32_t*)"\xFE":
-          if (*(int32_t*)"\xFF" == aBuf[1])
+        case '\xFE':
+          if ('\xFF' == aBuf[1])
           {
             /* FE FF: UTF-16, big endian BOM. */
             shortcutCharset = "UTF-16";
             shortcutConfidence = 0.99;
           }
         break;
-        case *(int32_t*)"\xFF":
-          if (*(int32_t*)"\xFE" == aBuf[1])
+        case '\xFF':
+          if ('\xFE' == aBuf[1])
           {
             if (aLen > 3          &&
-                aBuf[2] == *(int32_t*)"\x00" &&
-                aBuf[3] == *(int32_t*)"\x00")
+                aBuf[2] == '\x00' &&
+                aBuf[3] == '\x00')
             {
                 /* FF FE 00 00: UTF-32 (LE). */
                 shortcutCharset = "UTF-32";
@@ -157,11 +157,11 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
             }
           }
           break;
-        case *(int32_t*)"\x00":
+        case '\x00':
           if (aLen > 3           &&
-              aBuf[1] == *(int32_t*)"\x00" &&
-              aBuf[2] == *(int32_t*)"\xFE" &&
-              aBuf[3] == *(int32_t*)"\xFF")
+              aBuf[1] == '\x00' &&
+              aBuf[2] == '\xFE' &&
+              aBuf[3] == '\xFF')
           {
               /* 00 00 FE FF: UTF-32 (BE). */
               shortcutCharset = "UTF-32";
@@ -185,7 +185,7 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
      * probers.
      * 0xA0 (NBSP in a few charset) is apparently a rare exception
      * of non-ASCII character often contained in nearly-ASCII text. */
-    if (aBuf[i] & *(int32_t*)"\x80" && aBuf[i] != *(int32_t*)"\xA0")
+    if (aBuf[i] & '\x80' && aBuf[i] != '\xA0')
     {
       /* We got a non-ASCII byte (high-byte) */
       if (mInputState != eHighbyte)
@@ -231,7 +231,7 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
     else
     {
       /* Just pure ASCII or NBSP so far. */
-      if (aBuf[i] == *(int32_t*)"\xA0")
+      if (aBuf[i] == '\xA0')
       {
         /* ASCII with the only exception of NBSP seems quite common.
          * I doubt it is really necessary to train a model here, so let's
@@ -240,7 +240,7 @@ nsresult nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
           mNbspFound = PR_TRUE;
       }
       else if (mInputState == ePureAscii &&
-               (aBuf[i] == *(int32_t*)"\033" || (aBuf[i] == '{' && mLastChar == '~')))
+               (aBuf[i] == '\033' || (aBuf[i] == '{' && mLastChar == '~')))
       {
         /* We found an escape character or HZ "~{". */
         mInputState = eEscAscii;

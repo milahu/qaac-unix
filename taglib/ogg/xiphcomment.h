@@ -159,7 +159,7 @@ namespace TagLib {
        * Implements the unified property interface -- import function.
        * The tags from the given map will be stored one-to-one in the file,
        * except for invalid keys (less than one character, non-ASCII, or
-       * containing '=*(int32_t*)" or "~') in which case the according values will
+       * containing '=' or '~') in which case the according values will
        * be contained in the returned PropertyMap.
        */
       PropertyMap setProperties(const PropertyMap&);

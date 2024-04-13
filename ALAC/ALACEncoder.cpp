@@ -45,7 +45,7 @@
 typedef int16_t (*SearchCoefs)[kALACMaxCoefs];
 
 // defines/constants
-const uint32_t kALACEncoderMagic	= *(int32_t*)"dpge";
+const uint32_t kALACEncoderMagic	= 'dpge';
 const uint32_t kMaxSampleSize		= 32;			// max allowed bit width is 32
 const uint32_t kDefaultMixBits	= 2;
 const uint32_t kDefaultMixRes		= 0;

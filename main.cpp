@@ -163,14 +163,14 @@ AudioStreamBasicDescription get_encoding_ASBD(const ISource *src,
     oasbd.mChannelsPerFrame = iasbd.mChannelsPerFrame;
     oasbd.mSampleRate = iasbd.mSampleRate;
 
-    if (codecid == *(int32_t*)"aac ")
+    if (codecid == 'aac ')
         oasbd.mFramesPerPacket = 1024;
-    else if (codecid == *(int32_t*)"aach")
+    else if (codecid == 'aach')
         oasbd.mFramesPerPacket = 2048;
-    else if (codecid == *(int32_t*)"alac")
+    else if (codecid == 'alac')
         oasbd.mFramesPerPacket = 4096;
 
-    if (codecid == *(int32_t*)"alac") {
+    if (codecid == 'alac') {
         if (!(iasbd.mFormatFlags & kAudioFormatFlagIsSignedInteger))
             throw std::runtime_error(
                 "floating point PCM is not supported for ALAC");
@@ -397,7 +397,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                 int quality = std::min(opts.native_resampler_quality,
                                        (int)kAudioConverterQuality_Max);
                 if (quality < 0) quality = 0;
-                if (!complexity) complexity = *(int32_t*)"bats";
+                if (!complexity) complexity = 'bats';
 
                 std::shared_ptr<ISource>
                     resampler(new CoreAudioResampler(chain.back(), orate,
@@ -816,7 +816,7 @@ void show_available_codec_setttings(UInt32 fmt)
             auto bits = converter.getApplicableEncodeBitRates();
 
             std::wprintf("%hs %gHz %hs --",
-                    fmt == *(int32_t*)"aac " ? "LC" : "HE",
+                    fmt == 'aac ' ? "LC" : "HE",
                     srates[i].mMinimum, name.c_str());
             for (size_t k = 0; k < bits.size(); ++k) {
                 if (!bits[k].mMinimum) continue;
@@ -831,8 +831,8 @@ void show_available_codec_setttings(UInt32 fmt)
 static
 void show_available_aac_settings()
 {
-    show_available_codec_setttings(*(int32_t*)"aac ");
-    show_available_codec_setttings(*(int32_t*)"aach");
+    show_available_codec_setttings('aac ');
+    show_available_codec_setttings('aach');
 }
 
 static
@@ -841,7 +841,7 @@ void setup_aach_codec(HMODULE hDll)
     CFPlugInFactoryFunction aachFactory =
         AutoCast(GetProcAddress(hDll, "ACMP4AACHighEfficiencyEncoderFactory"));
     if (aachFactory) {
-        AudioComponentDescription desc = { *(int32_t*)"aenc", *(int32_t*)"aach", 0 };
+        AudioComponentDescription desc = { 'aenc', 'aach', 0 };
         AudioComponentRegister(&desc,
                 CFSTR("MPEG4 High Efficiency AAC Encoder"),
                 0, aachFactory);

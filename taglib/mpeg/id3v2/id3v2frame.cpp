@@ -342,7 +342,7 @@ namespace
     std::make_pair("TEXT", "LYRICIST"),
     std::make_pair("TFLT", "FILETYPE"),
     //std::make_pair("TIPL", "INVOLVEDPEOPLE"), handled separately
-    std::make_pair("TIT1", "WORK"), // *(int32_t*)"Work" in iTunes
+    std::make_pair("TIT1", "WORK"), // 'Work' in iTunes
     std::make_pair("TIT2", "TITLE"),
     std::make_pair("TIT3", "SUBTITLE"),
     std::make_pair("TKEY", "INITIALKEY"),

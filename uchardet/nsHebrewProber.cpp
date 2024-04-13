@@ -39,16 +39,16 @@
 #include <stdio.h>
 
 // windows-1255 / ISO-8859-8 code points of interest
-#define FINAL_KAF (*(int32_t*)"\xea")
-#define NORMAL_KAF (*(int32_t*)"\xeb")
-#define FINAL_MEM (*(int32_t*)"\xed")
-#define NORMAL_MEM (*(int32_t*)"\xee")
-#define FINAL_NUN (*(int32_t*)"\xef")
-#define NORMAL_NUN (*(int32_t*)"\xf0")
-#define FINAL_PE (*(int32_t*)"\xf3")
-#define NORMAL_PE (*(int32_t*)"\xf4")
-#define FINAL_TSADI (*(int32_t*)"\xf5")
-#define NORMAL_TSADI (*(int32_t*)"\xf6")
+#define FINAL_KAF ('\xea')
+#define NORMAL_KAF ('\xeb')
+#define FINAL_MEM ('\xed')
+#define NORMAL_MEM ('\xee')
+#define FINAL_NUN ('\xef')
+#define NORMAL_NUN ('\xf0')
+#define FINAL_PE ('\xf3')
+#define NORMAL_PE ('\xf4')
+#define FINAL_TSADI ('\xf5')
+#define NORMAL_TSADI ('\xf6')
 
 // Minimum Visual vs Logical final letter score difference.
 // If the difference is below this, don't rely solely on the final letter score distance.

@@ -61,8 +61,8 @@ enum
 
 enum
 {
-    kALACFormatAppleLossless = *(int32_t*)"alac",
-    kALACFormatLinearPCM = *(int32_t*)"lpcm"
+    kALACFormatAppleLossless = 'alac',
+    kALACFormatLinearPCM = 'lpcm'
 };
 
 enum
@@ -151,14 +151,14 @@ typedef struct AudioFormatDescription  AudioFormatDescription;
 
 enum
 {
-	kALACCodecFormat		= *(int32_t*)"alac",
+	kALACCodecFormat		= 'alac',
 	kALACVersion			= 0,
 	kALACCompatibleVersion	= kALACVersion,
 	kALACDefaultFrameSize	= 4096
 };
 
-// note: this struct is wrapped in an *(int32_t*)"alac" atom in the sample description extension area
-// note: in QT movies, it will be further wrapped in a *(int32_t*)"wave" atom surrounded by *(int32_t*)"frma" and *(int32_t*)"term" atoms
+// note: this struct is wrapped in an 'alac' atom in the sample description extension area
+// note: in QT movies, it will be further wrapped in a 'wave' atom surrounded by 'frma' and 'term' atoms
 typedef struct ALACSpecificConfig
 {
 	uint32_t				frameLength;
@@ -179,7 +179,7 @@ typedef struct ALACSpecificConfig
 // The AudioChannelLayout atom type is not exposed yet so define it here
 enum
 {
-	AudioChannelLayoutAID = *(int32_t*)"chan"
+	AudioChannelLayoutAID = 'chan'
 };
 
 #if PRAGMA_STRUCT_ALIGN

@@ -53,12 +53,12 @@ MP4Source::MP4Source(const std::shared_ptr<FILE> &fp)
                                      "found in input");
 
         switch (util::fourcc(type).nvalue) {
-        case *(int32_t*)"alac": setupALAC();       break;
-        case *(int32_t*)"fLaC": setupFLAC();       break;
+        case 'alac': setupALAC();       break;
+        case 'fLaC': setupFLAC();       break;
 #ifdef QAAC
-        case *(int32_t*)"mp4a": setupMPEG4Audio(); break;
+        case 'mp4a': setupMPEG4Audio(); break;
 #endif
-        case *(int32_t*)"Opus": setupOpus();       break;
+        case 'Opus': setupOpus();       break;
         default:     throw std::runtime_error("Not supported input codec");
         }
 
@@ -117,7 +117,7 @@ MP4Source::MP4Source(const std::shared_ptr<FILE> &fp)
             m_time_ratio = m_oasbd.mSampleRate / timescale;
             m_edits.scaleShift(m_time_ratio);
         }
-        if (m_iasbd.mFormatID == *(int32_t*)"aach" || m_iasbd.mFormatID == *(int32_t*)"aacp") {
+        if (m_iasbd.mFormatID == 'aach' || m_iasbd.mFormatID == 'aacp') {
             /* 
              * When upsampled scale is used in HE-AAC/HE-AACv2 MP4.
              * we assume it is from Nero or FhG. We have to subtract
@@ -271,7 +271,7 @@ void MP4Source::setupALAC()
         uint8_t  bits      = alac[5];
         memset(&m_iasbd, 0, sizeof m_iasbd);
         m_iasbd.mSampleRate = timescale;
-        m_iasbd.mFormatID   = *(int32_t*)"alac";
+        m_iasbd.mFormatID   = 'alac';
         switch (bits) {
         case 16: m_iasbd.mFormatFlags = 1; break;
         case 20: m_iasbd.mFormatFlags = 2; break;
@@ -360,9 +360,9 @@ void MP4Source::setupMPEG4Audio()
         }
         auto asc = cautil::parseMagicCookieAAC(magic_cookie);
         cautil::parseASC(asc, &m_iasbd, &m_chanmap);
-        if (m_iasbd.mFormatID != *(int32_t*)"aac " &&
-            m_iasbd.mFormatID != *(int32_t*)"aach" &&
-            m_iasbd.mFormatID != *(int32_t*)"aacp")
+        if (m_iasbd.mFormatID != 'aac ' &&
+            m_iasbd.mFormatID != 'aach' &&
+            m_iasbd.mFormatID != 'aacp')
             throw std::runtime_error("Not supported input codec");
         m_decoder = std::make_shared<CoreAudioPacketDecoder>(this, m_iasbd);
         m_decoder->setMagicCookie(magic_cookie);
@@ -378,7 +378,7 @@ void MP4Source::setupMPEG4Audio()
         feed(&first_frame);
         m_current_packet = 0;
         MPAHeader header(first_frame.data());
-        uint32_t layer_tab[] = { 0, *(int32_t*)".mp3", *(int32_t*)".mp2", *(int32_t*)".mp1" };
+        uint32_t layer_tab[] = { 0, '.mp3', '.mp2', '.mp1' };
         memset(&m_iasbd, 0, sizeof m_iasbd);
         m_iasbd.mSampleRate       = header.sample_rate();
         m_iasbd.mFormatID         = layer_tab[header.layer];
@@ -414,14 +414,14 @@ void MP4Source::setupOpus()
 unsigned MP4Source::getMaxFrameDependency()
 {
     switch (m_iasbd.mFormatID) {
-    case *(int32_t*)"alac":
-    case *(int32_t*)"fLaC":
+    case 'alac':
+    case 'fLaC':
         return 0;
-    case *(int32_t*)".mp3": return 10;
-    case *(int32_t*)"aach":
-    case *(int32_t*)"aacp":
+    case '.mp3': return 10;
+    case 'aach':
+    case 'aacp':
         return m_iasbd.mSampleRate / 2 / m_iasbd.mFramesPerPacket;
-    case *(int32_t*)"opus":
+    case 'opus':
         return 4;
     }
     return 1;

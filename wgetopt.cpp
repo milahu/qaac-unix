@@ -522,7 +522,7 @@ start:
         (optchar == (int)'-' && *place != '\0') ||
         (oli = (char*)(wcschr(options, optchar))) == NULL) {
         /*
-         * If the user specified "-" and  '-*(int32_t*)" isn"t listed in
+         * If the user specified "-" and  '-' isn't listed in
          * options, return -1 (non-option) as per POSIX.
          * Otherwise, it is an unknown option character (or ':').
          */

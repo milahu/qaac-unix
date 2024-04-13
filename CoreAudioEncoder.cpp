@@ -67,7 +67,7 @@ AudioFilePacketTableInfo CoreAudioEncoder::getGaplessInfo()
     ptinfo.mPrimingFrames = pinfo.leadingFrames;
     ptinfo.mRemainderFrames = pinfo.trailingFrames;
     int64_t total = m_stat.samplesWritten();
-    if (m_output_desc.mFormatID == *(int32_t*)"aach")
+    if (m_output_desc.mFormatID == 'aach')
         total /= 2;
     ptinfo.mNumberValidFrames =
         total - pinfo.leadingFrames - pinfo.trailingFrames;

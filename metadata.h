@@ -7,41 +7,41 @@
 #include "CoreAudio/AudioFile.h"
 
 namespace Tag {
-    const uint32_t kTitle = FOURCC(*(int32_t*)"\xa9",'n','a','m');
-    const uint32_t kArtist = FOURCC(*(int32_t*)"\xa9",'A','R','T');
-    const uint32_t kAlbumArtist = *(int32_t*)"aART";
-    const uint32_t kAlbum = FOURCC(*(int32_t*)"\xa9",'a','l','b');
-    const uint32_t kGrouping = FOURCC(*(int32_t*)"\xa9",'g','r','p');
-    const uint32_t kComposer = FOURCC(*(int32_t*)"\xa9",'w','r','t');
-    const uint32_t kComment = FOURCC(*(int32_t*)"\xa9",'c','m','t');
-    const uint32_t kGenre = FOURCC(*(int32_t*)"\xa9",'g','e','n');
-    const uint32_t kGenreID3 = *(int32_t*)"gnre";
-    const uint32_t kDate = FOURCC(*(int32_t*)"\xa9",'d','a','y');
-    const uint32_t kTrack = *(int32_t*)"trkn";
-    const uint32_t kDisk = *(int32_t*)"disk";
-    const uint32_t kTempo = *(int32_t*)"tmpo";
-    const uint32_t kDescription = *(int32_t*)"desc";
-    const uint32_t kLongDescription = *(int32_t*)"ldes";
-    const uint32_t kLyrics = FOURCC(*(int32_t*)"\xa9",'l','y','r');
-    const uint32_t kCopyright = *(int32_t*)"cprt";
-    const uint32_t kCompilation = *(int32_t*)"cpil";
-    const uint32_t kTool = FOURCC(*(int32_t*)"\xa9",'t','o','o');
-    const uint32_t kArtwork = *(int32_t*)"covr";
+    const uint32_t kTitle = FOURCC('\xa9','n','a','m');
+    const uint32_t kArtist = FOURCC('\xa9','A','R','T');
+    const uint32_t kAlbumArtist = 'aART';
+    const uint32_t kAlbum = FOURCC('\xa9','a','l','b');
+    const uint32_t kGrouping = FOURCC('\xa9','g','r','p');
+    const uint32_t kComposer = FOURCC('\xa9','w','r','t');
+    const uint32_t kComment = FOURCC('\xa9','c','m','t');
+    const uint32_t kGenre = FOURCC('\xa9','g','e','n');
+    const uint32_t kGenreID3 = 'gnre';
+    const uint32_t kDate = FOURCC('\xa9','d','a','y');
+    const uint32_t kTrack = 'trkn';
+    const uint32_t kDisk = 'disk';
+    const uint32_t kTempo = 'tmpo';
+    const uint32_t kDescription = 'desc';
+    const uint32_t kLongDescription = 'ldes';
+    const uint32_t kLyrics = FOURCC('\xa9','l','y','r');
+    const uint32_t kCopyright = 'cprt';
+    const uint32_t kCompilation = 'cpil';
+    const uint32_t kTool = FOURCC('\xa9','t','o','o');
+    const uint32_t kArtwork = 'covr';
 
-    const uint32_t kTvSeason = *(int32_t*)"tvsn";
-    const uint32_t kTvEpisode = *(int32_t*)"tves";
-    const uint32_t kPodcast = *(int32_t*)"pcst";
-    const uint32_t kHDVideo = *(int32_t*)"hdvd";
-    const uint32_t kMediaType = *(int32_t*)"stik";
-    const uint32_t kContentRating = *(int32_t*)"rtng";
-    const uint32_t kGapless = *(int32_t*)"pgap";
-    const uint32_t kiTunesAccountType = *(int32_t*)"akID";
-    const uint32_t kiTunesCountry = *(int32_t*)"sfID";
-    const uint32_t kcontentID = *(int32_t*)"cnID";
-    const uint32_t kartistID = *(int32_t*)"atID";
-    const uint32_t kplaylistID = *(int32_t*)"plID";
-    const uint32_t kgenreID = *(int32_t*)"geID";
-    const uint32_t kcomposerID = *(int32_t*)"cmID";
+    const uint32_t kTvSeason = 'tvsn';
+    const uint32_t kTvEpisode = 'tves';
+    const uint32_t kPodcast = 'pcst';
+    const uint32_t kHDVideo = 'hdvd';
+    const uint32_t kMediaType = 'stik';
+    const uint32_t kContentRating = 'rtng';
+    const uint32_t kGapless = 'pgap';
+    const uint32_t kiTunesAccountType = 'akID';
+    const uint32_t kiTunesCountry = 'sfID';
+    const uint32_t kcontentID = 'cnID';
+    const uint32_t kartistID = 'atID';
+    const uint32_t kplaylistID = 'plID';
+    const uint32_t kgenreID = 'geID';
+    const uint32_t kcomposerID = 'cmID';
 }
 
 namespace TextBasedTag {

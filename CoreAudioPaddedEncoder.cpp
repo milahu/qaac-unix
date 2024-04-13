@@ -11,7 +11,7 @@ CoreAudioPaddedEncoder::CoreAudioPaddedEncoder(AudioConverterXX &converter,
       m_read(&CoreAudioPaddedEncoder::readSamples0)
 {
     m_buffer.set_unit(getInputDescription().mChannelsPerFrame);
-    if (getOutputDescription().mFormatID == *(int32_t*)"aac ")
+    if (getOutputDescription().mFormatID == 'aac ')
         m_write = &CoreAudioPaddedEncoder::writeSamplesLC;
     else
         m_write = &CoreAudioPaddedEncoder::writeSamplesHE;
@@ -19,7 +19,7 @@ CoreAudioPaddedEncoder::CoreAudioPaddedEncoder(AudioConverterXX &converter,
 AudioFilePacketTableInfo CoreAudioPaddedEncoder::getGaplessInfo()
 {
     AudioFilePacketTableInfo pinfo = CoreAudioEncoder::getGaplessInfo();
-    if (getOutputDescription().mFormatID == *(int32_t*)"aach") {
+    if (getOutputDescription().mFormatID == 'aach') {
         unsigned fpp = getOutputDescription().mFramesPerPacket / 2;
         pinfo.mNumberValidFrames -= fpp;
         pinfo.mRemainderFrames += fpp;
@@ -58,7 +58,7 @@ void CoreAudioPaddedEncoder::extrapolate0()
     unsigned bpf = getInputDescription().mBytesPerFrame;
     unsigned fpp = getOutputDescription().mFramesPerPacket;
     unsigned nsamples = fpp / 2;
-    unsigned padding = (getOutputDescription().mFormatID == *(int32_t*)"aac ")
+    unsigned padding = (getOutputDescription().mFormatID == 'aac ')
         ? m_num_priming + 3 * fpp - APPLE_NUM_PRIMING - nsamples
         : nsamples;
 

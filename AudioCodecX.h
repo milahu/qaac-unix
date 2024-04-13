@@ -10,7 +10,7 @@ public:
     AudioCodecX() {}
     AudioCodecX(OSType codec)
     {
-        AudioComponentDescription desc = { *(int32_t*)"aenc", codec, 0 };
+        AudioComponentDescription desc = { 'aenc', codec, 0 };
         AudioComponent component = AudioComponentFindNext(0, &desc);
         if (!component)
             throw std::runtime_error("AudioComponentFindNext(): "

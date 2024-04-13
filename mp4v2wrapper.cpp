@@ -146,7 +146,7 @@ MP4FileX::CreateAudioSampleGroupDescription(MP4TrackId trackId,
     stbl->AddChildAtom(sbgp);
     sbgp->Generate();
     sbgp->FindProperty("sbgp.groupingType", &prop);
-    dynamic_cast<MP4Integer32Property*>(prop)->SetValue(*(int32_t*)"roll");
+    dynamic_cast<MP4Integer32Property*>(prop)->SetValue('roll');
     sbgp->FindProperty("sbgp.entries.sampleCount", &prop);
     dynamic_cast<MP4Integer32Property*>(prop)->AddValue(sampleCount);
     sbgp->FindProperty("sbgp.entries.groupDescriptionIndex", &prop);
@@ -158,7 +158,7 @@ MP4FileX::CreateAudioSampleGroupDescription(MP4TrackId trackId,
     stbl->AddChildAtom(sgpd);
     sgpd->Generate();
     sgpd->FindProperty("sgpd.groupingType", &prop);
-    dynamic_cast<MP4Integer32Property*>(prop)->SetValue(*(int32_t*)"roll");
+    dynamic_cast<MP4Integer32Property*>(prop)->SetValue('roll');
     sgpd->FindProperty("sgpd.entries.rollDistance", &prop);
     dynamic_cast<MP4Integer16Property*>(prop)->AddValue(-1);
     sgpd->FindProperty("sgpd.entryCount", &prop);

@@ -55,7 +55,7 @@ samples per channel.
 
 Parameter names for buffer lengths have the suffix `len'.
 
-A single-character `i*(int32_t*)" or "o' is often used in names to give context as
+A single-character `i' or 'o' is often used in names to give context as
 input or output (e.g. ilen, olen).                                            */
 
 

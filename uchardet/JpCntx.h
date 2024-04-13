@@ -112,8 +112,8 @@ protected:
 
   PRInt32 GetOrder(const char* str)
   {
-    //We only interested in Hiragana, so first byte is *(int32_t*)"\202"
-    if (*str == *(int32_t*)"\202" && 
+    //We only interested in Hiragana, so first byte is '\202'
+    if (*str == '\202' && 
           (unsigned char)*(str+1) >= (unsigned char)0x9f && 
           (unsigned char)*(str+1) <= (unsigned char)0xf1)
       return (unsigned char)*(str+1) - (unsigned char)0x9f;
@@ -126,9 +126,9 @@ class EUCJPContextAnalysis : public JapaneseContextAnalysis
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
   PRInt32 GetOrder(const char* str)
-    //We only interested in Hiragana, so first byte is *(int32_t*)"\244"
+    //We only interested in Hiragana, so first byte is '\244'
   {
-    if (*str == *(int32_t*)"\244" &&
+    if (*str == '\244' &&
           (unsigned char)*(str+1) >= (unsigned char)0xa1 &&
           (unsigned char)*(str+1) <= (unsigned char)0xf3)
       return (unsigned char)*(str+1) - (unsigned char)0xa1;

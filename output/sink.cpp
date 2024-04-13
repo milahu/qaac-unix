@@ -237,22 +237,22 @@ void MP4SinkBase::writeShortTag(uint32_t fcc, const std::string &value)
         { Tag::kplaylistID,           &MP4SinkBase::writeInt64Tag       },
         { Tag::kgenreID,              &MP4SinkBase::writeInt32Tag       },
         { Tag::kcomposerID,           &MP4SinkBase::writeInt32Tag       },
-        { *(int32_t*)"apID",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"catg",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"keyw",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"purd",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"purl",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"soaa",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"soal",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"soar",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"soco",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"sonm",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"sosn",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"tven",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"tvnn",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"tvsh",                     &MP4SinkBase::writeStringTag      },
-        { *(int32_t*)"xid ",                     &MP4SinkBase::writeStringTag      },
-        { FOURCC(*(int32_t*)"\xa9",'e','n','c'), &MP4SinkBase::writeStringTag      },
+        { 'apID',                     &MP4SinkBase::writeStringTag      },
+        { 'catg',                     &MP4SinkBase::writeStringTag      },
+        { 'keyw',                     &MP4SinkBase::writeStringTag      },
+        { 'purd',                     &MP4SinkBase::writeStringTag      },
+        { 'purl',                     &MP4SinkBase::writeStringTag      },
+        { 'soaa',                     &MP4SinkBase::writeStringTag      },
+        { 'soal',                     &MP4SinkBase::writeStringTag      },
+        { 'soar',                     &MP4SinkBase::writeStringTag      },
+        { 'soco',                     &MP4SinkBase::writeStringTag      },
+        { 'sonm',                     &MP4SinkBase::writeStringTag      },
+        { 'sosn',                     &MP4SinkBase::writeStringTag      },
+        { 'tven',                     &MP4SinkBase::writeStringTag      },
+        { 'tvnn',                     &MP4SinkBase::writeStringTag      },
+        { 'tvsh',                     &MP4SinkBase::writeStringTag      },
+        { 'xid ',                     &MP4SinkBase::writeStringTag      },
+        { FOURCC('\xa9','e','n','c'), &MP4SinkBase::writeStringTag      },
         { 0,                          0                                 }
     };
 
@@ -371,7 +371,7 @@ MP4Sink::MP4Sink(const std::string &path,
         std::vector<uint32_t> channels;
         cautil::parseASC(config, &asbd, &channels);
         unsigned rate = asbd.mSampleRate;
-        if (asbd.mFormatID == *(int32_t*)"aach")
+        if (asbd.mFormatID == 'aach')
             rate /= 2;
         m_mp4file.SetTimeScale(rate);
         m_track_id = m_mp4file.AddAudioTrack(rate, 1024,
@@ -384,7 +384,7 @@ MP4Sink::MP4Sink(const std::string &path,
                 "moov.trak.mdia.minf.stbl.stsd.mp4a.channels",
                 asbd.mChannelsPerFrame);
         /* Looks like iTunes sets upsampled scale here */
-        if (asbd.mFormatID == *(int32_t*)"aach") { 
+        if (asbd.mFormatID == 'aach') { 
             uint64_t scale = static_cast<uint64_t>(rate) << 17;
             m_mp4file.SetIntegerProperty(
                 "moov.trak.mdia.minf.stbl.stsd.mp4a.timeScale",
