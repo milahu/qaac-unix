@@ -852,41 +852,6 @@ FARPROC WINAPI DllImportHook(unsigned notify, PDelayLoadInfo pdli)
 */
 
 static
-void set_dll_directories(int verbose)
-{
-    uint32_t sz = GetEnvironmentVariableW("PATH", 0, 0);
-    std::vector<char> vec(sz);
-    sz = GetEnvironmentVariableW("PATH", &vec[0], sz);
-    std::string searchPaths(&vec[0], &vec[sz]);
-
-    try {
-        HKEY hKey;
-        const char *subkey[] = {
-            "SOFTWARE\\Apple Inc.\\Apple Application Support",
-            "SOFTWARE\\Apple Computer, Inc.\\iTunes",
-        };
-        for (int i = 0; i < 2; ++i) {
-            if (!RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey[i], 0, KEY_READ, &hKey)) {
-                std::shared_ptr<HKEY__> hKeyPtr(hKey, RegCloseKey);
-                uint32_t size;
-                if (!RegQueryValueExW(hKey, "InstallDir", 0, 0, 0, &size)) {
-                    std::vector<char> vec(size/sizeof(char));
-                    RegQueryValueExW(hKey, "InstallDir", 0, 0,
-                            reinterpret_cast<LPBYTE>(&vec[0]), &size);
-                    searchPaths = strutil::format("%s;%s", &vec[0], searchPaths.c_str());
-                }
-            }
-        }
-    } catch (const std::exception &) {}
-    std::string dir = win32::get_module_directory() + "QTfiles";
-#ifdef _WIN64
-    dir += "64";
-#endif
-    searchPaths = strutil::format("%s;%s", dir.c_str(), searchPaths.c_str());
-    SetEnvironmentVariableW("PATH", searchPaths.c_str());
-}
-
-static
 void encode_file(const std::shared_ptr<ISeekableSource> &src,
                  const std::string &ofilename, const Options &opts)
 {
