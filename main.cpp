@@ -109,7 +109,7 @@ public:
         : m_disp(100, verbosity), m_verbose(verbosity),
           m_total(total), m_rate(rate)
     {
-        m_stderr_type = GetFileType(win32::get_handle(_fileno(stderr)));
+        m_stderr_type = isatty(STDERR_FILENO); // 1 = stderr is a terminal, 0 = no
         m_console_visible = is_console_visible();
         if (total != ~0ULL)
             m_tstamp = util::format_seconds(static_cast<double>(total) / rate);
