@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <cmath>
 #include "strutil.h"
 #include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
 
