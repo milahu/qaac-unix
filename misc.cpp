@@ -187,7 +187,7 @@ namespace misc
         while ((tok = tokens.next())) {
             if (*tok && tok[0] == '#')
                 continue;
-            if (std::swscanf(tok, tfmt, &h, &m, &s) == 3) {
+            if (std::sscanf(tok, tfmt, &h, &m, &s) == 3) {
                 strutil::strsep(&tok, "\t ");
                 add_chapter_entry(chaps, tok, h, m, s);
             } else if (wcsncmp(tok, "Chapter", 7) == 0) {
@@ -196,7 +196,7 @@ namespace misc
                 char *key = strutil::strsep(&tok, "=");
                 if (std::wcsstr(key, "NAME"))
                     add_chapter_entry(chaps, tok, h, m, s);
-                else if (std::swscanf(tok, tfmt, &hh, &mm, &ss) == 3)
+                else if (std::sscanf(tok, tfmt, &hh, &mm, &ss) == 3)
                     h = hh, m = mm, s = ss;
             }
         }

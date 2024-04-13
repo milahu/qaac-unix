@@ -380,7 +380,7 @@ bool Options::parse(int &argc, char **&argv)
                 return false;
             }
             this->method = pos;
-            if (std::swscanf(getopt::optarg, "%lf", &this->bitrate) != 1) {
+            if (std::sscanf(getopt::optarg, "%lf", &this->bitrate) != 1) {
                 complain("AAC Bitrate/Quality must be an integer.\n");
                 return false;
             }
@@ -423,7 +423,7 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'caff')
             this->is_caf = true;
         else if (ch == 'q') {
-            if (std::swscanf(getopt::optarg, "%u", &this->quality) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->quality) != 1) {
                 complain("-q requires an integer.\n");
                 return false;
             }
@@ -439,7 +439,7 @@ bool Options::parse(int &argc, char **&argv)
                 char *tok;
                 while ((tok = tokens.next())) {
                     int n;
-                    if (std::swscanf(tok, "%u", &n) == 1)
+                    if (std::sscanf(tok, "%u", &n) == 1)
                         this->native_resampler_quality = n;
                     else if (std::wcslen(tok) == 4)
                         this->native_resampler_complexity =
@@ -484,7 +484,7 @@ bool Options::parse(int &argc, char **&argv)
             char *tok;
             while ((tok = tokens.next()) != 0) {
                 unsigned n;
-                if (std::swscanf(tok, "%u", &n) == 1)
+                if (std::sscanf(tok, "%u", &n) == 1)
                     this->chanmap.push_back(n);
                 else {
                     complain("Invalid arg for --chanmap.\n");
@@ -508,20 +508,20 @@ bool Options::parse(int &argc, char **&argv)
                 this->rate = -1;
             else if (!std::wcscmp(getopt::optarg, "auto"))
                 this->rate = 0;
-            else if (std::swscanf(getopt::optarg, "%u", &this->rate) != 1) {
+            else if (std::sscanf(getopt::optarg, "%u", &this->rate) != 1) {
                 complain("Invalid arg for --rate.\n");
                 return false;
             }
         }
         else if (ch == 'lpf ') {
-            if (std::swscanf(getopt::optarg, "%u", &this->lowpass) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->lowpass) != 1) {
                 complain("--lowpass requires an integer.\n");
                 return false;
             }
         }
         else if (ch == 'b') {
             uint32_t n;
-            if (std::swscanf(getopt::optarg, "%u", &n) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &n) != 1) {
                 complain("-b requires an integer.\n");
                 return false;
             }
@@ -535,13 +535,13 @@ bool Options::parse(int &argc, char **&argv)
             this->no_dither = true;
         }
         else if (ch == 'mask') {
-            if (std::swscanf(getopt::optarg, "%i", &this->chanmask) != 1) {
+            if (std::sscanf(getopt::optarg, "%i", &this->chanmask) != 1) {
                 complain("--chanmask requires an integer.\n");
                 return false;
             }
         }
         else if (ch == 'Rchn') {
-            if (std::swscanf(getopt::optarg, "%u", &this->raw_channels) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->raw_channels) != 1) {
                 complain("--raw-channels requires an integer.\n");
                 return false;
             }
@@ -555,7 +555,7 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'Rrat') {
-            if (std::swscanf(getopt::optarg, "%u",
+            if (std::sscanf(getopt::optarg, "%u",
                              &this->raw_sample_rate) != 1) {
                 complain("--raw-rate requires an integer.\n");
                 return false;
@@ -570,14 +570,14 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'afst')
             this->alac_fast = true;
         else if (ch == 'gain') {
-            if (std::swscanf(getopt::optarg, "%lf", &this->gain) != 1) {
+            if (std::sscanf(getopt::optarg, "%lf", &this->gain) != 1) {
                 complain("--gain requires an floating point number.\n");
                 return false;
             }
         }
         else if (ch == 'drc ') {
             double threshold, ratio, knee, attack, release;
-            if (std::swscanf(getopt::optarg,
+            if (std::sscanf(getopt::optarg,
                              "%lf:%lf:%lf:%lf:%lf",
                              &threshold,
                              &ratio,
@@ -626,7 +626,7 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'ndly')
             this->num_priming = 0;
         else if (ch == 'encd') {
-            if (std::swscanf(getopt::optarg, "%u", &this->num_priming) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->num_priming) != 1) {
                 complain("Invalid arg for --num-priming.\n");
                 return false;
             }
@@ -638,13 +638,13 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'soar')
             this->sort_args = true;
         else if (ch == 'gapm') {
-            if (std::swscanf(getopt::optarg, "%u", &this->gapless_mode) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->gapless_mode) != 1) {
                 complain("Invalid arg for --gapless-mode.\n");
                 return false;
             }
         }
         else if (ch == 'txcp') {
-            if (std::swscanf(getopt::optarg, "%u", &this->textcp) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->textcp) != 1) {
                 complain("--text-codepage requires code page number.\n");
                 return false;
             }
@@ -657,7 +657,7 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'atsz') {
-            if (std::swscanf(getopt::optarg, "%u", &this->artwork_size) != 1) {
+            if (std::sscanf(getopt::optarg, "%u", &this->artwork_size) != 1) {
                 complain("--artwork-size requires an integer.\n");
                 return false;
             }
@@ -675,7 +675,7 @@ bool Options::parse(int &argc, char **&argv)
                 this->tagopts[ch] = "1";
             else {
                 int n;
-                if (std::swscanf(getopt::optarg, "%d", &n) != 1) {
+                if (std::sscanf(getopt::optarg, "%d", &n) != 1) {
                     complain("Invalid --compilation option arg.\n");
                     return false;
                 }

@@ -252,7 +252,7 @@ void CueSheet::parseTrack(const std::string *args)
 {
     if (args[2] == "AUDIO") {
         unsigned no;
-        if (std::swscanf(args[1].c_str(), "%d", &no) != 1)
+        if (std::sscanf(args[1].c_str(), "%d", &no) != 1)
             die("Invalid TRACK number");
         m_tracks.push_back(CueTrack(this, no));
     }
@@ -264,9 +264,9 @@ void CueSheet::parseIndex(const std::string *args)
     if (m_cur_file.empty())
         die("INDEX command before FILE");
     unsigned no, mm, ss, ff, nframes;
-    if (std::swscanf(args[1].c_str(), "%u", &no) != 1)
+    if (std::sscanf(args[1].c_str(), "%u", &no) != 1)
         die("Invalid INDEX number");
-    if (std::swscanf(args[2].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
+    if (std::sscanf(args[2].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
         die("Invalid INDEX time format");
     if (ss > 59 || ff > 74)
         die("Invalid INDEX time format");
@@ -297,7 +297,7 @@ void CueSheet::parsePostgap(const std::string *args)
     if (!m_tracks.size())
         die("POSTGAP command before TRACK");
     unsigned mm, ss, ff;
-    if (std::swscanf(args[1].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
+    if (std::sscanf(args[1].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
         die("Invalid POSTGAP time format");
     CueSegment segment(std::string("__GAP__"), 0x7ffffffe);
     segment.m_end = msf2frames(mm, ss, ff);
@@ -308,7 +308,7 @@ void CueSheet::parsePregap(const std::string *args)
     if (!m_tracks.size())
         die("PREGAP command before TRACK");
     unsigned mm, ss, ff;
-    if (std::swscanf(args[1].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
+    if (std::sscanf(args[1].c_str(), "%u:%u:%u", &mm, &ss, &ff) != 3)
         die("Invalid PREGAP time format");
     CueSegment segment(std::string("__GAP__"), 0x7fffffff);
     segment.m_end = msf2frames(mm, ss, ff);
