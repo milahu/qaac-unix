@@ -1128,6 +1128,7 @@ void load_metadata_files(Options *opts)
             LOG("WARNING: %s\n", errormsg(e).c_str());
         }
     }
+    /*
     for (size_t i = 0; i < opts->artwork_files.size(); ++i) {
         try {
             uint64_t size;
@@ -1145,6 +1146,7 @@ void load_metadata_files(Options *opts)
             LOG("WARNING: %s\n", errormsg(e).c_str());
         }
     }
+    */
 }
 
 static
