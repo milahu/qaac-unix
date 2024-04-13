@@ -92,16 +92,6 @@ public:
     }
     void flush() {
         if (m_verbose) std::fputs(m_message.c_str(), stderr);
-        if (m_verbose && m_console_visible &&
-            m_last_tick_stderr - m_last_tick_title > m_interval * 4)
-        {
-            std::vector<char> s(m_message.size() + 1);
-            std::strcpy(&s[0], m_message.c_str());
-            strutil::squeeze(&s[0], "\r");
-            std::string msg = strutil::format("%hs %s", PROGNAME, &s[0]);
-            SetConsoleTitleW(msg.c_str());
-            m_last_tick_title = m_last_tick_stderr;
-        }
     }
 };
 
