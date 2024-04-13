@@ -504,9 +504,9 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'r') {
-            if (!std::wcscmp(getopt::optarg, "keep"))
+            if (!std::strcmp(getopt::optarg, "keep"))
                 this->rate = -1;
-            else if (!std::wcscmp(getopt::optarg, "auto"))
+            else if (!std::strcmp(getopt::optarg, "auto"))
                 this->rate = 0;
             else if (std::sscanf(getopt::optarg, "%u", &this->rate) != 1) {
                 complain("Invalid arg for --rate.\n");
@@ -758,7 +758,7 @@ bool Options::parse(int &argc, char **&argv)
         this->method = isSBR() ? kCVBR : kTVBR;
         this->bitrate = isSBR() ? 0 : 90;
     }
-    if (isMP4() && this->ofilename && !std::wcscmp(this->ofilename, "-")) {
+    if (isMP4() && this->ofilename && !std::strcmp(this->ofilename, "-")) {
         if (!win32::is_seekable(_fileno(stdout))) {
             complain("MP4 piping is not supported.\n");
             return false;

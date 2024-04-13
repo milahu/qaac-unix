@@ -1157,7 +1157,7 @@ std::string get_output_filename(const std::string &ifilename,
 
     const char *ext = opts.extension();
     const char *outdir = opts.outdir ? opts.outdir : ".";
-    if (!std::wcscmp(ifilename.c_str(), "-"))
+    if (!std::strcmp(ifilename.c_str(), "-"))
         return std::string("stdin") + ext;
 
     std::string obasename =
@@ -1316,14 +1316,14 @@ int wmain1(int argc, char **argv)
         if (opts.ofilename) {
             std::string fullpath = win32::GetFullPathNameX(opts.ofilename);
             const char *ws = fullpath.c_str();
-            if (!std::wcscmp(opts.ofilename, "-"))
+            if (!std::strcmp(opts.ofilename, "-"))
                 _setmode(1, _O_BINARY);
         }
 
         if (opts.sort_args) {
             std::sort(&argv[0], &argv[argc],
                       [](const char *a, const char *b) {
-                          return std::wcscmp(a, b) < 0;
+                          return std::strcmp(a, b) < 0;
                       });
         }
 
