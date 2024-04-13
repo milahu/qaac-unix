@@ -49,7 +49,7 @@ namespace
 
   FileHandle openFile(const FileName &path, bool readOnly)
   {
-    const DWORD access = readOnly ? GENERIC_READ : (GENERIC_READ | GENERIC_WRITE);
+    const uint32_t access = readOnly ? GENERIC_READ : (GENERIC_READ | GENERIC_WRITE);
 
 #if defined (PLATFORM_WINRT)
     return CreateFile2(path.wstr().c_str(), access, FILE_SHARE_READ, OPEN_EXISTING, NULL);
@@ -70,8 +70,8 @@ namespace
 
   size_t readFile(FileHandle file, ByteVector &buffer)
   {
-    DWORD length;
-    if(ReadFile(file, buffer.data(), static_cast<DWORD>(buffer.size()), &length, NULL))
+    uint32_t length;
+    if(ReadFile(file, buffer.data(), static_cast<uint32_t>(buffer.size()), &length, NULL))
       return static_cast<size_t>(length);
     else
       return 0;
@@ -79,8 +79,8 @@ namespace
 
   size_t writeFile(FileHandle file, const ByteVector &buffer)
   {
-    DWORD length;
-    if(WriteFile(file, buffer.data(), static_cast<DWORD>(buffer.size()), &length, NULL))
+    uint32_t length;
+    if(WriteFile(file, buffer.data(), static_cast<uint32_t>(buffer.size()), &length, NULL))
       return static_cast<size_t>(length);
     else
       return 0;
@@ -380,7 +380,7 @@ void FileStream::seek(long offset, Position p)
   LARGE_INTEGER liOffset;
   liOffset.QuadPart = offset;
 
-  if(!SetFilePointerEx(d->file, liOffset, NULL, static_cast<DWORD>(p))) {
+  if(!SetFilePointerEx(d->file, liOffset, NULL, static_cast<uint32_t>(p))) {
     debug("FileStream::seek() -- Failed to set the file pointer.");
   }
 

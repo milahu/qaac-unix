@@ -5,7 +5,7 @@
 #include "strutil.h"
 
 namespace win32 {
-    void throw_error(const std::string &msg, DWORD code)
+    void throw_error(const std::string &msg, uint32_t code)
     {
         LPWSTR pszMsg = 0;
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -63,11 +63,11 @@ namespace win32 {
         HANDLE hFile = CreateFileW(fullpath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
         if (hFile == INVALID_HANDLE_VALUE)
             throw_error(fullpath, GetLastError());
-        DWORD sizeHi, sizeLo;
+        uint32_t sizeHi, sizeLo;
         sizeLo = GetFileSize(hFile, &sizeHi);
         *size = (static_cast<uint64_t>(sizeHi) << 32) | sizeLo;
         HANDLE hMap = CreateFileMappingW(hFile, 0, PAGE_READONLY, 0, 0, 0);
-        DWORD err = GetLastError();
+        uint32_t err = GetLastError();
         CloseHandle(hFile);
         if (!hMap) throw_error("CreateFileMapping", err);
         char *view =
@@ -100,7 +100,7 @@ namespace win32 {
             win32::throw_error("FindResourceExW", GetLastError());
         std::string data;
         {
-            DWORD cbres = SizeofResource(hDll, hRes);
+            uint32_t cbres = SizeofResource(hDll, hRes);
             HGLOBAL hMem = LoadResource(hDll, hRes);
             if (hMem) {
                 char *pc = static_cast<char*>(LockResource(hMem));

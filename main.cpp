@@ -52,7 +52,7 @@
 static volatile bool g_interrupted = false;
 
 static
-BOOL WINAPI console_interrupt_handler(DWORD type)
+BOOL WINAPI console_interrupt_handler(uint32_t type)
 {
     g_interrupted = true;
     return TRUE;
@@ -110,7 +110,7 @@ class Progress {
     std::string m_tstamp;
     win32::Timer m_timer;
     bool m_console_visible;
-    DWORD m_stderr_type;
+    uint32_t m_stderr_type;
 public:
     Progress(bool verbosity, uint64_t total, uint32_t rate)
         : m_disp(100, verbosity), m_verbose(verbosity),
@@ -861,7 +861,7 @@ static
 void set_dll_directories(int verbose)
 {
     SetDllDirectoryW("");
-    DWORD sz = GetEnvironmentVariableW("PATH", 0, 0);
+    uint32_t sz = GetEnvironmentVariableW("PATH", 0, 0);
     std::vector<char> vec(sz);
     sz = GetEnvironmentVariableW("PATH", &vec[0], sz);
     std::string searchPaths(&vec[0], &vec[sz]);
@@ -875,7 +875,7 @@ void set_dll_directories(int verbose)
         for (int i = 0; i < 2; ++i) {
             if (!RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey[i], 0, KEY_READ, &hKey)) {
                 std::shared_ptr<HKEY__> hKeyPtr(hKey, RegCloseKey);
-                DWORD size;
+                uint32_t size;
                 if (!RegQueryValueExW(hKey, "InstallDir", 0, 0, 0, &size)) {
                     std::vector<char> vec(size/sizeof(char));
                     RegQueryValueExW(hKey, "InstallDir", 0, 0,

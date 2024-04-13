@@ -57,7 +57,7 @@ void PipedReader::inputThreadProc()
         uint8_t *bp = &buffer[0];
         HANDLE ph = m_writePipe.get();
         size_t n;
-        DWORD nb;
+        uint32_t nb;
         while ((n = src->readSamples(bp, NSAMPLES)) > 0
                && WriteFile(ph, bp, n * bpf, &nb, 0))
             ;

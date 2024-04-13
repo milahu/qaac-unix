@@ -78,7 +78,7 @@ void WaveOutDevice::writeSamples(const void *data, size_t length,
     if (m_ibuffer.size() < m_asbd.mSampleRate * nbpc / NUMBUFFERS)
         return;
 
-    DWORD n = WaitForMultipleObjects(util::sizeof_array(m_events), m_events,
+    uint32_t n = WaitForMultipleObjects(util::sizeof_array(m_events), m_events,
                                      0, INFINITE);
     n -= WAIT_OBJECT_0;
     ResetEvent(m_events[n]);

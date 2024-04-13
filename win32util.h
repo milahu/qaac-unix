@@ -24,7 +24,7 @@
 
 namespace win32 {
     class Timer {
-        DWORD m_ticks;
+        uint32_t m_ticks;
     public:
         Timer() { m_ticks = GetTickCount(); };
         double ellapsed() {
@@ -32,9 +32,9 @@ namespace win32 {
         }
     };
 
-    void throw_error(const std::string& msg, DWORD error);
+    void throw_error(const std::string& msg, uint32_t error);
 
-    inline void throw_error(const std::string& msg, DWORD error)
+    inline void throw_error(const std::string& msg, uint32_t error)
     {
         throw_error(strutil::us2w(msg), error);
     }
@@ -46,9 +46,9 @@ namespace win32 {
 
     inline std::string GetFullPathNameX(const std::string &path)
     {
-        DWORD length = GetFullPathNameW(path.c_str(), 0, 0, 0);
+        uint32_t length = GetFullPathNameW(path.c_str(), 0, 0, 0);
         std::vector<char> vec(length);
-        length = GetFullPathNameW(path.c_str(), static_cast<DWORD>(vec.size()),
+        length = GetFullPathNameW(path.c_str(), static_cast<uint32_t>(vec.size()),
                                   &vec[0], 0);
         return std::string(&vec[0], &vec[length]);
     }
@@ -76,12 +76,12 @@ namespace win32 {
     inline std::string GetModuleFileNameX(HMODULE module)
     {
         std::vector<char> buffer(32);
-        DWORD cclen = GetModuleFileNameW(module, &buffer[0],
-                                         static_cast<DWORD>(buffer.size()));
+        uint32_t cclen = GetModuleFileNameW(module, &buffer[0],
+                                         static_cast<uint32_t>(buffer.size()));
         while (cclen >= buffer.size() - 1) {
             buffer.resize(buffer.size() * 2);
             cclen = GetModuleFileNameW(module, &buffer[0],
-                                       static_cast<DWORD>(buffer.size()));
+                                       static_cast<uint32_t>(buffer.size()));
         }
         return std::string(&buffer[0], &buffer[cclen]);
     }
