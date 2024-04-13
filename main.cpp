@@ -1018,7 +1018,7 @@ static
 AudioStreamBasicDescription getRawFormat(const Options &opts)
 {
     int bits;
-    unsigned char c_type, c_endian = '';
+    unsigned char c_type, c_endian = 'L';
     int itype, iendian;
 
     if (std::swscanf(opts.raw_format, "%hc%d%hc",
