@@ -5,6 +5,7 @@
 #include "ISink.h"
 #include "win32util.h"
 #include "AudioFile.h"
+//#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
 
 class CAFSink : public ISink, public ITagStore {
     std::shared_ptr<FILE> m_file;
@@ -60,12 +61,12 @@ private:
     }
     void write32(uint32_t x)
     {
-        x = _byteswap_ulong(x);
+        x = BSWAP32(x);
         write(&x, 4);
     }
     void write64(uint64_t x)
     {
-        x = _byteswap_uint64(x);
+        x = BSWAP64(x);
         write(&x, 8);
     }
     void writef64(double x)
