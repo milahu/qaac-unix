@@ -36,13 +36,13 @@ using namespace TagLib;
 
 namespace
 {
-  std::wstring ansiToUnicode(const char *str)
+  std::string ansiToUnicode(const char *str)
   {
     const int len = MultiByteToWideChar(CP_ACP, 0, str, -1, NULL, 0);
     if(len == 0)
-      return std::wstring();
+      return std::string();
 
-    std::wstring wstr(len - 1, L'\0');
+    std::string wstr(len - 1, L'\0');
     MultiByteToWideChar(CP_ACP, 0, str, -1, &wstr[0], len);
 
     return wstr;
@@ -79,7 +79,7 @@ FileName::operator const char *() const
   return m_name.c_str();
 }
 
-const std::wstring &FileName::wstr() const
+const std::string &FileName::wstr() const
 {
   return m_wname;
 }

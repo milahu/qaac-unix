@@ -5,7 +5,7 @@
 #include "strutil.h"
 
 namespace win32 {
-    void throw_error(const std::wstring &msg, DWORD code)
+    void throw_error(const std::string &msg, DWORD code)
     {
         LPWSTR pszMsg = 0;
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -16,7 +16,7 @@ namespace win32 {
                        (LPWSTR)&pszMsg,
                        0,
                        0);
-        std::wstring ss;
+        std::string ss;
         if (pszMsg) {
             strutil::squeeze(pszMsg, L"\r\n");
             ss = strutil::format(L"%s: %s", msg.c_str(), pszMsg);
@@ -31,7 +31,7 @@ namespace win32 {
 
     FILE *tmpfile(const char *prefix)
     {
-        std::wstring sprefix =
+        std::string sprefix =
             strutil::format(L"%s.%d.", prefix, GetCurrentProcessId());
         char *tmpname = _wtempnam(0, sprefix.c_str());
         std::shared_ptr<char> tmpname_p(tmpname, std::free);
@@ -59,7 +59,7 @@ namespace win32 {
 
     char *load_with_mmap(const char *path, uint64_t *size)
     {
-        std::wstring fullpath = prefixed_path(path);
+        std::string fullpath = prefixed_path(path);
         HANDLE hFile = CreateFileW(fullpath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
         if (hFile == INVALID_HANDLE_VALUE)
             throw_error(fullpath, GetLastError());

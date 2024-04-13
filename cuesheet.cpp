@@ -113,7 +113,7 @@ void CueSheet::parse(std::wstreambuf *src)
 {
     static struct handler_t {
         const char *cmd;
-        void (CueSheet::*mf)(const std::wstring *args);
+        void (CueSheet::*mf)(const std::string *args);
         size_t nargs;
     } handlers[] = {
         { L"FILE", &CueSheet::parseFile, 3 },
@@ -135,7 +135,7 @@ void CueSheet::parse(std::wstreambuf *src)
         if (!tokenizer.m_fields.size())
             continue;
         m_lineno = tokenizer.m_lineno;
-        std::wstring cmd = tokenizer.m_fields[0];
+        std::string cmd = tokenizer.m_fields[0];
         for (handler_t *p = handlers; p->cmd; ++p) {
             if (cmd != p->cmd)
                 continue;
@@ -151,7 +151,7 @@ void CueSheet::parse(std::wstreambuf *src)
 }
 
 std::vector<std::shared_ptr<ISeekableSource>>
-CueSheet::loadTracks(bool is_embedded, const std::wstring &path,
+CueSheet::loadTracks(bool is_embedded, const std::string &path,
                      const std::vector<int> &selection)
 {
     std::vector<std::shared_ptr<ISeekableSource>> tracks;
@@ -170,7 +170,7 @@ CueSheet::loadTracks(bool is_embedded, const std::wstring &path,
             } else if (is_embedded) {
                 src = InputFactory::instance().open(path.c_str());
             } else {
-                std::wstring ifilename =
+                std::string ifilename =
                     win32::PathCombineX(path, seg.m_filename);
                 src = InputFactory::instance().open(ifilename.c_str());
             }
@@ -242,13 +242,13 @@ void CueSheet::validate()
     };
 }
 
-void CueSheet::parseFile(const std::wstring *args)
+void CueSheet::parseFile(const std::string *args)
 {
     if (!m_cur_file.empty() && m_cur_file != args[1])
         this->m_has_multiple_files = true;
     m_cur_file = args[1];
 }
-void CueSheet::parseTrack(const std::wstring *args)
+void CueSheet::parseTrack(const std::string *args)
 {
     if (args[2] == L"AUDIO") {
         unsigned no;
@@ -257,7 +257,7 @@ void CueSheet::parseTrack(const std::wstring *args)
         m_tracks.push_back(CueTrack(this, no));
     }
 }
-void CueSheet::parseIndex(const std::wstring *args)
+void CueSheet::parseIndex(const std::string *args)
 {
     if (!m_tracks.size())
         die("INDEX command before TRACK");
@@ -292,30 +292,30 @@ void CueSheet::parseIndex(const std::wstring *args)
         m_tracks[m_tracks.size() - 2].addSegment(segment);
     }
 }
-void CueSheet::parsePostgap(const std::wstring *args)
+void CueSheet::parsePostgap(const std::string *args)
 {
     if (!m_tracks.size())
         die("POSTGAP command before TRACK");
     unsigned mm, ss, ff;
     if (std::swscanf(args[1].c_str(), L"%u:%u:%u", &mm, &ss, &ff) != 3)
         die("Invalid POSTGAP time format");
-    CueSegment segment(std::wstring(L"__GAP__"), 0x7ffffffe);
+    CueSegment segment(std::string(L"__GAP__"), 0x7ffffffe);
     segment.m_end = msf2frames(mm, ss, ff);
     m_tracks.back().addSegment(segment);
 }
-void CueSheet::parsePregap(const std::wstring *args)
+void CueSheet::parsePregap(const std::string *args)
 {
     if (!m_tracks.size())
         die("PREGAP command before TRACK");
     unsigned mm, ss, ff;
     if (std::swscanf(args[1].c_str(), L"%u:%u:%u", &mm, &ss, &ff) != 3)
         die("Invalid PREGAP time format");
-    CueSegment segment(std::wstring(L"__GAP__"), 0x7fffffff);
+    CueSegment segment(std::string(L"__GAP__"), 0x7fffffff);
     segment.m_end = msf2frames(mm, ss, ff);
     if (m_tracks.size() > 1)
         m_tracks[m_tracks.size() - 2].addSegment(segment);
 }
-void CueSheet::parseMeta(const std::wstring *args)
+void CueSheet::parseMeta(const std::string *args)
 {
     if (m_tracks.size())
         m_tracks.back().setMeta(args[0], args[1]);

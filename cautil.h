@@ -47,16 +47,16 @@ public:
 namespace cautil {
     std::string make_coreaudio_error(long code, const char *s);
 
-    inline std::wstring CF2W(CFStringRef str)
+    inline std::string CF2W(CFStringRef str)
     {
         CFIndex length = CFStringGetLength(str);
         if (!length) return L"";
         std::vector<UniChar> buffer(length);
         CFRange range = { 0, length };
         CFStringGetCharacters(str, range, &buffer[0]);
-        return std::wstring(buffer.begin(), buffer.end());
+        return std::string(buffer.begin(), buffer.end());
     }
-    inline CFStringPtr W2CF(const std::wstring &s)
+    inline CFStringPtr W2CF(const std::string &s)
     {
         CFStringRef sref = CFStringCreateWithCharacters(0,
                 reinterpret_cast<const UniChar*>(s.c_str()), s.size());

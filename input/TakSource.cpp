@@ -12,7 +12,7 @@
 #define CHECK(expr) do { if (!(expr)) throw std::runtime_error("!?"); } \
     while (0)
 
-bool TakModule::load(const std::wstring &path)
+bool TakModule::load(const std::string &path)
 {
     if (!m_dl.load(path))
         return false;
@@ -178,7 +178,7 @@ void TakSource::fetchTags()
     for (it = itemListMap.begin(); it != itemListMap.end(); ++it) {
         std::string key = it->first.toCString();
         if (it->second.type() == TagLib::APE::Item::Text) {
-            std::wstring value = it->second.toString().toWString();
+            std::string value = it->second.toString().toWString();
             tags[key] = strutil::w2us(value);
         } else if (it->second.type() == TagLib::APE::Item::Binary) {
             if (strcasecmp(key.c_str(), "Cover Art (Front)"))

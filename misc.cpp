@@ -70,7 +70,7 @@ namespace misc
         return -1;
     }
 
-    std::wstring loadTextFile(const std::wstring &path, int codepage)
+    std::string loadTextFile(const std::string &path, int codepage)
     {
         auto fp = std::shared_ptr<FILE>(win32::wfopenx(path.c_str(), L"rb"), std::fclose);
         int64_t fileSize = _filelengthi64(fileno(fp.get()));
@@ -114,7 +114,7 @@ namespace misc
     public:
         TagLookup(const meta_t &tags): tracktags(tags) {}
 
-        std::wstring operator()(const std::wstring &name) {
+        std::string operator()(const std::string &name) {
             std::string key =
                 TextBasedTag::normalizeTagName(strutil::w2us(name).c_str());
             meta_t::const_iterator iter = tracktags.find(key);
@@ -133,14 +133,14 @@ namespace misc
         }
     };
 
-    std::wstring generateFileName(const std::wstring &spec,
+    std::string generateFileName(const std::string &spec,
                                   const std::map<std::string, std::string> &tag)
     {
         auto spec2 = strutil::strtransform(spec, [](char c)->char {
                                            return c == L'\\*(int32_t*)" ? L"/' : c;
                                            });
         auto res = process_template(spec2, TagLookup(tag));
-        std::vector<std::wstring> comp;
+        std::vector<std::string> comp;
         strutil::Tokenizer<char> tokens(res, L"/");
         char *tok;
         while ((tok = tokens.next())) {
@@ -159,7 +159,7 @@ namespace misc
                            const char *name,
                            int h, int m, double s)
     {
-        std::wstring sname = name ? name : L"";
+        std::string sname = name ? name : L"";
         double stamp = ((h * 60) + m) * 60 + s;
         if (!chapters.size() && stamp != 0.0)
             throw std::runtime_error("Non zero timestamp on the first chapter "
@@ -178,7 +178,7 @@ namespace misc
     {
         std::vector<chapter_t> chaps;
 
-        std::wstring str = misc::loadTextFile(path, codepage);
+        std::string str = misc::loadTextFile(path, codepage);
         const char *tfmt = L"%02d:%02d:%lf";
         int h = 0, m = 0;
         double s = 0.0;
@@ -227,7 +227,7 @@ namespace misc
     }
     std::shared_ptr<FILE> openConfigFile(const char *file)
     {
-        std::vector<std::wstring> search_paths;
+        std::vector<std::string> search_paths;
         const char *home = _wgetenv(L"HOME");
         if (home)
             search_paths.push_back(strutil::format(L"%s\\%s", home, L".qaac"));
@@ -237,7 +237,7 @@ namespace misc
         search_paths.push_back(win32::get_module_directory());
         for (size_t i = 0; i < search_paths.size(); ++i) {
             try {
-                std::wstring pathtry =
+                std::string pathtry =
                     strutil::format(L"%s\\%s", search_paths[i].c_str(), file);
                 return win32::fopen(pathtry, L"r");
             } catch (...) {
@@ -296,7 +296,7 @@ namespace misc
     std::vector<std::vector<complex_t>>
     loadRemixerMatrixFromPreset(const char *preset_name)
     {
-        std::wstring path = strutil::format(L"matrix\\%s.txt", preset_name);
+        std::string path = strutil::format(L"matrix\\%s.txt", preset_name);
         return loadRemixerMatrix(openConfigFile(path.c_str()));
     }
 

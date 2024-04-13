@@ -41,7 +41,7 @@ namespace afutil {
                                        0, 0, &size, vec.data()));
         return vec;
     }
-    inline std::wstring getFileTypeName(uint32_t type)
+    inline std::string getFileTypeName(uint32_t type)
     {
         CFStringRef name;
         UInt32 size = sizeof(name);
@@ -50,7 +50,7 @@ namespace afutil {
         CFStringPtr _(name, CFRelease);
         return cautil::CF2W(name);
     }
-    inline std::vector<std::wstring> getExtensionsForType(uint32_t type)
+    inline std::vector<std::string> getExtensionsForType(uint32_t type)
     {
         CFArrayRef aref;
         UInt32 size = sizeof(aref);
@@ -58,7 +58,7 @@ namespace afutil {
                                        sizeof(UInt32), &type, &size, &aref));
         std::shared_ptr<const __CFArray> _(aref, CFRelease);
         CFIndex count = CFArrayGetCount(aref);
-        std::vector<std::wstring> result;
+        std::vector<std::string> result;
         for (CFIndex i = 0; i < count; ++i) {
             CFStringRef value =
                 static_cast<CFStringRef>(CFArrayGetValueAtIndex(aref, i));
@@ -78,7 +78,7 @@ namespace afutil {
         return vec;
     }
     inline
-    std::wstring getASBDFormatName(const AudioStreamBasicDescription &asbd)
+    std::string getASBDFormatName(const AudioStreamBasicDescription &asbd)
     {
         CFStringRef s;
         UInt32 size = sizeof(s);
@@ -86,7 +86,7 @@ namespace afutil {
                                        sizeof(asbd), &asbd,
                                        &size, &s));
         CFStringPtr _(s, CFRelease);
-        std::wstring ws = cautil::CF2W(s);
+        std::string ws = cautil::CF2W(s);
         // XXX
         // Workaround for CoreAudio bug. MPEG Layer 1 and 2 is reported as
         // Layer 3

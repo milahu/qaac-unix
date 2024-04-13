@@ -25,7 +25,7 @@ namespace strutil {
     template<> char *strsep(char **strp, const char *sep);
     template<> char *strsep(char **strp, const char *sep);
 
-    std::wstring &m2w(std::wstring &dst, const char *src, size_t srclen,
+    std::string &m2w(std::string &dst, const char *src, size_t srclen,
             const std::codecvt<char, char, std::mbstate_t> &cvt);
 
     std::string &w2m(std::string &dst, const char *src, size_t srclen,
@@ -45,7 +45,7 @@ namespace strutil {
         return strtransform(s, tolower);
     }
     inline
-    std::wstring wslower(const std::wstring &s)
+    std::string wslower(const std::string &s)
     {
         return strtransform(s, towlower);
     }
@@ -55,7 +55,7 @@ namespace strutil {
         return strtransform(s, toupper);
     }
     inline
-    std::wstring wsupper(const std::wstring &s)
+    std::string wsupper(const std::string &s)
     {
         return strtransform(s, towupper);
     }
@@ -86,46 +86,46 @@ namespace strutil {
     }
 
     inline
-    std::wstring m2w(const std::string &src,
+    std::string m2w(const std::string &src,
                      const std::codecvt<char, char, std::mbstate_t> &cvt)
     {
-        std::wstring result;
+        std::string result;
         return m2w(result, src.c_str(), src.size(), cvt);
     }
     inline
-    std::wstring m2w(const std::string &src)
+    std::string m2w(const std::string &src)
     {
         typedef std::codecvt<char, char, std::mbstate_t> cvt_t;
         std::locale loc("");
         return m2w(src, std::use_facet<cvt_t>(loc));
     }
     inline
-    std::wstring us2w(const std::string &src)
+    std::string us2w(const std::string &src)
     {
         return m2w(src, std::codecvt_utf8<char>());
     }
     inline
-    std::string w2m(const std::wstring& src,
+    std::string w2m(const std::string& src,
                     const std::codecvt<char, char, std::mbstate_t> &cvt)
     {
         std::string result;
         return w2m(result, src.c_str(), src.size(), cvt);
     }
     inline
-    std::string w2m(const std::wstring &src)
+    std::string w2m(const std::string &src)
     {
         typedef std::codecvt<char, char, std::mbstate_t> cvt_t;
         std::locale loc("");
         return w2m(src, std::use_facet<cvt_t>(loc));
     }
     inline
-    std::string w2us(const std::wstring &src)
+    std::string w2us(const std::string &src)
     {
         return w2m(src, std::codecvt_utf8<char>());
     }
 
     std::string format(const char *fmt, ...);
-    std::wstring format(const char *fmt, ...);
+    std::string format(const char *fmt, ...);
 
     template <typename T>
     std::basic_string<T> normalize_crlf(const T *s, const T *eol)

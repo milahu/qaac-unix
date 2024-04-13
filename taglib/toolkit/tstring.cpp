@@ -39,7 +39,7 @@ namespace
 {
   using namespace TagLib;
 
-  // Returns the native format of std::wstring.
+  // Returns the native format of std::string.
   String::Type wcharByteOrder()
   {
     if(Utils::systemByteOrder() == Utils::LittleEndian)
@@ -49,7 +49,7 @@ namespace
 
   // Converts a Latin-1 string into UTF-16(without BOM/CPU byte order)
   // and copies it to the internal buffer.
-  void copyFromLatin1(std::wstring &data, const char *s, size_t length)
+  void copyFromLatin1(std::string &data, const char *s, size_t length)
   {
     data.resize(length);
 
@@ -59,12 +59,12 @@ namespace
 
   // Converts a UTF-8 string into UTF-16(without BOM/CPU byte order)
   // and copies it to the internal buffer.
-  void copyFromUTF8(std::wstring &data, const char *s, size_t length)
+  void copyFromUTF8(std::string &data, const char *s, size_t length)
   {
     data.resize(length);
 
     try {
-      const std::wstring::iterator dstEnd = utf8::utf8to16(s, s + length, data.begin());
+      const std::string::iterator dstEnd = utf8::utf8to16(s, s + length, data.begin());
       data.resize(dstEnd - data.begin());
     }
     catch(const utf8::exception &e) {
@@ -99,7 +99,7 @@ namespace
   // Converts a UTF-16 (with BOM), UTF-16LE or UTF16-BE string into
   // UTF-16(without BOM/CPU byte order) and copies it to the internal buffer.
   template <typename T>
-  void copyFromUTF16(std::wstring &data, const T *s, size_t length, String::Type t)
+  void copyFromUTF16(std::string &data, const T *s, size_t length, String::Type t)
   {
     bool swap;
     if(t == String::UTF16) {
@@ -515,7 +515,7 @@ String String::stripWhiteSpace() const
   static const char *WhiteSpaceChars = L"\t\n\f\r ";
 
   const size_t pos1 = d->data.find_first_not_of(WhiteSpaceChars);
-  if(pos1 == std::wstring::npos)
+  if(pos1 == std::string::npos)
     return String();
 
   const size_t pos2 = d->data.find_last_not_of(WhiteSpaceChars);

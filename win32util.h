@@ -32,7 +32,7 @@ namespace win32 {
         }
     };
 
-    void throw_error(const std::wstring& msg, DWORD error);
+    void throw_error(const std::string& msg, DWORD error);
 
     inline void throw_error(const std::string& msg, DWORD error)
     {
@@ -44,36 +44,36 @@ namespace win32 {
         if (FAILED(expr)) throw_error(msg, expr);
     }
 
-    inline std::wstring GetFullPathNameX(const std::wstring &path)
+    inline std::string GetFullPathNameX(const std::string &path)
     {
         DWORD length = GetFullPathNameW(path.c_str(), 0, 0, 0);
         std::vector<char> vec(length);
         length = GetFullPathNameW(path.c_str(), static_cast<DWORD>(vec.size()),
                                   &vec[0], 0);
-        return std::wstring(&vec[0], &vec[length]);
+        return std::string(&vec[0], &vec[length]);
     }
 
-    inline std::wstring PathReplaceExtension(const std::wstring &path,
+    inline std::string PathReplaceExtension(const std::string &path,
                                              const char *ext)
     {
         const char *beg = path.c_str();
         const char *end = PathFindExtensionW(beg);
-        std::wstring s(beg, end);
+        std::string s(beg, end);
         //if (ext[0] != L'.') s.push_back(L'.');
         s += ext;
         return s;
     }
 
     // XXX: limited to MAX_PATH
-    inline std::wstring PathCombineX(const std::wstring &basedir,
-                                     const std::wstring &filename)
+    inline std::string PathCombineX(const std::string &basedir,
+                                     const std::string &filename)
     {
         char buffer[MAX_PATH];
         PathCombineW(buffer, basedir.c_str(), filename.c_str());
         return buffer;
     }
 
-    inline std::wstring GetModuleFileNameX(HMODULE module)
+    inline std::string GetModuleFileNameX(HMODULE module)
     {
         std::vector<char> buffer(32);
         DWORD cclen = GetModuleFileNameW(module, &buffer[0],
@@ -83,13 +83,13 @@ namespace win32 {
             cclen = GetModuleFileNameW(module, &buffer[0],
                                        static_cast<DWORD>(buffer.size()));
         }
-        return std::wstring(&buffer[0], &buffer[cclen]);
+        return std::string(&buffer[0], &buffer[cclen]);
     }
 
-    inline bool MakeSureDirectoryPathExistsX(const std::wstring &path)
+    inline bool MakeSureDirectoryPathExistsX(const std::string &path)
     {
         // SHCreateDirectoryEx() doesn't work with relative path
-        std::wstring fullpath = GetFullPathNameX(path);
+        std::string fullpath = GetFullPathNameX(path);
         std::vector<char> buf(fullpath.begin(), fullpath.end());
         buf.push_back(0);
         char *pos = PathFindFileNameW(buf.data());
@@ -98,16 +98,16 @@ namespace win32 {
         return rc == ERROR_SUCCESS;
     }
 
-    inline std::wstring get_module_directory(HMODULE module=0)
+    inline std::string get_module_directory(HMODULE module=0)
     {
-        std::wstring path = GetModuleFileNameX(module);
+        std::string path = GetModuleFileNameX(module);
         const char *fpos = PathFindFileNameW(path.c_str());
         return path.substr(0, fpos - path.c_str());
     }
 
-    inline std::wstring prefixed_path(const char *path)
+    inline std::string prefixed_path(const char *path)
     {
-        std::wstring fullpath = GetFullPathNameX(path);
+        std::string fullpath = GetFullPathNameX(path);
         if (fullpath.size() < 256)
             return fullpath;
         if (fullpath.size() > 2 && fullpath.substr(0, 2) == L"\\\\")
@@ -119,7 +119,7 @@ namespace win32 {
 
     inline FILE *wfopenx(const char *path, const char *mode)
     {
-        std::wstring fullpath = win32::prefixed_path(path);
+        std::string fullpath = win32::prefixed_path(path);
         int share = _SH_DENYRW;
         if (std::wcschr(mode, L'r') && !std::wcschr(mode, L'+'))
             share = _SH_DENYWR;
@@ -130,7 +130,7 @@ namespace win32 {
         }
         return fp;
     }
-    inline std::shared_ptr<FILE> fopen(const std::wstring &path,
+    inline std::shared_ptr<FILE> fopen(const std::string &path,
                                        const char *mode)
     {
         auto noop_close = [](FILE *){};

@@ -25,7 +25,7 @@ public:
         else
             m_module.reset(handle, [](HMODULE){});
     }
-    bool load(const std::wstring &path)
+    bool load(const std::string &path)
     {
         HMODULE handle = LoadLibraryW(path.c_str());
         if (handle) m_module.reset(handle, FreeLibrary);

@@ -60,7 +60,7 @@ void parseMagicCookieALAC(const std::vector<uint8_t> &cookie,
 
 using mp4v2::impl::MP4Atom;
 
-MP4SinkBase::MP4SinkBase(const std::wstring &path, bool temp)
+MP4SinkBase::MP4SinkBase(const std::string &path, bool temp)
         : m_filename(path), m_closed(false),
           m_edit_start(0), m_edit_duration(0),
           m_max_bitrate(0)
@@ -359,7 +359,7 @@ void MP4SinkBase::writeStringTag(const char *fcc, const std::string &value)
     m_mp4file.SetMetadataString(fcc, s.c_str());
 }
 
-MP4Sink::MP4Sink(const std::wstring &path,
+MP4Sink::MP4Sink(const std::string &path,
                  const std::vector<uint8_t> &config,
                  bool temp)
         : MP4SinkBase(path, temp),
@@ -423,7 +423,7 @@ void MP4Sink::writeTags()
     MP4SinkBase::writeTags();
 }
 
-ALACSink::ALACSink(const std::wstring &path,
+ALACSink::ALACSink(const std::string &path,
         const std::vector<uint8_t> &magicCookie, bool temp)
         : MP4SinkBase(path, temp)
 {
@@ -442,7 +442,7 @@ ALACSink::ALACSink(const std::wstring &path,
     }
 }
 
-ADTSSink::ADTSSink(const std::wstring &path,
+ADTSSink::ADTSSink(const std::string &path,
                    const std::vector<uint8_t> &cookie,
                    bool append)
     : m_fp(win32::fopen(path, append ? L"ab" : L"wb"))

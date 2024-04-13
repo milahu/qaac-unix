@@ -10,12 +10,12 @@
 #include <complex>
 
 namespace misc {
-    typedef std::pair<std::wstring, double> chapter_t;
+    typedef std::pair<std::string, double> chapter_t;
     typedef std::complex<float> complex_t;
 
-    std::wstring loadTextFile(const std::wstring &path, int codepage=0);
+    std::string loadTextFile(const std::string &path, int codepage=0);
 
-    std::wstring generateFileName(const std::wstring &spec,
+    std::string generateFileName(const std::string &spec,
                                   const std::map<std::string, std::string>&tag);
 
     // the resulting chapter_t is <name, absolute timestamp>

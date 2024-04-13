@@ -21,7 +21,7 @@ public:
         static SoXConvolverModule self;
         return self;
     }
-    bool load(const std::wstring &path);
+    bool load(const std::string &path);
     bool loaded() const { return m_dl.loaded(); }
 
     const char *(*version)();

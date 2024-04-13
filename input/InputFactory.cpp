@@ -13,7 +13,7 @@
 
 std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
 {
-    std::map<std::wstring, std::shared_ptr<ISeekableSource> >::iterator
+    std::map<std::string, std::shared_ptr<ISeekableSource> >::iterator
         pos = m_sources.find(path);
     if (pos != m_sources.end())
         return pos->second;

@@ -174,7 +174,7 @@ namespace util {
         throw std::runtime_error(ss.str());
     }
 
-    inline void throw_crt_error(const std::wstring &message)
+    inline void throw_crt_error(const std::string &message)
     {
         std::stringstream ss;
         ss << strutil::w2us(message) << ": " << std::strerror(errno);
@@ -230,7 +230,7 @@ namespace util {
         *millis = (seconds - *s) * 1000;
     }
 
-    inline std::wstring format_seconds(double seconds)
+    inline std::string format_seconds(double seconds)
     {
         int h, m, s, millis;
         seconds_to_HMS(seconds, &h, &m, &s, &millis);

@@ -18,7 +18,7 @@ class CAFSink : public ISink, public ITagStore {
     std::vector<uint32_t> m_packet_table;
     AudioStreamBasicDescription m_asbd;
 public:
-    CAFSink(const std::wstring &filename,
+    CAFSink(const std::string &filename,
             const AudioStreamBasicDescription &asbd,
             uint32_t channel_layout,
             const std::vector<uint8_t> &cookie)

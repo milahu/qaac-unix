@@ -29,7 +29,7 @@ namespace strutil {
         return tok;
     }
 
-    std::wstring &m2w(std::wstring &dst, const char *src, size_t srclen,
+    std::string &m2w(std::string &dst, const char *src, size_t srclen,
             const std::codecvt<char, char, std::mbstate_t> &cvt)
     {
         typedef std::codecvt<char, char, std::mbstate_t> cvt_t;
@@ -105,7 +105,7 @@ namespace strutil {
     }
 
 #if defined(_MSC_VER) || defined(__MINGW32__) 
-    std::wstring format(const char *fmt, ...)
+    std::string format(const char *fmt, ...)
     {
         va_list args;
 
@@ -119,7 +119,7 @@ namespace strutil {
         rc = _vsnwprintf(&buffer[0], buffer.size(), fmt, args);
         va_end(args);
 
-        return std::wstring(&buffer[0], &buffer[rc]);
+        return std::string(&buffer[0], &buffer[rc]);
     }
 #endif
 

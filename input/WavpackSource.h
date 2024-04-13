@@ -25,7 +25,7 @@ public:
         static WavpackModule self;
         return self;
     }
-    bool load(const std::wstring &path);
+    bool load(const std::string &path);
     bool loaded() const { return m_dl.loaded(); }
 
     const char *(*GetLibraryVersionString)();
@@ -67,7 +67,7 @@ class WavpackSource: public ISeekableSource, public ITagParser
     AudioStreamBasicDescription m_asbd;
     WavpackModule &m_module;
 public:
-    WavpackSource(const std::wstring &path);
+    WavpackSource(const std::string &path);
     ~WavpackSource() { m_wpc.reset(); }
     uint64_t length() const { return m_length; }
     const AudioStreamBasicDescription &getSampleFormat() const

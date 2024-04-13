@@ -59,7 +59,7 @@ BOOL WINAPI console_interrupt_handler(DWORD type)
 }
 
 inline
-std::wstring errormsg(const std::exception &ex)
+std::string errormsg(const std::exception &ex)
 {
     return strutil::us2w(ex.what());
 }
@@ -68,7 +68,7 @@ class PeriodicDisplay {
     uint32_t m_interval;
     uint32_t m_last_tick_title;
     uint32_t m_last_tick_stderr;
-    std::wstring m_message;
+    std::string m_message;
     bool m_verbose;
     bool m_console_visible;
 public:
@@ -79,7 +79,7 @@ public:
         m_console_visible = IsWindowVisible(GetConsoleWindow());
         m_last_tick_title = m_last_tick_stderr = GetTickCount();
     }
-    void put(const std::wstring &message) {
+    void put(const std::string &message) {
         m_message = message;
         uint32_t tick = GetTickCount();
         if (tick - m_last_tick_stderr > m_interval) {
@@ -95,7 +95,7 @@ public:
             std::vector<char> s(m_message.size() + 1);
             std::wcscpy(&s[0], m_message.c_str());
             strutil::squeeze(&s[0], L"\r");
-            std::wstring msg = strutil::format(L"%hs %s", PROGNAME, &s[0]);
+            std::string msg = strutil::format(L"%hs %s", PROGNAME, &s[0]);
             SetConsoleTitleW(msg.c_str());
             m_last_tick_title = m_last_tick_stderr;
         }
@@ -107,7 +107,7 @@ class Progress {
     bool m_verbose;
     uint64_t m_total;
     uint32_t m_rate;
-    std::wstring m_tstamp;
+    std::string m_tstamp;
     win32::Timer m_timer;
     bool m_console_visible;
     DWORD m_stderr_type;
@@ -134,7 +134,7 @@ public:
             m_disp.put(strutil::format(L"\r%s (%.1fx)   ",
                 util::format_seconds(seconds).c_str(), speed));
         else {
-            std::wstring msg =
+            std::string msg =
                 strutil::format(L"\r[%.1f%%] %s/%s (%.1fx), ETA %s  ",
                                 percent, util::format_seconds(seconds).c_str(),
                                 m_tstamp.c_str(), speed,
@@ -548,7 +548,7 @@ bool accept_tag(const std::string &name)
 
 static
 void set_tags(ISource *src, ISink *sink, const Options &opts,
-              const std::wstring encoder_config)
+              const std::string encoder_config)
 {
     ITagStore *tagstore = dynamic_cast<ITagStore*>(sink);
     if (!tagstore)
@@ -600,7 +600,7 @@ void set_tags(ISource *src, ISink *sink, const Options &opts,
 
 static
 void decode_file(const std::vector<std::shared_ptr<ISource> > &chain,
-                 const std::wstring &ofilename, const Options &opts)
+                 const std::string &ofilename, const Options &opts)
 {
     std::shared_ptr<ISink> sink;
     uint32_t chanmask = 0;
@@ -684,13 +684,13 @@ uint32_t map_to_aac_channels(std::vector<std::shared_ptr<ISource> > &chain,
 }
 
 static
-void do_encode(IEncoder *encoder, const std::wstring &ofilename,
+void do_encode(IEncoder *encoder, const std::string &ofilename,
                const Options &opts)
 {
     typedef std::shared_ptr<std::FILE> file_t;
     file_t statPtr;
     if (opts.save_stat) {
-        std::wstring statname =
+        std::string statname =
             win32::PathReplaceExtension(ofilename, L".stat.txt");
         statPtr = win32::fopen(statname, L"w");
     }
@@ -713,7 +713,7 @@ void do_encode(IEncoder *encoder, const std::wstring &ofilename,
     }
 }
 
-static void do_optimize(MP4FileX *file, const std::wstring &dst, bool verbose)
+static void do_optimize(MP4FileX *file, const std::string &dst, bool verbose)
 {
     try {
         file->FinishWriteX();
@@ -735,7 +735,7 @@ static void do_optimize(MP4FileX *file, const std::wstring &dst, bool verbose)
 
 static
 void finalize_m4a(MP4SinkBase *sink, IEncoder *encoder,
-                   const std::wstring &ofilename, const Options &opts)
+                   const std::string &ofilename, const Options &opts)
 {
     IEncoderStat *stat = dynamic_cast<IEncoderStat *>(encoder);
     if (opts.chapter_file) {
@@ -757,7 +757,7 @@ void finalize_m4a(MP4SinkBase *sink, IEncoder *encoder,
 
 #ifdef QAAC
 static
-std::shared_ptr<ISink> open_sink(const std::wstring &ofilename,
+std::shared_ptr<ISink> open_sink(const std::string &ofilename,
                                  const Options &opts,
                                  const AudioStreamBasicDescription &asbd,
                                  uint32_t channel_layout,
@@ -864,7 +864,7 @@ void set_dll_directories(int verbose)
     DWORD sz = GetEnvironmentVariableW(L"PATH", 0, 0);
     std::vector<char> vec(sz);
     sz = GetEnvironmentVariableW(L"PATH", &vec[0], sz);
-    std::wstring searchPaths(&vec[0], &vec[sz]);
+    std::string searchPaths(&vec[0], &vec[sz]);
 
     try {
         HKEY hKey;
@@ -885,7 +885,7 @@ void set_dll_directories(int verbose)
             }
         }
     } catch (const std::exception &) {}
-    std::wstring dir = win32::get_module_directory() + L"QTfiles";
+    std::string dir = win32::get_module_directory() + L"QTfiles";
 #ifdef _WIN64
     dir += L"64";
 #endif
@@ -895,7 +895,7 @@ void set_dll_directories(int verbose)
 
 static
 void encode_file(const std::shared_ptr<ISeekableSource> &src,
-                 const std::wstring &ofilename, const Options &opts)
+                 const std::string &ofilename, const Options &opts)
 {
     std::vector<std::shared_ptr<ISource> > chain;
     build_filter_chain(src, chain, opts);
@@ -917,7 +917,7 @@ void encode_file(const std::shared_ptr<ISeekableSource> &src,
         int32_t quality = (opts.quality + 1) << 5;
         converter.configAACCodec(opts.method, opts.bitrate, quality);
     }
-    std::wstring encoder_config = strutil::us2w(converter.getConfigAsString());
+    std::string encoder_config = strutil::us2w(converter.getConfigAsString());
     LOG(L"%s\n", encoder_config.c_str());
     auto cookie = converter.getCompressionMagicCookie();
 
@@ -970,7 +970,7 @@ void encode_file(const std::shared_ptr<ISeekableSource> &src,
 
 static
 void encode_file(const std::shared_ptr<ISeekableSource> &src,
-        const std::wstring &ofilename, const Options &opts)
+        const std::string &ofilename, const Options &opts)
 {
     std::vector<std::shared_ptr<ISource> > chain;
     build_filter_chain(src, chain, opts);
@@ -1077,11 +1077,11 @@ trim_input(std::shared_ptr<ISeekableSource> src, const Options & opts)
     return std::make_shared<TrimmedSource>(src, start, duration);
 }
 
-typedef std::pair<std::wstring, std::shared_ptr<ISeekableSource>> workItem;
+typedef std::pair<std::string, std::shared_ptr<ISeekableSource>> workItem;
 
 static
 void load_cue_tracks(const Options &opts, std::wstreambuf *sb, bool is_embedded,
-                     const std::wstring &path, std::vector<workItem> &items)
+                     const std::string &path, std::vector<workItem> &items)
 {
     CueSheet cue;
     cue.parse(sb);
@@ -1090,7 +1090,7 @@ void load_cue_tracks(const Options &opts, std::wstreambuf *sb, bool is_embedded,
         auto parser = dynamic_cast<ITagParser*>(tracks[i].get());
         const char *spec = opts.fname_format;
         if (!spec) spec = L"${tracknumber}${title& }${title}";
-        std::wstring ofname =
+        std::string ofname =
             misc::generateFileName(spec, parser->getTags());
         items.push_back(std::make_pair(ofname, tracks[i]));
     }
@@ -1102,16 +1102,16 @@ void load_track(const char *ifilename, const Options &opts,
 {
     if (strutil::wslower(PathFindExtensionW(ifilename)) == L".cue") {
         const char *base_p = PathFindFileNameW(ifilename);
-        std::wstring cuedir =
-            (base_p == ifilename ? L"." : std::wstring(ifilename, base_p));
+        std::string cuedir =
+            (base_p == ifilename ? L"." : std::string(ifilename, base_p));
         cuedir = win32::GetFullPathNameX(cuedir);
-        std::wstring cuetext = misc::loadTextFile(ifilename, opts.textcp);
+        std::string cuetext = misc::loadTextFile(ifilename, opts.textcp);
         std::wstringbuf istream(cuetext);
         load_cue_tracks(opts, &istream, false, cuedir, tracks);
         return;
     }
 
-    std::wstring ofilename(ifilename);
+    std::string ofilename(ifilename);
     auto src = InputFactory::instance().open(ifilename);
     auto parser = dynamic_cast<ITagParser*>(src.get());
     if (parser) {
@@ -1171,7 +1171,7 @@ void load_metadata_files(Options *opts)
 }
 
 static
-std::wstring get_output_filename(const std::wstring &ifilename,
+std::string get_output_filename(const std::string &ifilename,
                                  const Options &opts)
 {
     if (opts.ofilename) return opts.ofilename;
@@ -1179,11 +1179,11 @@ std::wstring get_output_filename(const std::wstring &ifilename,
     const char *ext = opts.extension();
     const char *outdir = opts.outdir ? opts.outdir : L".";
     if (!std::wcscmp(ifilename.c_str(), L"-"))
-        return std::wstring(L"stdin") + ext;
+        return std::string(L"stdin") + ext;
 
-    std::wstring obasename =
+    std::string obasename =
         win32::PathReplaceExtension(PathFindFileNameW(ifilename.c_str()), ext);
-    std::wstring ofilename = strutil::format(L"%s/%s", outdir,
+    std::string ofilename = strutil::format(L"%s/%s", outdir,
                                              obasename.c_str());
 
     /* test if ifilename and ofilename refer to the same file */
@@ -1197,7 +1197,7 @@ std::wstring get_output_filename(const std::wstring &ifilename,
     if (!win32::is_same_file(_fileno(ifp.get()), _fileno(ofp.get())))
         return ofilename;
 
-    std::wstring tl = strutil::format(L"_%s", ext);
+    std::string tl = strutil::format(L"_%s", ext);
     return win32::PathReplaceExtension(ofilename, tl.c_str());
 }
 
@@ -1231,7 +1231,7 @@ int wmain(int argc, char **argv)
 int wmain1(int argc, char **argv)
 #endif
 {
-    auto cmdline = std::wstring(GetCommandLineW()) + L"\n";
+    auto cmdline = std::string(GetCommandLineW()) + L"\n";
     OutputDebugStringW(cmdline.c_str());
 
 #ifdef _DEBUG
@@ -1327,13 +1327,13 @@ int wmain1(int argc, char **argv)
 
         load_metadata_files(&opts);
         if (opts.tmpdir) {
-            std::wstring env(L"TMP=");
+            std::string env(L"TMP=");
             env += opts.tmpdir;
             _wputenv(env.c_str());
         }
 
         if (opts.ofilename) {
-            std::wstring fullpath = win32::GetFullPathNameX(opts.ofilename);
+            std::string fullpath = win32::GetFullPathNameX(opts.ofilename);
             const char *ws = fullpath.c_str();
             if (!std::wcscmp(opts.ofilename, L"-"))
                 _setmode(1, _O_BINARY);
@@ -1365,7 +1365,7 @@ int wmain1(int argc, char **argv)
 
         if (!opts.concat) {
             for (size_t i = 0; i < workItems.size() && !g_interrupted; ++i) {
-                std::wstring ofilename =
+                std::string ofilename =
                     get_output_filename(workItems[i].first, opts);
                 LOG(L"\n%s\n",
                     ofilename == L"-" ? L"<stdout>"
@@ -1375,7 +1375,7 @@ int wmain1(int argc, char **argv)
                 encode_file(src, ofilename, opts);
             }
         } else {
-            std::wstring ofilename = get_output_filename(argv[0], opts);
+            std::string ofilename = get_output_filename(argv[0], opts);
             LOG(L"\n%s\n",
                 ofilename == L"-" ? L"<stdout>"
                                   : PathFindFileNameW(ofilename.c_str()));

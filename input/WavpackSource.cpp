@@ -12,7 +12,7 @@
 #define CHECK(expr) do { if (!(expr)) throw std::runtime_error("!?"); } \
     while (0)
 
-bool WavpackModule::load(const std::wstring &path)
+bool WavpackModule::load(const std::string &path)
 {
     if (!m_dl.load(path)) return false;
     try {
@@ -103,7 +103,7 @@ namespace wavpack {
     }
 }
 
-WavpackSource::WavpackSource(const std::wstring &path)
+WavpackSource::WavpackSource(const std::string &path)
     : m_module(WavpackModule::instance())
 {
     char error[0x100];

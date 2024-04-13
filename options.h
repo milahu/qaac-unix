@@ -119,12 +119,12 @@ struct Options {
     uint32_t output_format;
     std::vector<DRCParams> drc_params;
     std::map<uint32_t, std::string> tagopts;
-    std::map<uint32_t, std::wstring> ftagopts;
+    std::map<uint32_t, std::string> ftagopts;
     std::map<std::string, std::string> longtags;
     std::vector<misc::chapter_t> chapters;
-    std::vector<std::wstring> artwork_files;
+    std::vector<std::string> artwork_files;
     std::vector<std::vector<char> > artworks;
-    std::wstring encoder_name;
+    std::string encoder_name;
     std::vector<uint32_t> chanmap;
     std::vector<int> cue_tracks;
 };

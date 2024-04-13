@@ -66,10 +66,10 @@ void CompositeSource::addSource(const std::shared_ptr<ISeekableSource> &src)
 
 void CompositeSource::addSourceWithChapter(
                             const std::shared_ptr<ISeekableSource> &src,
-                            const std::wstring &title)
+                            const std::string &title)
 {
     addSource(src);
-    std::wstring name(title);
+    std::string name(title);
     auto parser = dynamic_cast<ITagParser*>(src.get());
     auto cp = dynamic_cast<IChapterParser*>(src.get());
     if (cp) {

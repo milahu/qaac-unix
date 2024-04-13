@@ -3,7 +3,7 @@
 
 #define CHECK(expr) do { if (!(expr)) throw std::runtime_error("!?"); } \
     while (0)
-bool AvisynthModule::load(const std::wstring &path)
+bool AvisynthModule::load(const std::string &path)
 {
     if (!m_dl.load(path)) return false;
     try {
@@ -26,7 +26,7 @@ bool AvisynthModule::load(const std::wstring &path)
 }
 
 
-AvisynthSource::AvisynthSource(const std::wstring &path)
+AvisynthSource::AvisynthSource(const std::string &path)
     : m_position(0),
       m_module(AvisynthModule::instance())
 {
