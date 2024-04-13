@@ -6,12 +6,16 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <unistd.h> // realpath
-#include <fcntl.h>
+#include <unistd.h> // realpath, access, F_OK, open, close
+#include <fcntl.h> // for open, O_CREAT, O_WRONLY, O_RDWR, O_RDONLY
 #include <ctime>
 #include <cstdlib>
 #include <cstring>
 #include <limits.h> // PATH_MAX
+#include <cstdio>
+#include <cerrno> // for errno
+#include <sys/file.h> // flock
+
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -157,19 +161,69 @@ namespace win32 {
         return fullpath;
     }
 
-    inline FILE *wfopenx(const char *path, const char *mode)
-    {
-        std::string fullpath = win32::prefixed_path(path);
-        int share = _SH_DENYRW;
-        if (std::wcschr(mode, L'r') && !std::wcschr(mode, L'+'))
-            share = _SH_DENYWR;
-        FILE *fp = _wfsopen(fullpath.c_str(), mode, share);
-        if (!fp) {
-            if (_doserrno) throw_error(fullpath.c_str(), _doserrno);
-            util::throw_crt_error(fullpath);
+    inline FILE *wfopenx(const char *path, const char *mode) {
+        std::string fullpath = path; // No need for any prefix in Unix/Linux
+        int share = 0;
+
+        // Determine file access mode and file sharing mode
+        if (strchr(mode, 'r') && !strchr(mode, '+')) {
+            // Read-only mode
+            share = LOCK_SH;
+        } else {
+            // Write or read/write mode
+            share = LOCK_EX;
         }
+
+        // Check if the file exists before opening it
+        if (access(fullpath.c_str(), F_OK) == -1) {
+            // File does not exist, create it if mode includes write access
+            if (strchr(mode, 'w') || strchr(mode, 'a')) {
+                int fd = open(fullpath.c_str(), O_CREAT, 0644);
+                if (fd == -1) {
+                    // Error creating the file
+                    // You may want to handle the error differently
+                    perror("Error creating file");
+                    return nullptr;
+                }
+                close(fd);
+            } else {
+                // File does not exist and mode doesn't include write access
+                // Return nullptr
+                return nullptr;
+            }
+        }
+
+        // Open the file with the specified mode
+        int fd = open(fullpath.c_str(), O_RDWR);
+        if (fd == -1) {
+            // Error opening the file
+            // You may want to handle the error differently
+            perror("Error opening file");
+            return nullptr;
+        }
+
+        // Apply file locking based on the determined sharing mode
+        if (flock(fd, share | LOCK_NB) == -1) {
+            // Error applying file lock
+            // You may want to handle the error differently
+            perror("Error applying file lock");
+            close(fd);
+            return nullptr;
+        }
+
+        // Convert file descriptor to FILE pointer
+        FILE *fp = fdopen(fd, mode);
+        if (!fp) {
+            // Error converting file descriptor to FILE pointer
+            // You may want to handle the error differently
+            perror("Error converting file descriptor to FILE pointer");
+            close(fd);
+            return nullptr;
+        }
+
         return fp;
     }
+
     inline std::shared_ptr<FILE> fopen(const std::string &path,
                                        const char *mode)
     {
