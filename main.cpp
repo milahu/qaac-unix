@@ -1186,10 +1186,6 @@ int wmain1(int argc, char **argv)
 
     std::setlocale(LC_CTYPE, "");
     std::setbuf(stderr, 0);
-    _setmode(0, _O_BINARY);
-    _setmode(2, _O_U8TEXT);
-    _setmaxstdio(2048);
-
 #if 0
     FILE *fp = std::fopen("CON", "r");
     std::getc(fp);
