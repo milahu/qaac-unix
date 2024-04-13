@@ -8,6 +8,7 @@
 #include <memory>
 #include <unistd.h>
 #include <fcntl.h>
+#include <ctime>
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -23,6 +24,19 @@
 #define HR(expr) (void)(win32::throwIfError((expr), #expr))
 
 namespace win32 {
+
+    // Function to get the number of milliseconds since system startup
+    unsigned long GetTickCount()
+    {
+        struct timespec now;
+        if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+            // Handle error
+            return 0;
+        }
+        // Calculate milliseconds since system startup
+        return now.tv_sec * 1000 + now.tv_nsec / 1000000;
+    }
+
     class Timer {
         uint32_t m_ticks;
     public:
