@@ -1264,17 +1264,17 @@ int wmain1(int argc, char **argv)
         encoder_name = strutil::format(PROGNAME " %s", get_qaac_version());
 #ifdef QAAC
 //      decltype(__pfnDliNotifyHook2) __pfnDliFailureHook2 = DllImportHook;
-        set_dll_directories(opts.verbose);
-        HMODULE hDll = LoadLibraryW("CoreAudioToolbox.dll");
+        // TODO Replace "CoreAudioToolbox.so" with the actual path to your shared library
+        void* hDll = dlopen("CoreAudioToolbox.so", RTLD_NOW);
         if (!hDll)
-            win32::throw_error("CoreAudioToolbox.dll", GetLastError());
+            throw std::runtime_error("failed to load CoreAudioToolbox.so");
         else {
             WORD langid_us = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
             std::string ver = win32::get_dll_version_for_locale(hDll, langid_us);
             encoder_name = strutil::format("%s, CoreAudioToolbox %s",
                                            encoder_name.c_str(), ver.c_str());
             setup_aach_codec(hDll);
-            FreeLibrary(hDll);
+            dlclose(hDll);
         }
 #endif
         opts.encoder_name = strutil::us2w(encoder_name);
