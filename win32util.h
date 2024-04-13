@@ -80,11 +80,11 @@ namespace win32 {
         return path + "." + newExtension;
     }
 
-    // XXX: limited to MAX_PATH
+    // XXX: limited to PATH_MAX
     inline std::string PathCombineX(const std::string &basedir,
                                      const std::string &filename)
     {
-        char buffer[MAX_PATH];
+        char buffer[PATH_MAX];
         PathCombineW(buffer, basedir.c_str(), filename.c_str());
         return buffer;
     }

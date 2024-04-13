@@ -231,7 +231,7 @@ namespace misc
         const char *home = _wgetenv("HOME");
         if (home)
             search_paths.push_back(strutil::format("%s\\%s", home, ".qaac"));
-        char path[MAX_PATH];
+        char path[PATH_MAX];
         if (SUCCEEDED(SHGetFolderPathW(0, CSIDL_APPDATA, 0, 0, path)))
             search_paths.push_back(strutil::format("%s\\%s", path, "qaac"));
         search_paths.push_back(win32::get_module_directory());
