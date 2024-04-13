@@ -1,6 +1,7 @@
 #ifndef _SINK_H
 #define _SINK_H
 
+#include <cstdio> // FILE
 #include "CoreAudioToolbox.h"
 #include "mp4v2wrapper.h"
 #include "ISink.h"
@@ -125,10 +126,11 @@ public:
     void writeSamples(const void *data, size_t length, size_t nsamples);
 private:
     void init(const std::vector<uint8_t> &cookie);
-    void write(const void *data, size_t size)
-    {
-        if (_write(fileno(m_fp.get()), data, size) < 0)
-            win32::throw_error("write failed", _doserrno);
+    void write(const void *data, size_t size) {
+        FILE *fp = m_fp.get();
+        if (fwrite(data, 1, size, fp) < size) {
+            throw std::runtime_error("write failed");
+        }
     }
 };
 
