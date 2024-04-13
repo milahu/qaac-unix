@@ -90,17 +90,17 @@ namespace win32 {
         }
     }
 
-    inline std::string GetModuleFileNameX(HMODULE module)
-    {
-        std::vector<char> buffer(32);
-        uint32_t cclen = GetModuleFileNameW(module, &buffer[0],
-                                         static_cast<uint32_t>(buffer.size()));
-        while (cclen >= buffer.size() - 1) {
-            buffer.resize(buffer.size() * 2);
-            cclen = GetModuleFileNameW(module, &buffer[0],
-                                       static_cast<uint32_t>(buffer.size()));
+    std::string GetModuleFileNameX(void* module) {
+        // the "module" paramter is not supported
+        // always return name of this exe
+        char buffer[PATH_MAX];
+        ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer));
+        if (len == -1) {
+            // Error handling: unable to read the symbolic link
+            return "";
         }
-        return std::string(&buffer[0], &buffer[cclen]);
+        buffer[len] = '\0'; // Null-terminate the string
+        return std::string(buffer);
     }
 
     inline bool MakeSureDirectoryPathExistsX(const std::string &path)
