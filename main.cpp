@@ -1096,7 +1096,7 @@ void load_track(const char *ifilename, const Options &opts,
         auto cue = meta.find("CUESHEET");
         if (cue != meta.end()) {
             try {
-                std::wstringbuf wsb(strutil::us2w(cue->second));
+                std::stringbuf wsb(strutil::us2w(cue->second));
                 load_cue_tracks(opts, &wsb, true, ifilename, tracks);
                 return;
             } catch (...) {}
