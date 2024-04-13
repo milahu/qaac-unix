@@ -805,13 +805,13 @@ void show_available_codec_setttings(UInt32 fmt)
                     kAudioCodecBitRateControlMode_Constant);
             auto bits = converter.getApplicableEncodeBitRates();
 
-            std::wprintf("%hs %gHz %hs --",
+            std::printf("%hs %gHz %hs --",
                     fmt == 'aac ' ? "LC" : "HE",
                     srates[i].mMinimum, name.c_str());
             for (size_t k = 0; k < bits.size(); ++k) {
                 if (!bits[k].mMinimum) continue;
                 int delim = k == 0 ? ' ' : ',';
-                std::wprintf("%c%d", delim, lrint(bits[k].mMinimum / 1000.0));
+                std::printf("%c%d", delim, lrint(bits[k].mMinimum / 1000.0));
             }
             std::putwchar('\n');
         }
