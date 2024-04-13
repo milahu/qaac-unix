@@ -979,7 +979,7 @@ AudioStreamBasicDescription getRawFormat(const Options &opts)
     unsigned char c_type, c_endian = 'L';
     int itype, iendian;
 
-    if (std::sscanf(opts.raw_format, "%hc%d%hc",
+    if (std::sscanf(opts.raw_format, "%c%d%c",
                     &c_type, &bits, &c_endian) < 2)
         throw std::runtime_error("Invalid --raw-format spec");
     if ((itype = strutil::strindex("USF", toupper(c_type))) == -1)
