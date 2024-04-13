@@ -18,7 +18,7 @@ public:
         static InputFactory self;
         return self;
     }
-    std::shared_ptr<ISeekableSource> open(const char8_t *path);
+    std::shared_ptr<ISeekableSource> open(const char *path);
     void setRawFormat(const AudioStreamBasicDescription &asbd)
     {
         m_raw_format = asbd;

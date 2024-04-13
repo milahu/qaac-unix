@@ -23,13 +23,13 @@ typedef intptr_t ssize_t;
 namespace strutil {
     template<typename T> T *strsep(T **strp, const T *sep);
     template<> char *strsep(char **strp, const char *sep);
-    template<> char8_t *strsep(char8_t **strp, const char8_t *sep);
+    template<> char *strsep(char **strp, const char *sep);
 
     std::wstring &m2w(std::wstring &dst, const char *src, size_t srclen,
-            const std::codecvt<char8_t, char, std::mbstate_t> &cvt);
+            const std::codecvt<char, char, std::mbstate_t> &cvt);
 
-    std::string &w2m(std::string &dst, const char8_t *src, size_t srclen,
-                   const std::codecvt<char8_t, char, std::mbstate_t> &cvt);
+    std::string &w2m(std::string &dst, const char *src, size_t srclen,
+                   const std::codecvt<char, char, std::mbstate_t> &cvt);
 
     template <typename T, typename Conv>
     inline
@@ -64,9 +64,9 @@ namespace strutil {
         const char *p = std::strchr(s, ch);
         return p ? p - s : -1;
     }
-    inline ssize_t strindex(const char8_t *s, int ch)
+    inline ssize_t strindex(const char *s, int ch)
     {
-        const char8_t *p = std::wcschr(s, ch);
+        const char *p = std::wcschr(s, ch);
         return p ? p - s : -1;
     }
     template <typename T>
@@ -92,7 +92,7 @@ namespace strutil {
 
     inline
     std::wstring m2w(const std::string &src,
-                     const std::codecvt<char8_t, char, std::mbstate_t> &cvt)
+                     const std::codecvt<char, char, std::mbstate_t> &cvt)
     {
         std::wstring result;
         return m2w(result, src.c_str(), src.size(), cvt);
@@ -100,18 +100,18 @@ namespace strutil {
     inline
     std::wstring m2w(const std::string &src)
     {
-        typedef std::codecvt<char8_t, char, std::mbstate_t> cvt_t;
+        typedef std::codecvt<char, char, std::mbstate_t> cvt_t;
         std::locale loc("");
         return m2w(src, std::use_facet<cvt_t>(loc));
     }
     inline
     std::wstring us2w(const std::string &src)
     {
-        return m2w(src, std::codecvt_utf8<char8_t>());
+        return m2w(src, std::codecvt_utf8<char>());
     }
     inline
     std::string w2m(const std::wstring& src,
-                    const std::codecvt<char8_t, char, std::mbstate_t> &cvt)
+                    const std::codecvt<char, char, std::mbstate_t> &cvt)
     {
         std::string result;
         return w2m(result, src.c_str(), src.size(), cvt);
@@ -119,18 +119,18 @@ namespace strutil {
     inline
     std::string w2m(const std::wstring &src)
     {
-        typedef std::codecvt<char8_t, char, std::mbstate_t> cvt_t;
+        typedef std::codecvt<char, char, std::mbstate_t> cvt_t;
         std::locale loc("");
         return w2m(src, std::use_facet<cvt_t>(loc));
     }
     inline
     std::string w2us(const std::wstring &src)
     {
-        return w2m(src, std::codecvt_utf8<char8_t>());
+        return w2m(src, std::codecvt_utf8<char>());
     }
 
     std::string format(const char *fmt, ...);
-    std::wstring format(const char8_t *fmt, ...);
+    std::wstring format(const char *fmt, ...);
 
     template <typename T>
     std::basic_string<T> normalize_crlf(const T *s, const T *eol)
@@ -174,7 +174,7 @@ namespace strutil {
         }
     };
 
-    bool parse_numeric_ranges(const char8_t *s, std::vector<int> *nums,
+    bool parse_numeric_ranges(const char *s, std::vector<int> *nums,
                               int vmin=0, int vmax=99);
 }
 

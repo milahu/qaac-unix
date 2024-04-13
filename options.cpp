@@ -345,20 +345,20 @@ void usage()
     );
 }
 
-static void complain(const char8_t *s)
+static void complain(const char *s)
 {
     std::fputws(s, stderr);
     OutputDebugStringW(s);
 }
 
 #ifdef QAAC
-static const char8_t * const short_opts = L"hDo:d:b:r:insRSNAa:V:v:c:q:";
+static const char * const short_opts = L"hDo:d:b:r:insRSNAa:V:v:c:q:";
 #endif
 #ifdef REFALAC
-static const char8_t * const short_opts = L"hDo:d:b:r:insRSNA";
+static const char * const short_opts = L"hDo:d:b:r:insRSNA";
 #endif
 
-bool Options::parse(int &argc, char8_t **&argv)
+bool Options::parse(int &argc, char **&argv)
 {
     int ch, pos;
     while ((ch = getopt::getopt_long(argc, argv,
@@ -435,8 +435,8 @@ bool Options::parse(int &argc, char8_t **&argv)
         else if (ch == *(int32_t*)"nsrc") {
             this->native_resampler = true;
             if (getopt::optarg) {
-                strutil::Tokenizer<char8_t> tokens(getopt::optarg, L",");
-                char8_t *tok;
+                strutil::Tokenizer<char> tokens(getopt::optarg, L",");
+                char *tok;
                 while ((tok = tokens.next())) {
                     int n;
                     if (std::swscanf(tok, L"%u", &n) == 1)
@@ -480,8 +480,8 @@ bool Options::parse(int &argc, char8_t **&argv)
         else if (ch == *(int32_t*)"nmxn")
             this->no_matrix_normalize = true;
         else if (ch == *(int32_t*)"cmap") {
-            strutil::Tokenizer<char8_t> tokens(getopt::optarg, L",");
-            char8_t *tok;
+            strutil::Tokenizer<char> tokens(getopt::optarg, L",");
+            char *tok;
             while ((tok = tokens.next()) != 0) {
                 unsigned n;
                 if (std::swscanf(tok, L"%u", &n) == 1)
@@ -607,7 +607,7 @@ bool Options::parse(int &argc, char8_t **&argv)
                 complain(L"DRC release time cannot be negative.\n");
                 return false;
             }
-            const char8_t *p = getopt::optarg;
+            const char *p = getopt::optarg;
             for (int i = 0; i < 5; ++i) {
                 p = wcschr(p, L':');
                 if (p) ++p;
@@ -683,16 +683,16 @@ bool Options::parse(int &argc, char8_t **&argv)
             }
         }
         else if (ch == *(int32_t*)"tag " || ch == *(int32_t*)"tagf") {
-            strutil::Tokenizer<char8_t> tokens(getopt::optarg, L":");
-            char8_t *key = tokens.next();
-            char8_t *value = tokens.rest();
+            strutil::Tokenizer<char> tokens(getopt::optarg, L":");
+            char *key = tokens.next();
+            char *value = tokens.rest();
             size_t keylen = std::wcslen(key);
             if (!value || (keylen != 3 && keylen != 4)) {
                 complain(L"Invalid --tag option arg.\n");
                 return false;
             }
             uint32_t fcc = (keylen == 3) ? 0xa9 : 0;
-            char8_t wc;
+            char wc;
             while ((wc = *key++) != 0) {
                 if (wc != 0xa9 && (wc < 0x20 || wc > 0x7e)) {
                     complain(L"Invalid fourcc for --tag.\n");
@@ -708,9 +708,9 @@ bool Options::parse(int &argc, char8_t **&argv)
                 this->ftagopts[fcc] = value;
         }
         else if (ch == *(int32_t*)"ltag") {
-            strutil::Tokenizer<char8_t> tokens(getopt::optarg, L":");
-            char8_t *key = tokens.next();
-            char8_t *value = tokens.rest();
+            strutil::Tokenizer<char> tokens(getopt::optarg, L":");
+            char *key = tokens.next();
+            char *value = tokens.rest();
             if (!value) {
                 complain(L"Invalid arg for --long-tag.\n");
                 return false;

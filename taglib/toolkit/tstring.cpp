@@ -79,7 +79,7 @@ namespace
   unsigned short nextUTF16(const T **p);
 
   template <>
-  unsigned short nextUTF16<char8_t>(const char8_t **p)
+  unsigned short nextUTF16<char>(const char **p)
   {
     return static_cast<unsigned short>(*(*p)++);
   }
@@ -201,7 +201,7 @@ String::String(const wstring &s, Type t) :
   }
 }
 
-String::String(const char8_t *s, Type t) :
+String::String(const char *s, Type t) :
   d(new StringPrivate())
 {
   if(t == UTF16 || t == UTF16BE || t == UTF16LE) {
@@ -215,7 +215,7 @@ String::String(const char8_t *s, Type t) :
     copyFromUTF16(d->data, s, ::wcslen(s), t);
   }
   else {
-    debug("String::String() -- const char8_t * should not contain Latin1 or UTF-8.");
+    debug("String::String() -- const char * should not contain Latin1 or UTF-8.");
   }
 }
 
@@ -231,13 +231,13 @@ String::String(const char *s, Type t) :
   }
 }
 
-String::String(char8_t c, Type t) :
+String::String(char c, Type t) :
   d(new StringPrivate())
 {
   if(t == UTF16 || t == UTF16BE || t == UTF16LE)
     copyFromUTF16(d->data, &c, 1, t);
   else {
-    debug("String::String() -- char8_t should not contain Latin1 or UTF-8.");
+    debug("String::String() -- char should not contain Latin1 or UTF-8.");
   }
 }
 
@@ -295,7 +295,7 @@ const char *String::toCString(bool unicode) const
   return d->cstring.c_str();
 }
 
-const char8_t *String::toCWString() const
+const char *String::toCWString() const
 {
   return d->data.c_str();
 }
@@ -496,8 +496,8 @@ int String::toInt() const
 
 int String::toInt(bool *ok) const
 {
-  const char8_t *begin = d->data.c_str();
-  char8_t *end;
+  const char *begin = d->data.c_str();
+  char *end;
   errno = 0;
   const long value = ::wcstol(begin, &end, 10);
 
@@ -512,7 +512,7 @@ int String::toInt(bool *ok) const
 
 String String::stripWhiteSpace() const
 {
-  static const char8_t *WhiteSpaceChars = L"\t\n\f\r ";
+  static const char *WhiteSpaceChars = L"\t\n\f\r ";
 
   const size_t pos1 = d->data.find_first_not_of(WhiteSpaceChars);
   if(pos1 == std::wstring::npos)
@@ -545,13 +545,13 @@ String String::number(int n) // static
   return Utils::formatString("%d", n);
 }
 
-char8_t &String::operator[](int i)
+char &String::operator[](int i)
 {
   detach();
   return d->data[i];
 }
 
-const char8_t &String::operator[](int i) const
+const char &String::operator[](int i) const
 {
   return d->data[i];
 }
@@ -568,7 +568,7 @@ bool String::operator!=(const String &s) const
 
 bool String::operator==(const char *s) const
 {
-  const char8_t *p = toCWString();
+  const char *p = toCWString();
 
   while(*p != L'\0' || *s != '\0') {
     if(*p++ != static_cast<unsigned char>(*s++))
@@ -582,12 +582,12 @@ bool String::operator!=(const char *s) const
   return !(*this == s);
 }
 
-bool String::operator==(const char8_t *s) const
+bool String::operator==(const char *s) const
 {
   return (d->data == s);
 }
 
-bool String::operator!=(const char8_t *s) const
+bool String::operator!=(const char *s) const
 {
   return !(*this == s);
 }
@@ -600,7 +600,7 @@ String &String::operator+=(const String &s)
   return *this;
 }
 
-String &String::operator+=(const char8_t *s)
+String &String::operator+=(const char *s)
 {
   detach();
 
@@ -617,7 +617,7 @@ String &String::operator+=(const char *s)
   return *this;
 }
 
-String &String::operator+=(char8_t c)
+String &String::operator+=(char c)
 {
   detach();
 
@@ -651,7 +651,7 @@ String &String::operator=(const wstring &s)
   return *this;
 }
 
-String &String::operator=(const char8_t *s)
+String &String::operator=(const char *s)
 {
   String(s).swap(*this);
   return *this;
@@ -663,7 +663,7 @@ String &String::operator=(char c)
   return *this;
 }
 
-String &String::operator=(char8_t c)
+String &String::operator=(char c)
 {
   String(c, wcharByteOrder()).swap(*this);
   return *this;

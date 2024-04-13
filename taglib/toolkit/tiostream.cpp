@@ -51,7 +51,7 @@ namespace
 
 // m_name is no longer used, but kept for backward compatibility.
 
-FileName::FileName(const char8_t *name) :
+FileName::FileName(const char *name) :
   m_name(),
   m_wname(name)
 {
@@ -69,7 +69,7 @@ FileName::FileName(const FileName &name) :
 {
 }
 
-FileName::operator const char8_t *() const
+FileName::operator const char *() const
 {
   return m_wname.c_str();
 }

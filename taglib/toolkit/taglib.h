@@ -72,7 +72,7 @@ namespace TagLib {
 
   // These integer types are deprecated. Do not use them.
 
-  typedef char8_t            wchar;   // Assumed to be sufficient to store a UTF-16 char.
+  typedef char            wchar;   // Assumed to be sufficient to store a UTF-16 char.
   typedef unsigned char      uchar;
   typedef unsigned short     ushort;
   typedef unsigned int       uint;
@@ -83,7 +83,7 @@ namespace TagLib {
    * Unfortunately std::wstring isn't defined on some systems, (i.e. GCC < 3)
    * so I'm providing something here that should be constant.
    */
-  typedef std::basic_string<char8_t> wstring;
+  typedef std::basic_string<char> wstring;
 }  // namespace TagLib
 
 /*!

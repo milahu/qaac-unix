@@ -19,7 +19,7 @@ namespace misc {
                                   const std::map<std::string, std::string>&tag);
 
     // the resulting chapter_t is <name, absolute timestamp>
-    std::vector<chapter_t> loadChapterFile(const char8_t *file,
+    std::vector<chapter_t> loadChapterFile(const char *file,
                                            uint32_t codepage);
 
     // convert <name, absolute timestamp> to <name, timedelta>
@@ -27,13 +27,13 @@ namespace misc {
         convertChaptersToQT(const std::vector<chapter_t> &chapters,
                             double total_duration);
 
-    std::shared_ptr<FILE> openConfigFile(const char8_t *file);
+    std::shared_ptr<FILE> openConfigFile(const char *file);
 
     std::vector<std::vector<complex_t>>
-    loadRemixerMatrixFromFile(const char8_t *path);
+    loadRemixerMatrixFromFile(const char *path);
 
     std::vector<std::vector<complex_t>>
-    loadRemixerMatrixFromPreset(const char8_t *preset_name);
+    loadRemixerMatrixFromPreset(const char *preset_name);
 }
 
 #endif

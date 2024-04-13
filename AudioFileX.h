@@ -7,9 +7,9 @@
 #include "cautil.h"
 
 namespace afutil {
-    inline uint32_t getTypesForExtension(const char8_t *fname)
+    inline uint32_t getTypesForExtension(const char *fname)
     {
-        const char8_t *pos = std::wcsrchr(fname, L'.');
+        const char *pos = std::wcsrchr(fname, L'.');
         if (!pos)
             return 0;
         CFStringPtr cfsp = cautil::W2CF(strutil::wslower(pos + 1));
@@ -91,7 +91,7 @@ namespace afutil {
         // Workaround for CoreAudio bug. MPEG Layer 1 and 2 is reported as
         // Layer 3
         if (asbd.mFormatID == *(int32_t*)".mp1" || asbd.mFormatID == *(int32_t*)".mp2") {
-            const char8_t *p;
+            const char *p;
             if ((p = std::wcsstr(ws.c_str(), L"Layer 3")) != 0)
                 ws[p - ws.c_str() + 6] = asbd.mFormatID & 0xff;
         }

@@ -36,7 +36,7 @@ inline int lrint(double x)
 #endif
 
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
-inline int _wtoi(const char8_t *s) { return std::wcstol(s, 0, 10); }
+inline int _wtoi(const char *s) { return std::wcstol(s, 0, 10); }
 #endif
 
 #ifdef _MSC_VER
@@ -216,7 +216,7 @@ namespace util {
         return 20 * std::log10(scale);
     }
 
-    bool parse_timespec(const char8_t *spec, double sample_rate,
+    bool parse_timespec(const char *spec, double sample_rate,
                         int64_t *result);
 
     inline void seconds_to_HMS(double seconds, int *h, int *m, int *s,

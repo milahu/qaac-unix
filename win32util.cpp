@@ -29,12 +29,12 @@ namespace win32 {
         throw std::runtime_error(strutil::w2us(ss));
     }
 
-    FILE *tmpfile(const char8_t *prefix)
+    FILE *tmpfile(const char *prefix)
     {
         std::wstring sprefix =
             strutil::format(L"%s.%d.", prefix, GetCurrentProcessId());
-        char8_t *tmpname = _wtempnam(0, sprefix.c_str());
-        std::shared_ptr<char8_t> tmpname_p(tmpname, std::free);
+        char *tmpname = _wtempnam(0, sprefix.c_str());
+        std::shared_ptr<char> tmpname_p(tmpname, std::free);
         HANDLE fh = CreateFileW(prefixed_path(tmpname).c_str(),
                                 GENERIC_READ | GENERIC_WRITE,
                                 0, 0, CREATE_ALWAYS,
@@ -57,7 +57,7 @@ namespace win32 {
         return fp;
     }
 
-    char *load_with_mmap(const char8_t *path, uint64_t *size)
+    char *load_with_mmap(const char *path, uint64_t *size)
     {
         std::wstring fullpath = prefixed_path(path);
         HANDLE hFile = CreateFileW(fullpath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
@@ -77,7 +77,7 @@ namespace win32 {
         return view;
     }
 
-    int create_named_pipe(const char8_t *path)
+    int create_named_pipe(const char *path)
     {
         HANDLE fh = CreateNamedPipeW(path,
                                      PIPE_ACCESS_OUTBOUND,

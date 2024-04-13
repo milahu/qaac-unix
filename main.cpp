@@ -92,7 +92,7 @@ public:
         if (m_verbose && m_console_visible &&
             m_last_tick_stderr - m_last_tick_title > m_interval * 4)
         {
-            std::vector<char8_t> s(m_message.size() + 1);
+            std::vector<char> s(m_message.size() + 1);
             std::wcscpy(&s[0], m_message.c_str());
             strutil::squeeze(&s[0], L"\r");
             std::wstring msg = strutil::format(L"%hs %s", PROGNAME, &s[0]);
@@ -862,13 +862,13 @@ void set_dll_directories(int verbose)
 {
     SetDllDirectoryW(L"");
     DWORD sz = GetEnvironmentVariableW(L"PATH", 0, 0);
-    std::vector<char8_t> vec(sz);
+    std::vector<char> vec(sz);
     sz = GetEnvironmentVariableW(L"PATH", &vec[0], sz);
     std::wstring searchPaths(&vec[0], &vec[sz]);
 
     try {
         HKEY hKey;
-        const char8_t *subkey[] = {
+        const char *subkey[] = {
             L"SOFTWARE\\Apple Inc.\\Apple Application Support",
             L"SOFTWARE\\Apple Computer, Inc.\\iTunes",
         };
@@ -877,7 +877,7 @@ void set_dll_directories(int verbose)
                 std::shared_ptr<HKEY__> hKeyPtr(hKey, RegCloseKey);
                 DWORD size;
                 if (!RegQueryValueExW(hKey, L"InstallDir", 0, 0, 0, &size)) {
-                    std::vector<char8_t> vec(size/sizeof(char8_t));
+                    std::vector<char> vec(size/sizeof(char));
                     RegQueryValueExW(hKey, L"InstallDir", 0, 0,
                             reinterpret_cast<LPBYTE>(&vec[0]), &size);
                     searchPaths = strutil::format(L"%s;%s", &vec[0], searchPaths.c_str());
@@ -1088,7 +1088,7 @@ void load_cue_tracks(const Options &opts, std::wstreambuf *sb, bool is_embedded,
     auto tracks = cue.loadTracks(is_embedded, path, opts.cue_tracks);
     for (size_t i = 0; i < tracks.size(); ++i) {
         auto parser = dynamic_cast<ITagParser*>(tracks[i].get());
-        const char8_t *spec = opts.fname_format;
+        const char *spec = opts.fname_format;
         if (!spec) spec = L"${tracknumber}${title& }${title}";
         std::wstring ofname =
             misc::generateFileName(spec, parser->getTags());
@@ -1097,11 +1097,11 @@ void load_cue_tracks(const Options &opts, std::wstreambuf *sb, bool is_embedded,
 }
 
 static
-void load_track(const char8_t *ifilename, const Options &opts,
+void load_track(const char *ifilename, const Options &opts,
                 std::vector<workItem> &tracks)
 {
     if (strutil::wslower(PathFindExtensionW(ifilename)) == L".cue") {
-        const char8_t *base_p = PathFindFileNameW(ifilename);
+        const char *base_p = PathFindFileNameW(ifilename);
         std::wstring cuedir =
             (base_p == ifilename ? L"." : std::wstring(ifilename, base_p));
         cuedir = win32::GetFullPathNameX(cuedir);
@@ -1176,8 +1176,8 @@ std::wstring get_output_filename(const std::wstring &ifilename,
 {
     if (opts.ofilename) return opts.ofilename;
 
-    const char8_t *ext = opts.extension();
-    const char8_t *outdir = opts.outdir ? opts.outdir : L".";
+    const char *ext = opts.extension();
+    const char *outdir = opts.outdir ? opts.outdir : L".";
     if (!std::wcscmp(ifilename.c_str(), L"-"))
         return std::wstring(L"stdin") + ext;
 
@@ -1202,10 +1202,10 @@ std::wstring get_output_filename(const std::wstring &ifilename,
 }
 
 struct ConsoleTitleSaver {
-    char8_t title[1024];
+    char title[1024];
     ConsoleTitleSaver()
     {
-        GetConsoleTitleW(title, sizeof(title)/sizeof(char8_t));
+        GetConsoleTitleW(title, sizeof(title)/sizeof(char));
     }
     ~ConsoleTitleSaver()
     {
@@ -1226,9 +1226,9 @@ struct COMInitializer {
 
 
 #ifdef _MSC_VER
-int wmain(int argc, char8_t **argv)
+int wmain(int argc, char **argv)
 #else
-int wmain1(int argc, char8_t **argv)
+int wmain1(int argc, char **argv)
 #endif
 {
     auto cmdline = std::wstring(GetCommandLineW()) + L"\n";
@@ -1334,14 +1334,14 @@ int wmain1(int argc, char8_t **argv)
 
         if (opts.ofilename) {
             std::wstring fullpath = win32::GetFullPathNameX(opts.ofilename);
-            const char8_t *ws = fullpath.c_str();
+            const char *ws = fullpath.c_str();
             if (!std::wcscmp(opts.ofilename, L"-"))
                 _setmode(1, _O_BINARY);
         }
 
         if (opts.sort_args) {
             std::sort(&argv[0], &argv[argc],
-                      [](const char8_t *a, const char8_t *b) {
+                      [](const char *a, const char *b) {
                           return std::wcscmp(a, b) < 0;
                       });
         }
@@ -1399,7 +1399,7 @@ int wmain1(int argc, char8_t **argv)
 int main()
 {
     int argc;
-    char8_t **argv, **envp;
+    char **argv, **envp;
     _startupinfo si = { 0 };
     __wgetmainargs(&argc, &argv, &envp, 1, &si);
     return wmain1(argc, argv);
