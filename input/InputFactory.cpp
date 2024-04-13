@@ -12,14 +12,14 @@
 #include "MP4Source.h"
 #include "AvisynthSource.h"
 
-std::shared_ptr<ISeekableSource> InputFactory::open(const wchar_t *path)
+std::shared_ptr<ISeekableSource> InputFactory::open(const char8_t *path)
 {
     std::map<std::wstring, std::shared_ptr<ISeekableSource> >::iterator
         pos = m_sources.find(path);
     if (pos != m_sources.end())
         return pos->second;
 
-    const wchar_t *ext = PathFindExtensionW(path);
+    const char8_t *ext = PathFindExtensionW(path);
     std::shared_ptr<FILE> fp(win32::fopen(path, L"rb"));
     if (m_is_raw) {
         std::shared_ptr<RawSource> src =

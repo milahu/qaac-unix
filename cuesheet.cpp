@@ -66,7 +66,7 @@ bool CueTokenizer<CharT>::nextline()
 }
 
 template struct CueTokenizer<char>;
-template struct CueTokenizer<wchar_t>;
+template struct CueTokenizer<char8_t>;
 
 void CueTrack::addSegment(const CueSegment &seg)
 {
@@ -112,7 +112,7 @@ std::map<std::string, std::string> CueTrack::getTags() const
 void CueSheet::parse(std::wstreambuf *src)
 {
     static struct handler_t {
-        const wchar_t *cmd;
+        const char8_t *cmd;
         void (CueSheet::*mf)(const std::wstring *args);
         size_t nargs;
     } handlers[] = {
@@ -130,7 +130,7 @@ void CueSheet::parse(std::wstreambuf *src)
         { 0, 0, 0 }
     };
 
-    CueTokenizer<wchar_t> tokenizer(src);
+    CueTokenizer<char8_t> tokenizer(src);
     while (tokenizer.nextline()) {
         if (!tokenizer.m_fields.size())
             continue;

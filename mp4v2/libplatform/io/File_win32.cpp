@@ -83,7 +83,7 @@ StandardFileProvider::open( const std::string& name, Mode mode )
 {
     _name = name;
 
-    const wchar_t *om;
+    const char8_t *om;
     switch( mode ) {
         case MODE_UNDEFINED:
         case MODE_READ:

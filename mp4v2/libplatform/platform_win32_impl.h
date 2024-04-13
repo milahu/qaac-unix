@@ -23,10 +23,10 @@ class Utf8ToFilename
     Utf8ToFilename ( const Utf8ToFilename &src );
     Utf8ToFilename &operator= ( const Utf8ToFilename &src );
     
-    wchar_t             *ConvertToUTF16 ( const string &utf8 );
+    char8_t             *ConvertToUTF16 ( const string &utf8 );
 
     static int          ConvertToUTF16Buf ( const char      *utf8,
-                                            wchar_t         *utf16_buf,
+                                            char8_t         *utf16_buf,
                                             size_t          num_bytes );
 
     static bool         HasPrefix ( const string &utf8string );
@@ -41,7 +41,7 @@ class Utf8ToFilename
     static const uint8_t    *Utf8DecodeChar (
         const uint8_t       *utf8_char,
         size_t              num_bytes,
-        wchar_t             *utf16,
+        char8_t             *utf16,
         int                 *invalid
         );
 
@@ -57,7 +57,7 @@ class Utf8ToFilename
     /**
      * The UTF-16 encoding of the filename actually used
      */
-    wchar_t*    _wideCharString;
+    char8_t*    _wideCharString;
 
     public:
 

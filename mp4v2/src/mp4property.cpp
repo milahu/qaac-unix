@@ -503,7 +503,7 @@ void MP4StringProperty::Dump( uint8_t indent, bool dumpImplicits, uint32_t index
         if( m_useUnicode )
             log.dump(indent, MP4_LOG_VERBOSE1, "\"%s\": %s%s = %ls",
                      m_parentAtom.GetFile().GetFilename().c_str(),
-                     m_name, indexd, (wchar_t*)m_values[index] );
+                     m_name, indexd, (char8_t*)m_values[index] );
         else
             log.dump(indent, MP4_LOG_VERBOSE1, "\"%s\": %s%s = %s",
                      m_parentAtom.GetFile().GetFilename().c_str(),
@@ -523,7 +523,7 @@ void MP4StringProperty::Dump( uint8_t indent, bool dumpImplicits, uint32_t index
             if( m_useUnicode )
                 log.dump(indent, MP4_LOG_VERBOSE2, "\"%s\": %s[%u] = %ls",
                          m_parentAtom.GetFile().GetFilename().c_str(),
-                         m_name, i, (wchar_t*)value );
+                         m_name, i, (char8_t*)value );
             else
                 log.dump(indent, MP4_LOG_VERBOSE2, "\"%s\": %s[%u] = %s",
                          m_parentAtom.GetFile().GetFilename().c_str(),

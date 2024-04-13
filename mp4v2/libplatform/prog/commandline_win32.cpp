@@ -5,7 +5,7 @@ namespace mp4v2 { namespace platform { namespace prog {
 
 CommandLine::CommandLine(int argc, char **argv)
 {
-    wchar_t **wargv = CommandLineToArgvW(GetCommandLineW(), &_argc);
+    char8_t **wargv = CommandLineToArgvW(GetCommandLineW(), &_argc);
 
     _vargv.resize(_argc + 1);
 

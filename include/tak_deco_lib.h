@@ -36,7 +36,7 @@ typedef unsigned int TtakUInt32;
 typedef __int64      TtakInt64;
 typedef __int32      TtakBool;
 typedef char         TtakAnsiChar;
-typedef wchar_t      TtakWideChar;
+typedef char8_t      TtakWideChar;
 #else
 #error Port me!
 #endif

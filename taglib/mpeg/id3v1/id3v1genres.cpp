@@ -29,7 +29,7 @@ using namespace TagLib;
 
 namespace
 {
-  const wchar_t *const genres[] = {
+  const char8_t *const genres[] = {
     L"Blues",
     L"Classic Rock",
     L"Country",
@@ -262,7 +262,7 @@ int ID3v1::genreIndex(const String &name)
 
   // If the name was not found, try the names which have been changed
   static const struct {
-    const wchar_t *genre;
+    const char8_t *genre;
     int code;
   } fixUpGenres[] = {
     { L"Jazz+Funk", 29 },

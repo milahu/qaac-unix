@@ -5,7 +5,7 @@
 inline void mm_try(MMRESULT expr, const char *msg)
 {
     if (expr != MMSYSERR_NOERROR) {
-        wchar_t text[1024];
+        char8_t text[1024];
         waveOutGetErrorTextW(expr, text, 1024);
 	throw std::runtime_error(strutil::format("WaveOut: %s",
                                                  strutil::w2us(text).c_str()));

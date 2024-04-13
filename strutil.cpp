@@ -15,9 +15,9 @@ namespace strutil {
             *strp = 0;
         return tok;
     }
-    template<> wchar_t *strsep(wchar_t **strp, const wchar_t *sep)
+    template<> char8_t *strsep(char8_t **strp, const char8_t *sep)
     {
-        wchar_t *tok, *s;
+        char8_t *tok, *s;
 
         if (!strp || !(tok = *strp))
             return 0;
@@ -30,13 +30,13 @@ namespace strutil {
     }
 
     std::wstring &m2w(std::wstring &dst, const char *src, size_t srclen,
-            const std::codecvt<wchar_t, char, std::mbstate_t> &cvt)
+            const std::codecvt<char8_t, char, std::mbstate_t> &cvt)
     {
-        typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_t;
-        wchar_t buffer[0x100];
+        typedef std::codecvt<char8_t, char, std::mbstate_t> cvt_t;
+        char8_t buffer[0x100];
         std::mbstate_t state = { 0 };
         const char *pend = src + srclen, *pnext = src;
-        wchar_t *pwbegin = buffer,
+        char8_t *pwbegin = buffer,
                 *pwend = buffer + sizeof(buffer)/sizeof(buffer[0]),
                 *pwnext = pwbegin;
         dst.clear();
@@ -51,13 +51,13 @@ namespace strutil {
         return dst;
     }
 
-    std::string &w2m(std::string &dst, const wchar_t *src, size_t srclen,
-                   const std::codecvt<wchar_t, char, std::mbstate_t> &cvt)
+    std::string &w2m(std::string &dst, const char8_t *src, size_t srclen,
+                   const std::codecvt<char8_t, char, std::mbstate_t> &cvt)
     {
-        typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_t;
+        typedef std::codecvt<char8_t, char, std::mbstate_t> cvt_t;
         char buffer[0x100];
         std::mbstate_t state = { 0 };
-        const wchar_t *pwend = src + srclen, *pwnext = src;
+        const char8_t *pwend = src + srclen, *pwnext = src;
         char *pbegin = buffer,
              *pend = buffer + sizeof(buffer),
              *pnext = pbegin;
@@ -105,7 +105,7 @@ namespace strutil {
     }
 
 #if defined(_MSC_VER) || defined(__MINGW32__) 
-    std::wstring format(const wchar_t *fmt, ...)
+    std::wstring format(const char8_t *fmt, ...)
     {
         va_list args;
 
@@ -113,7 +113,7 @@ namespace strutil {
         int rc = _vscwprintf(fmt, args);
         va_end(args);
 
-        std::vector<wchar_t> buffer(rc + 1);
+        std::vector<char8_t> buffer(rc + 1);
 
         va_start(args, fmt);
         rc = _vsnwprintf(&buffer[0], buffer.size(), fmt, args);
@@ -128,11 +128,11 @@ namespace strutil {
      * TERM ::= NUMBER | NUMBER"-"NUMBER
      * RANGES ::= TERM | RANGES","TERM
      */
-    bool parse_numeric_ranges(const wchar_t *s, std::vector<int> *nums,
+    bool parse_numeric_ranges(const char8_t *s, std::vector<int> *nums,
                               int vmin, int vmax)
     {
         enum { NUMBER, TERM };
-        wchar_t *end;
+        char8_t *end;
         std::vector<int> result;
         int n, state = NUMBER;
 

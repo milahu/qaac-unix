@@ -106,9 +106,9 @@ static struct utf8_len_info s_len_info[] =
 
 
 static
-std::wstring GetFullPathNameStr(const wchar_t *path)
+std::wstring GetFullPathNameStr(const char8_t *path)
 {
-    std::vector<wchar_t> buf(GetFullPathNameW(path, 0, 0, 0));
+    std::vector<char8_t> buf(GetFullPathNameW(path, 0, 0, 0));
     DWORD len = GetFullPathNameW(path, buf.size(), &buf[0], 0);
     return std::wstring(&buf[0], &buf[len]);
 }
@@ -184,7 +184,7 @@ Utf8ToFilename::Utf8ToFilename( const string &_utf8string )
     // We canonicalize the path via a call to GetFullPathName() API.
     std::wstring fullPath = GetFullPathNameStr(_wideCharString);
     free(_wideCharString);
-    _wideCharString = (wchar_t*)malloc((fullPath.size() + 1) * sizeof(wchar_t));
+    _wideCharString = (char8_t*)malloc((fullPath.size() + 1) * sizeof(char8_t));
     wcscpy(_wideCharString, fullPath.c_str());
 }
 
@@ -209,14 +209,14 @@ Utf8ToFilename::~Utf8ToFilename( )
  * replacement character U+FFFD.  The caller is
  * responsible for freeing this memory.
  */
-wchar_t *
+char8_t *
 Utf8ToFilename::ConvertToUTF16 ( const string &utf8string )
 {
     size_t      num_bytes;
     size_t      num_chars;
-    wchar_t     *retval;
+    char8_t     *retval;
 
-    ASSERT(sizeof(wchar_t) == 2);
+    ASSERT(sizeof(char8_t) == 2);
 
     // Store the utf8 string in our member variable so it's
     // available
@@ -240,8 +240,8 @@ Utf8ToFilename::ConvertToUTF16 ( const string &utf8string )
     ** Allocate space for the decoded string.  Add one
     ** for the NUL terminator.
     */
-    num_bytes = (num_chars + 1) * sizeof(wchar_t);
-    retval = (wchar_t *)malloc(num_bytes);
+    num_bytes = (num_chars + 1) * sizeof(char8_t);
+    retval = (char8_t *)malloc(num_bytes);
     if (!retval)
     {
         log.errorf("%s: error allocating memory for %d byte(s)",__FUNCTION__,num_bytes);
@@ -296,7 +296,7 @@ Utf8ToFilename::ConvertToUTF16 ( const string &utf8string )
  */
 int
 Utf8ToFilename::ConvertToUTF16Buf ( const char      *utf8,
-                                    wchar_t         *utf16_buf,
+                                    char8_t         *utf16_buf,
                                     size_t          num_bytes )
 {
     size_t        i;
@@ -305,13 +305,13 @@ Utf8ToFilename::ConvertToUTF16Buf ( const char      *utf8,
     size_t        num_utf16_chars;
     size_t        num_input_bytes;
     const uint8_t *p;
-    wchar_t       this_utf16[2];
+    char8_t       this_utf16[2];
 
     ASSERT(utf8);
     ASSERT(utf16_buf || (num_bytes == 0));
-    ASSERT(sizeof(wchar_t) == 2);
+    ASSERT(sizeof(char8_t) == 2);
 
-    ASSERT(num_bytes % sizeof(wchar_t) == 0);
+    ASSERT(num_bytes % sizeof(char8_t) == 0);
 
     LOG_PRINTF((MP4_LOG_VERBOSE4,"%s: converting \"%s\"",__FUNCTION__,utf8));
 
@@ -335,7 +335,7 @@ Utf8ToFilename::ConvertToUTF16Buf ( const char      *utf8,
     // message after the while loop to be less specific.
     // This way we give the caller more info about the
     // input string.
-    if (num_bytes < sizeof(wchar_t))
+    if (num_bytes < sizeof(char8_t))
     {
         log.errorf("%s: %u byte(s) is not enough to transform a %u byte UTF-8 string "
                    "to NUL-terminated UTF-16",__FUNCTION__,num_bytes,num_input_bytes);
@@ -348,7 +348,7 @@ Utf8ToFilename::ConvertToUTF16Buf ( const char      *utf8,
 
     // The number of UTF-16 characters we've got space for
     // in utf16_buf
-    num_utf16_chars = num_bytes / sizeof(wchar_t);
+    num_utf16_chars = num_bytes / sizeof(char8_t);
 
     p = (const uint8_t *)utf8;
     i = 0;
@@ -689,7 +689,7 @@ Utf8ToFilename::IsUTF16Valid( ) const
  *
  * @param utf16 populated with the UTF-16 equivalent of @p
  * utf8_char.  Note that this must point to at least 2
- * wchar_t's of memory so there's room to hold a surrogate
+ * char8_t's of memory so there's room to hold a surrogate
  * pair.
  *
  * @param invalid populated with 1 if @p utf8_char doesn't
@@ -704,14 +704,14 @@ Utf8ToFilename::IsUTF16Valid( ) const
 const uint8_t *
 Utf8ToFilename::Utf8DecodeChar ( const uint8_t  *utf8_char,
                                  size_t         num_bytes,
-                                 wchar_t        *utf16,
+                                 char8_t        *utf16,
                                  int            *invalid )
 
 {
-    wchar_t       high_half;
+    char8_t       high_half;
     int           i;
     uint8_t       len;
-    wchar_t       low_half;
+    char8_t       low_half;
     uint8_t       mask;
     const uint8_t *p;
     uint32_t      ucs4;

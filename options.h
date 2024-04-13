@@ -8,7 +8,7 @@
 
 struct DRCParams {
     double   m_threshold, m_ratio, m_knee_width, m_attack, m_release;
-    const wchar_t *m_stat_file;
+    const char8_t *m_stat_file;
 
     DRCParams():
         m_threshold(0.0), m_ratio(0.0), m_knee_width(0.0),
@@ -16,7 +16,7 @@ struct DRCParams {
         m_stat_file(0)
     {}
     DRCParams(double threshold, double ratio, double knee_width,
-              double attack, double release, const wchar_t *stat_file)
+              double attack, double release, const char8_t *stat_file)
         : m_threshold(threshold), m_ratio(ratio), m_knee_width(knee_width),
           m_attack(attack), m_release(release),
           m_stat_file(stat_file)
@@ -56,7 +56,7 @@ struct Options {
 
         output_format(0)
     {}
-    bool parse(int &argc, wchar_t **&argv);
+    bool parse(int &argc, char8_t **&argv);
 
     bool isMP4() const
     {
@@ -86,7 +86,7 @@ struct Options {
     {
         return output_format == 'peak';
     }
-    const wchar_t *extension() const
+    const char8_t *extension() const
     {
         if (is_caf) return L".caf";
         else if (isMP4()) return L".m4a";
@@ -105,7 +105,7 @@ struct Options {
     uint32_t bits_per_sample, raw_channels, raw_sample_rate,
              artwork_size, native_resampler_complexity, textcp,
              gapless_mode;
-    const wchar_t
+    const char8_t
             *ofilename, *outdir, *raw_format, *fname_format, *chapter_file,
             *logfilename, *remix_preset, *remix_file, *tmpdir,
             *start, *end, *delay;

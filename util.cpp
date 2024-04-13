@@ -147,11 +147,11 @@ namespace util {
         return total > 0 ? total : n;
     }
 
-    bool parse_timespec(const wchar_t *spec, double sample_rate,
+    bool parse_timespec(const char8_t *spec, double sample_rate,
                         int64_t *result)
     {
         int hh, mm, s, ff, sign = 1;
-        wchar_t a, b;
+        char8_t a, b;
         double ss;
         if (!spec || !*spec)
             return false;

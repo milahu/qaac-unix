@@ -50,17 +50,17 @@ namespace win32 {
     inline std::wstring GetFullPathNameX(const std::wstring &path)
     {
         DWORD length = GetFullPathNameW(path.c_str(), 0, 0, 0);
-        std::vector<wchar_t> vec(length);
+        std::vector<char8_t> vec(length);
         length = GetFullPathNameW(path.c_str(), static_cast<DWORD>(vec.size()),
                                   &vec[0], 0);
         return std::wstring(&vec[0], &vec[length]);
     }
 
     inline std::wstring PathReplaceExtension(const std::wstring &path,
-                                             const wchar_t *ext)
+                                             const char8_t *ext)
     {
-        const wchar_t *beg = path.c_str();
-        const wchar_t *end = PathFindExtensionW(beg);
+        const char8_t *beg = path.c_str();
+        const char8_t *end = PathFindExtensionW(beg);
         std::wstring s(beg, end);
         //if (ext[0] != L'.') s.push_back(L'.');
         s += ext;
@@ -71,14 +71,14 @@ namespace win32 {
     inline std::wstring PathCombineX(const std::wstring &basedir,
                                      const std::wstring &filename)
     {
-        wchar_t buffer[MAX_PATH];
+        char8_t buffer[MAX_PATH];
         PathCombineW(buffer, basedir.c_str(), filename.c_str());
         return buffer;
     }
 
     inline std::wstring GetModuleFileNameX(HMODULE module)
     {
-        std::vector<wchar_t> buffer(32);
+        std::vector<char8_t> buffer(32);
         DWORD cclen = GetModuleFileNameW(module, &buffer[0],
                                          static_cast<DWORD>(buffer.size()));
         while (cclen >= buffer.size() - 1) {
@@ -93,9 +93,9 @@ namespace win32 {
     {
         // SHCreateDirectoryEx() doesn't work with relative path
         std::wstring fullpath = GetFullPathNameX(path);
-        std::vector<wchar_t> buf(fullpath.begin(), fullpath.end());
+        std::vector<char8_t> buf(fullpath.begin(), fullpath.end());
         buf.push_back(0);
-        wchar_t *pos = PathFindFileNameW(buf.data());
+        char8_t *pos = PathFindFileNameW(buf.data());
         *pos = 0;
         int rc = SHCreateDirectoryExW(nullptr, buf.data(), nullptr);
         return rc == ERROR_SUCCESS;
@@ -104,11 +104,11 @@ namespace win32 {
     inline std::wstring get_module_directory(HMODULE module=0)
     {
         std::wstring path = GetModuleFileNameX(module);
-        const wchar_t *fpos = PathFindFileNameW(path.c_str());
+        const char8_t *fpos = PathFindFileNameW(path.c_str());
         return path.substr(0, fpos - path.c_str());
     }
 
-    inline std::wstring prefixed_path(const wchar_t *path)
+    inline std::wstring prefixed_path(const char8_t *path)
     {
         std::wstring fullpath = GetFullPathNameX(path);
         if (fullpath.size() < 256)
@@ -120,7 +120,7 @@ namespace win32 {
         return fullpath;
     }
 
-    inline FILE *wfopenx(const wchar_t *path, const wchar_t *mode)
+    inline FILE *wfopenx(const char8_t *path, const char8_t *mode)
     {
         std::wstring fullpath = win32::prefixed_path(path);
         int share = _SH_DENYRW;
@@ -134,7 +134,7 @@ namespace win32 {
         return fp;
     }
     inline std::shared_ptr<FILE> fopen(const std::wstring &path,
-                                       const wchar_t *mode)
+                                       const char8_t *mode)
     {
         auto noop_close = [](FILE *){};
         if (path != L"-")
@@ -159,11 +159,11 @@ namespace win32 {
         return is_seekable(get_handle(fd));
     }
 
-    FILE *tmpfile(const wchar_t *prefix);
+    FILE *tmpfile(const char8_t *prefix);
 
-    char *load_with_mmap(const wchar_t *path, uint64_t *size);
+    char *load_with_mmap(const char8_t *path, uint64_t *size);
 
-    int create_named_pipe(const wchar_t *path);
+    int create_named_pipe(const char8_t *path);
 
     std::string get_dll_version_for_locale(HMODULE hDll, WORD langid);
 

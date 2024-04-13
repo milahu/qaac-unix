@@ -17,7 +17,7 @@ public:
         if (GetFileType(win32::get_handle(2)) != FILE_TYPE_UNKNOWN)
             m_streams.push_back(std::shared_ptr<FILE>(stderr, [](FILE*){}));
     }
-    void enable_file(const wchar_t *filename)
+    void enable_file(const char8_t *filename)
     {
         try {
             FILE *fp = win32::wfopenx(filename, L"w");
@@ -26,17 +26,17 @@ public:
             m_streams.push_back(std::shared_ptr<FILE>(fp, std::fclose));
         } catch (...) {}
     }
-    void vwprintf(const wchar_t *fmt, va_list args)
+    void vwprintf(const char8_t *fmt, va_list args)
     {
         int rc = _vscwprintf(fmt, args);
-        std::vector<wchar_t> buffer(rc + 1);
+        std::vector<char8_t> buffer(rc + 1);
         rc = _vsnwprintf(buffer.data(), buffer.size(), fmt, args);
 
         OutputDebugStringW(buffer.data());
         for (size_t i = 0; i < m_streams.size(); ++i)
             std::fputws(buffer.data(), m_streams[i].get());
     }
-    void wprintf(const wchar_t *fmt, ...)
+    void wprintf(const char8_t *fmt, ...)
     {
         va_list ap;
         va_start(ap, fmt);

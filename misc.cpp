@@ -93,9 +93,9 @@ namespace misc
             if (codepage < 0)
                 throw std::runtime_error(strutil::w2us(path + L": unknown charset"));
         }
-        std::vector<wchar_t> obuf;
+        std::vector<char8_t> obuf;
         if (codepage == 0) {
-            obuf.resize(ibuf.size() / sizeof(wchar_t));
+            obuf.resize(ibuf.size() / sizeof(char8_t));
             std::memcpy(obuf.data(), ibuf.data(), ibuf.size());
         } else {
             int nc = MultiByteToWideChar(codepage, 0, ibuf.data(), ibuf.size(), nullptr, 0);
@@ -127,7 +127,7 @@ namespace misc
                 return strutil::format(L"%02u", n);
             }
             auto val = strutil::us2w(iter->second);
-            return strutil::strtransform(val, [](wchar_t c)->wchar_t {
+            return strutil::strtransform(val, [](char8_t c)->char8_t {
                 return std::wcschr(L":/\\?|<>*\"", c) ? L'_' : c;
             });
         }
@@ -136,13 +136,13 @@ namespace misc
     std::wstring generateFileName(const std::wstring &spec,
                                   const std::map<std::string, std::string> &tag)
     {
-        auto spec2 = strutil::strtransform(spec, [](wchar_t c)->wchar_t {
+        auto spec2 = strutil::strtransform(spec, [](char8_t c)->char8_t {
                                            return c == L'\\' ? L'/' : c;
                                            });
         auto res = process_template(spec2, TagLookup(tag));
         std::vector<std::wstring> comp;
-        strutil::Tokenizer<wchar_t> tokens(res, L"/");
-        wchar_t *tok;
+        strutil::Tokenizer<char8_t> tokens(res, L"/");
+        char8_t *tok;
         while ((tok = tokens.next())) {
             if (wcslen(tok) > 250)
                 tok[250] = 0;
@@ -156,7 +156,7 @@ namespace misc
     }
 
     void add_chapter_entry(std::vector<chapter_t> &chapters,
-                           const wchar_t *name,
+                           const char8_t *name,
                            int h, int m, double s)
     {
         std::wstring sname = name ? name : L"";
@@ -173,17 +173,17 @@ namespace misc
         chapters.push_back(std::make_pair(sname, stamp));
     }
 
-    std::vector<chapter_t> loadChapterFile(const wchar_t *path,
+    std::vector<chapter_t> loadChapterFile(const char8_t *path,
                                            uint32_t codepage)
     {
         std::vector<chapter_t> chaps;
 
         std::wstring str = misc::loadTextFile(path, codepage);
-        const wchar_t *tfmt = L"%02d:%02d:%lf";
+        const char8_t *tfmt = L"%02d:%02d:%lf";
         int h = 0, m = 0;
         double s = 0.0;
-        strutil::Tokenizer<wchar_t> tokens(str, L"\n");
-        wchar_t *tok;
+        strutil::Tokenizer<char8_t> tokens(str, L"\n");
+        char8_t *tok;
         while ((tok = tokens.next())) {
             if (*tok && tok[0] == L'#')
                 continue;
@@ -193,7 +193,7 @@ namespace misc
             } else if (wcsncmp(tok, L"Chapter", 7) == 0) {
                 int hh, mm;
                 double ss;
-                wchar_t *key = strutil::strsep(&tok, L"=");
+                char8_t *key = strutil::strsep(&tok, L"=");
                 if (std::wcsstr(key, L"NAME"))
                     add_chapter_entry(chaps, tok, h, m, s);
                 else if (std::swscanf(tok, tfmt, &hh, &mm, &ss) == 3)
@@ -225,13 +225,13 @@ namespace misc
         }
         return result;
     }
-    std::shared_ptr<FILE> openConfigFile(const wchar_t *file)
+    std::shared_ptr<FILE> openConfigFile(const char8_t *file)
     {
         std::vector<std::wstring> search_paths;
-        const wchar_t *home = _wgetenv(L"HOME");
+        const char8_t *home = _wgetenv(L"HOME");
         if (home)
             search_paths.push_back(strutil::format(L"%s\\%s", home, L".qaac"));
-        wchar_t path[MAX_PATH];
+        char8_t path[MAX_PATH];
         if (SUCCEEDED(SHGetFolderPathW(0, CSIDL_APPDATA, 0, 0, path)))
             search_paths.push_back(strutil::format(L"%s\\%s", path, L"qaac"));
         search_paths.push_back(win32::get_module_directory());
@@ -288,13 +288,13 @@ namespace misc
     }
 
     std::vector<std::vector<complex_t>>
-    loadRemixerMatrixFromFile(const wchar_t *path)
+    loadRemixerMatrixFromFile(const char8_t *path)
     {
         return loadRemixerMatrix(win32::fopen(path, L"r"));
     }
 
     std::vector<std::vector<complex_t>>
-    loadRemixerMatrixFromPreset(const wchar_t *preset_name)
+    loadRemixerMatrixFromPreset(const char8_t *preset_name)
     {
         std::wstring path = strutil::format(L"matrix\\%s.txt", preset_name);
         return loadRemixerMatrix(openConfigFile(path.c_str()));

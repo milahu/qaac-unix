@@ -154,7 +154,7 @@ namespace TagLib {
      * of the CPU byte order.  If UTF16BE, it will not be swapped.  This behavior
      * will be changed in TagLib2.0.
      */
-    String(const wchar_t *s, Type t = UTF16BE);
+    String(const char8_t *s, Type t = UTF16BE);
 
     /*!
      * Makes a deep copy of the data in \a c.
@@ -167,7 +167,7 @@ namespace TagLib {
     /*!
      * Makes a deep copy of the data in \a c.
      */
-    String(wchar_t c, Type t = Latin1);
+    String(char8_t c, Type t = Latin1);
 
     /*!
      * Makes a deep copy of the data in \a s.
@@ -197,7 +197,7 @@ namespace TagLib {
 
     /*!
      * Returns a deep copy of this String as a wstring.  The returned string is
-     * encoded in UTF-16 (without BOM/CPU byte order), not UTF-32 even if wchar_t
+     * encoded in UTF-16 (without BOM/CPU byte order), not UTF-32 even if char8_t
      * is 32-bit wide.
      *
      * \see toCWString()
@@ -227,7 +227,7 @@ namespace TagLib {
     /*!
      * Returns a standard C-style (null-terminated) wide character version of
      * this String.  The returned string is encoded in UTF-16 (without BOM/CPU byte
-     * order), not UTF-32 even if wchar_t is 32-bit wide.
+     * order), not UTF-32 even if char8_t is 32-bit wide.
      *
      * The returned string is still owned by this String and should not be deleted
      * by the user.
@@ -240,7 +240,7 @@ namespace TagLib {
      *
      * \see toWString()
      */
-    const wchar_t *toCWString() const;
+    const char8_t *toCWString() const;
 
     /*!
      * Returns an iterator pointing to the beginning of the string.
@@ -395,12 +395,12 @@ namespace TagLib {
     /*!
      * Returns a reference to the character at position \a i.
      */
-    wchar_t &operator[](int i);
+    char8_t &operator[](int i);
 
     /*!
      * Returns a const reference to the character at position \a i.
      */
-    const wchar_t &operator[](int i) const;
+    const char8_t &operator[](int i) const;
 
     /*!
      * Compares each character of the String with each character of \a s and
@@ -430,13 +430,13 @@ namespace TagLib {
      * Compares each character of the String with each character of \a s and
      * returns true if the strings match.
      */
-    bool operator==(const wchar_t *s) const;
+    bool operator==(const char8_t *s) const;
 
     /*!
      * Compares each character of the String with each character of \a s and
      * returns false if the strings match.
      */
-    bool operator!=(const wchar_t *s) const;
+    bool operator!=(const char8_t *s) const;
 
     /*!
      * Appends \a s to the end of the String.
@@ -446,7 +446,7 @@ namespace TagLib {
     /*!
      * Appends \a s to the end of the String.
      */
-    String &operator+=(const wchar_t* s);
+    String &operator+=(const char8_t* s);
 
     /*!
      * Appends \a s to the end of the String.
@@ -456,7 +456,7 @@ namespace TagLib {
     /*!
      * Appends \a s to the end of the String.
      */
-    String &operator+=(wchar_t c);
+    String &operator+=(char8_t c);
 
     /*!
      * Appends \a c to the end of the String.
@@ -482,7 +482,7 @@ namespace TagLib {
     /*!
      * Performs a deep copy of the data in \a s.
      */
-    String &operator=(const wchar_t *s);
+    String &operator=(const char8_t *s);
 
     /*!
      * Performs a deep copy of the data in \a s.
@@ -492,7 +492,7 @@ namespace TagLib {
     /*!
      * Performs a deep copy of the data in \a s.
      */
-    String &operator=(wchar_t c);
+    String &operator=(char8_t c);
 
     /*!
      * Performs a deep copy of the data in \a s.
