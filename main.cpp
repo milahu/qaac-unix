@@ -1172,18 +1172,6 @@ std::string get_output_filename(const std::string &ifilename,
     return outputPath.string();
 }
 
-struct COMInitializer {
-    COMInitializer()
-    {
-        CoInitialize(0);
-    }
-    ~COMInitializer()
-    {
-        CoUninitialize();
-    }
-};
-
-
 #ifdef _MSC_VER
 int wmain(int argc, char **argv)
 #else
@@ -1214,7 +1202,6 @@ int wmain1(int argc, char **argv)
     if (!opts.parse(argc, argv))
         return 1;
 
-    COMInitializer __com__;
     Log &logger = Log::instance();
 
     try {
