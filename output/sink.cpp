@@ -6,7 +6,7 @@
 #include "metadata.h"
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #include "win32util.h"
-#include <io.h>
+#include <unistd.h>
 #include <fcntl.h>
 #endif
 #include <sys/stat.h>

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <io.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <share.h>
 #ifndef NOMINMAX

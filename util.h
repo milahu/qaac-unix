@@ -12,7 +12,7 @@
 #include <cerrno>
 #include <stdint.h>
 #include <sys/stat.h>
-#include <io.h>
+#include <unistd.h>
 #include "strutil.h"
 
 #if defined(_MSC_VER) && _MSC_VER < 1800

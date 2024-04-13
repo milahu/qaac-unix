@@ -1,4 +1,4 @@
-#include <io.h>
+#include <unistd.h>
 #include "ExtAFSource.h"
 #ifdef _WIN32
 #include "win32util.h"

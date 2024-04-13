@@ -1,7 +1,7 @@
 #include <cstring>
 #include <limits>
 #include <assert.h>
-#include <io.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include "WaveSource.h"

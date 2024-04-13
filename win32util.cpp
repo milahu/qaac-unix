@@ -1,6 +1,6 @@
 #include "win32util.h"
 #include "util.h"
-#include <io.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include "strutil.h"
 

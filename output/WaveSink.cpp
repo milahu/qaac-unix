@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
-#include <io.h>
+#include <unistd.h>
 #include "WaveSource.h"
 #include "WaveSink.h"
 

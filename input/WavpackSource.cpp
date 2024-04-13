@@ -1,4 +1,4 @@
-#include <io.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include "WavpackSource.h"
 #include <wavpack.h>
