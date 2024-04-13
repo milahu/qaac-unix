@@ -4,6 +4,7 @@
 #include "FilterBase.h"
 #include "win32util.h"
 #include <unistd.h>
+#include <pthread.h> // pthread_create
 
 class PipedReader: public FilterBase {
     std::shared_ptr<FILE> m_readPipe;
@@ -15,19 +16,21 @@ public:
     size_t readSamples(void *buffer, size_t nsamples);
     void start()
     {
-        intptr_t h = _beginthreadex(0, 0, staticInputThreadProc, this, 0, 0);
-        if (h == -1)
-            throw std::runtime_error(std::strerror(errno));
-        m_thread.reset(reinterpret_cast<HANDLE>(h), CloseHandle);
+        pthread_t thread;
+        int ret = pthread_create(&thread, nullptr, staticInputThreadProc, this);
+        if (ret != 0) {
+            throw std::runtime_error(std::strerror(ret));
+        }
+        m_thread.reset(reinterpret_cast<void*>(thread), pthread_join);
     }
     int64_t getPosition() { return m_position; }
 private:
     void inputThreadProc();
-    static unsigned  staticInputThreadProc(void *arg)
+    static void* staticInputThreadProc(void *arg)
     {
         PipedReader *self = static_cast<PipedReader*>(arg);
         self->inputThreadProc();
-        return 0;
+        return nullptr;
     }
 };
 
