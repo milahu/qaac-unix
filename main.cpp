@@ -1202,9 +1202,6 @@ int wmain1(int argc, char **argv)
         if (opts.logfilename)
             logger.enable_file(opts.logfilename);
 
-        if (opts.nice)
-            SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
-
         std::string encoder_name;
         encoder_name = strutil::format(PROGNAME " %s", get_qaac_version());
 #ifdef QAAC
