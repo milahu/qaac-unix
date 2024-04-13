@@ -42,7 +42,6 @@
 #include "CoreAudioPaddedEncoder.h"
 #include "CoreAudioResampler.h"
 #endif
-#include <crtdbg.h>
 
 #ifdef REFALAC
 #define PROGNAME "refalac"
