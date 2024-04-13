@@ -694,7 +694,7 @@ void do_encode(IEncoder *encoder, const std::string &ofilename,
         while (!g_interrupted && encoder->encodeChunk(1)) {
             progress.update(src->getPosition());
             if (statfp && stat->framesWritten())
-                std::fwprintf(statfp, "%g\n", stat->currentBitrate());
+                std::fprintf(statfp, "%g\n", stat->currentBitrate());
         }
         progress.finish(src->getPosition());
     } catch (...) {
