@@ -149,9 +149,9 @@ namespace strutil {
                 for (int k = result.back() + 1; k <= n; ++k)
                     result.push_back(k);
             }
-            if (*end == L',')
+            if (*end == ',')
                 state = NUMBER;
-            else if (*end == L'-') {
+            else if (*end == '-') {
                 if (state == TERM)
                     return false;
                 else

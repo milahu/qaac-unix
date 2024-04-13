@@ -481,7 +481,7 @@ void Ogg::XiphComment::parse(const ByteVector &data)
         continue;
       }
 
-      if(key[0] == L'M') {
+      if(key[0] == 'M') {
 
         // Decode FLAC Picture
 

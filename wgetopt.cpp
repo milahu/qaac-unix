@@ -141,7 +141,7 @@ warnx(const char *fmt, ...)
     va_list args;
     va_start(args, fmt);
     vfwprintf(stderr, fmt, args);
-    putwc(L'\n', stderr);
+    putwc('\n', stderr);
     va_end(args);
 }
 

@@ -609,7 +609,7 @@ bool Options::parse(int &argc, char **&argv)
             }
             const char *p = getopt::optarg;
             for (int i = 0; i < 5; ++i) {
-                p = wcschr(p, L':');
+                p = wcschr(p, ':');
                 if (p) ++p;
             }
             this->drc_params.push_back(DRCParams(threshold, ratio, knee,

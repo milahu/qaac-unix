@@ -503,7 +503,7 @@ int String::toInt(bool *ok) const
 
   // Has wcstol() consumed the entire string and not overflowed?
   if(ok) {
-    *ok = (errno == 0 && end > begin && *end == L'\0');
+    *ok = (errno == 0 && end > begin && *end == '\0');
     *ok = (*ok && value > INT_MIN && value < INT_MAX);
   }
 
@@ -570,7 +570,7 @@ bool String::operator==(const char *s) const
 {
   const char *p = toCWString();
 
-  while(*p != L'\0' || *s != '\0') {
+  while(*p != '\0' || *s != '\0') {
     if(*p++ != static_cast<unsigned char>(*s++))
       return false;
   }

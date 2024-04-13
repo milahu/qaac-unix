@@ -9,7 +9,7 @@
 namespace afutil {
     inline uint32_t getTypesForExtension(const char *fname)
     {
-        const char *pos = std::wcsrchr(fname, L'.');
+        const char *pos = std::wcsrchr(fname, '.');
         if (!pos)
             return 0;
         CFStringPtr cfsp = cautil::W2CF(strutil::wslower(pos + 1));

@@ -231,7 +231,7 @@ namespace win32 {
         if (path != "-")
             return std::shared_ptr<FILE>(wfopenx(path.c_str(), mode),
                                          std::fclose);
-        else if (std::wcschr(mode, L'r'))
+        else if (std::wcschr(mode, 'r'))
             return std::shared_ptr<FILE>(stdin, noop_close);
         else
             return std::shared_ptr<FILE>(stdout, noop_close);

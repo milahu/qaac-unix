@@ -820,10 +820,10 @@ void show_available_codec_setttings(UInt32 fmt)
                     srates[i].mMinimum, name.c_str());
             for (size_t k = 0; k < bits.size(); ++k) {
                 if (!bits[k].mMinimum) continue;
-                int delim = k == 0 ? L' *(int32_t*)" : ",';
+                int delim = k == 0 ? ' *(int32_t*)" : ",';
                 std::wprintf("%c%d", delim, lrint(bits[k].mMinimum / 1000.0));
             }
-            std::putwchar(L'\n');
+            std::putwchar('\n');
         }
     }
 }
@@ -1018,7 +1018,7 @@ static
 AudioStreamBasicDescription getRawFormat(const Options &opts)
 {
     int bits;
-    unsigned char c_type, c_endian = 'L';
+    unsigned char c_type, c_endian = '';
     int itype, iendian;
 
     if (std::swscanf(opts.raw_format, "%hc%d%hc",

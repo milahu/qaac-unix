@@ -155,14 +155,14 @@ namespace util {
         double ss;
         if (!spec || !*spec)
             return false;
-        if (std::swscanf(spec, "%lld%c%c", result, &a, &b) == 2 && a == L's')
+        if (std::swscanf(spec, "%lld%c%c", result, &a, &b) == 2 && a == 's')
             return true;
-        if (spec[0] == L'-') {
+        if (spec[0] == '-') {
             sign = -1;
             ++spec;
         }
         if (std::swscanf(spec, "%d:%d:%d%c%c", &mm, &s, &ff, &a, &b) == 4 &&
-            a == L'f')
+            a == 'f')
             ss = mm * 60 + s + ff / 75.0;
         else if (std::swscanf(spec, "%d:%d:%lf%c", &hh, &mm, &ss, &a) == 3)
             ss = ss + ((hh * 60.0) + mm) * 60.0;

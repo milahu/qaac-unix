@@ -42,7 +42,7 @@ namespace
     if(len == 0)
       return std::string();
 
-    std::string wstr(len - 1, L'\0');
+    std::string wstr(len - 1, '\0');
     MultiByteToWideChar(CP_ACP, 0, str, -1, &wstr[0], len);
 
     return wstr;

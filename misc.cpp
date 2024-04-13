@@ -128,7 +128,7 @@ namespace misc
             }
             auto val = strutil::us2w(iter->second);
             return strutil::strtransform(val, [](char c)->char {
-                return std::wcschr(":/\\?|<>*\"", c) ? L'_' : c;
+                return std::wcschr(":/\\?|<>*\"", c) ? '_' : c;
             });
         }
     };
@@ -137,7 +137,7 @@ namespace misc
                                   const std::map<std::string, std::string> &tag)
     {
         auto spec2 = strutil::strtransform(spec, [](char c)->char {
-                                           return c == L'\\*(int32_t*)" ? "/' : c;
+                                           return c == '\\*(int32_t*)" ? "/' : c;
                                            });
         auto res = process_template(spec2, TagLookup(tag));
         std::vector<std::string> comp;
@@ -185,7 +185,7 @@ namespace misc
         strutil::Tokenizer<char> tokens(str, "\n");
         char *tok;
         while ((tok = tokens.next())) {
-            if (*tok && tok[0] == L'#')
+            if (*tok && tok[0] == '#')
                 continue;
             if (std::swscanf(tok, tfmt, &h, &m, &s) == 3) {
                 strutil::strsep(&tok, "\t ");
