@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <stdint.h>
+#include <cstdio> // FILE
 #undef FindAtom
 #include "src/impl.h"
 #include "util.h"
@@ -108,12 +109,16 @@ struct MP4StdIOCallbacks: public MP4IOCallbacks
         std::memcpy(this, &t, sizeof t);
     }
 
-    static int64_t get_size(void *handle)
-    {
+    static int64_t get_size(void *handle) {
         FILE *fp = static_cast<FILE*>(handle);
         fflush(fp);
-        return _filelengthi64(_fileno(fp));
+        long originalPosition = ftell(fp);
+        fseek(fp, 0, SEEK_END);
+        long fileSize = ftell(fp);
+        fseek(fp, originalPosition, SEEK_SET);
+        return fileSize;
     }
+
     static int seek(void *handle, int64_t pos)
     {
         FILE *fp = static_cast<FILE*>(handle);
