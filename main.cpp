@@ -854,7 +854,6 @@ FARPROC WINAPI DllImportHook(unsigned notify, PDelayLoadInfo pdli)
 static
 void set_dll_directories(int verbose)
 {
-    SetDllDirectoryW("");
     uint32_t sz = GetEnvironmentVariableW("PATH", 0, 0);
     std::vector<char> vec(sz);
     sz = GetEnvironmentVariableW("PATH", &vec[0], sz);
@@ -1235,7 +1234,6 @@ int wmain1(int argc, char **argv)
     Options opts;
 
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
-    SetDllDirectoryW("");
     std::setlocale(LC_CTYPE, "");
     std::setbuf(stderr, 0);
     _setmode(0, _O_BINARY);
