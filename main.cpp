@@ -36,7 +36,6 @@
 #include "ALACEncoderX.h"
 #endif
 #ifdef QAAC
-#include <delayimp.h>
 #include "AudioCodecX.h"
 #include "CoreAudioEncoder.h"
 #include "CoreAudioPaddedEncoder.h"
