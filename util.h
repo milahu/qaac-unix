@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "strutil.h"
+#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
 
 #if defined(_MSC_VER) && _MSC_VER < 1800
 #ifdef _M_IX86
@@ -150,19 +151,19 @@ namespace util {
 
     inline uint16_t b2host16(uint16_t n)
     {
-        return _byteswap_ushort(n);
+        return BSWAP16(n);
     }
     inline uint32_t b2host32(uint32_t n)
     {
-        return _byteswap_ulong(n);
+        return BSWAP32(n);
     }
     inline uint64_t b2host64(uint64_t n)
     {
-        return _byteswap_uint64(n);
+        return BSWAP64(n);
     }
     inline uint32_t h2big32(uint32_t n)
     {
-        return _byteswap_ulong(n);
+        return BSWAP32(n);
     }
 
     void bswapbuffer(void *buffer, size_t size, uint32_t width);
