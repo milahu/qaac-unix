@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <algorithm>
+#include <atomic>
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
@@ -10,6 +11,8 @@ namespace {
         uint32_t i;
         float    f;
     } *h2s_table;
+
+    std::atomic<uif_t*> atomic_h2s_table{nullptr};
 
     inline float quantize(double v)
     {
@@ -40,11 +43,13 @@ namespace {
     }
     void init_h2s_table()
     {
-        if (!h2s_table) {
+        if (atomic_h2s_table.load(std::memory_order_acquire) == nullptr) {
             uif_t *p = new uif_t[1<<16];
             for (unsigned n = 0; n < (1<<16); ++n)
                 p[n].i = half2single_(n);
-            InterlockedCompareExchangePointerRelease((void**)&h2s_table, p, 0);
+            // Try to set the atomic pointer if it's still nullptr
+            uif_t* expected = nullptr;
+            atomic_h2s_table.compare_exchange_strong(expected, p, std::memory_order_release, std::memory_order_relaxed);
         }
     }
 }
