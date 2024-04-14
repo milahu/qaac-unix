@@ -698,10 +698,16 @@ bool Options::parse(int &argc, char **&argv)
             uint32_t fcc = (keylen == 3) ? 0xa9 : 0;
             char wc;
             while ((wc = *key++) != 0) {
+                // dont validate fourcc. validating utf8 would be more complex
+                /*
+                // 0xa9 = copyright symbol in windows utf16 (or in extended ASCII codes)
+                // 0x20 = space = first printable ascii char
+                // 0x7e = tilde = last printable ascii char
                 if (wc != 0xa9 && (wc < 0x20 || wc > 0x7e)) {
                     complain("Invalid fourcc for --tag.\n");
                     return false;
                 }
+                */
                 fcc = ((fcc << 8) | wc);
             }
             if (fcc == Tag::kArtwork)
