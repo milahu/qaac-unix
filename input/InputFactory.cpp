@@ -9,7 +9,6 @@
 #include "WaveSource.h"
 #include "WavpackSource.h"
 #include "MP4Source.h"
-#include "AvisynthSource.h"
 
 std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
 {
