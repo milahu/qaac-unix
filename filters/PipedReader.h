@@ -21,7 +21,12 @@ public:
         if (ret != 0) {
             throw std::runtime_error(std::strerror(ret));
         }
-        m_thread.reset(reinterpret_cast<void*>(thread), pthread_join);
+
+        // custom deleter function for pthread_join
+        auto joinThread = [](void* ptr) { pthread_join(*static_cast<pthread_t*>(ptr), nullptr); };
+
+        m_thread.reset(reinterpret_cast<void*>(thread), joinThread);
+
     }
     int64_t getPosition() { return m_position; }
 private:
