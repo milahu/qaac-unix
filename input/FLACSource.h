@@ -4,7 +4,7 @@
 #include <deque>
 #include <FLAC/all.h>
 #include "ISource.h"
-#include "flacmodule.h"
+#include "FLACModule.h"
 
 class FLACSource: public ISeekableSource, public ITagParser
 {
