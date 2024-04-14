@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include "MP4Source.h"
 #include "metadata.h"
 #include "cautil.h"
@@ -91,7 +92,7 @@ MP4Source::MP4Source(const std::shared_ptr<FILE> &fp)
             std::string iTunSMPB = m_tags.find("iTunSMPB")->second;
             uint32_t junk, priming, padding;
             uint64_t duration;
-            if (std::sscanf(iTunSMPB.c_str(), "%x %x %x %llx",
+            if (std::sscanf(iTunSMPB.c_str(), "%" SCNx32 " %" SCNx32 " %" SCNx32 " %" SCNx64,
                             &junk, &priming, &padding, &duration) == 4) {
                 m_edits.addEntry(priming, duration);
             }
