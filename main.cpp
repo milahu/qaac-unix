@@ -1295,7 +1295,7 @@ int wmain1(int argc, char **argv)
                     get_output_filename(workItems[i].first, opts);
                 LOG("\n%s\n",
                     ofilename == "-" ? "<stdout>"
-                                      : PathFindFileNameW(ofilename.c_str()));
+                                      : ofilename.c_str());
                 auto src = trim_input(workItems[i].second, opts);
                 src->seekTo(0);
                 encode_file(src, ofilename, opts);
@@ -1304,7 +1304,7 @@ int wmain1(int argc, char **argv)
             std::string ofilename = get_output_filename(argv[0], opts);
             LOG("\n%s\n",
                 ofilename == "-" ? "<stdout>"
-                                  : PathFindFileNameW(ofilename.c_str()));
+                                  : ofilename.c_str());
 
             auto cs = std::make_shared<CompositeSource>();
             for (size_t i = 0; i < workItems.size(); ++i)
