@@ -194,7 +194,7 @@ namespace misc
                 int hh, mm;
                 double ss;
                 char *key = strutil::strsep(&tok, "=");
-                if (std::wcsstr(key, "NAME"))
+                if (std::strstr(key, "NAME"))
                     add_chapter_entry(chaps, tok, h, m, s);
                 else if (std::sscanf(tok, tfmt, &hh, &mm, &ss) == 3)
                     h = hh, m = mm, s = ss;
