@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <sys/stat.h>
 #include "ExtAFSource.h"
 #ifdef _WIN32
 #include "win32util.h"
@@ -27,10 +28,18 @@ namespace audiofile {
         *nread = n;
         return 0;
     }
-    SInt64 size(void *cookie)
+
+    //int64_t size(void *cookie)
+    long long size(void *cookie)
     {
         int fd = static_cast<int>(reinterpret_cast<intptr_t>(cookie));
-        return _filelengthi64(fd);
+        struct stat st;
+        if (fstat(fd, &st) == -1) {
+            // Handle error (e.g., file descriptor is invalid)
+            return -1;
+        }
+        //return st.st_size;
+        return (long long) st.st_size;
     }
 
     void fetchTagDictCallback(const void *key, const void *value, void *ctx)
