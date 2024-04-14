@@ -8,19 +8,6 @@ namespace strutil {
 
         if (!strp || !(tok = *strp))
             return 0;
-        if ((s = std::strpbrk(tok, sep))) {
-            *s = 0;
-            *strp = s + 1;
-        } else
-            *strp = 0;
-        return tok;
-    }
-    template<> char *strsep(char **strp, const char *sep)
-    {
-        char *tok, *s;
-
-        if (!strp || !(tok = *strp))
-            return 0;
         if ((s = std::wcspbrk(tok, sep))) {
             *s = 0;
             *strp = s + 1;
