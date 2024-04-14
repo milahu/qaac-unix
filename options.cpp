@@ -348,7 +348,6 @@ void usage()
 static void complain(const char *s)
 {
     std::fputs(s, stderr);
-    OutputDebugStringW(s);
 }
 
 #ifdef QAAC
