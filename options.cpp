@@ -4,6 +4,11 @@
 #include <getopt.h>
 #include "metadata.h"
 
+bool is_seekable(int fd) {
+    // Attempt to seek to the current position to check if the file descriptor is seekable
+    return lseek(fd, 0, SEEK_CUR) != -1;
+}
+
 static option long_options[] = {
 #ifdef QAAC
     { "formats", no_argument, 0, 'fmts' },
@@ -758,7 +763,7 @@ bool Options::parse(int &argc, char **&argv)
         this->bitrate = isSBR() ? 0 : 90;
     }
     if (isMP4() && this->ofilename && !std::strcmp(this->ofilename, "-")) {
-        if (!win32::is_seekable(_fileno(stdout))) {
+        if (!is_seekable(fileno(stdout))) {
             complain("MP4 piping is not supported.\n");
             return false;
         }
