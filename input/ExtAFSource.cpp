@@ -213,5 +213,5 @@ void ExtAFSource::seekTo(int64_t count)
         if (n <= 0) break;
         distance -= n;
     }
-    CHECKCA(ExtAudioFileTell(m_eaf, &m_position));
+    CHECKCA(ExtAudioFileTell(m_eaf, (SInt64*) &m_position));
 }
