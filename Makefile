@@ -51,7 +51,7 @@ INC_DIRS := \
 
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-COMMON_FLAGS = -MMD -MP -Wfatal-errors -DQAAC=1
+COMMON_FLAGS = -MMD -MP -Wfatal-errors -DQAAC=1 -DNO_COREAUDIO=1
 
 CFLAGS ?= $(INC_FLAGS) $(COMMON_FLAGS)
 
