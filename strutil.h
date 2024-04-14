@@ -3,6 +3,7 @@
 
 #include <cwchar>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <locale>
 #include <stdexcept>
