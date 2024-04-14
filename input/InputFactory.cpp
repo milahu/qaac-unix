@@ -79,7 +79,6 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
 #endif
     TRY_MAKE_SHARED(FLACSource, fd);
     TRY_MAKE_SHARED(WavpackSource, path);
-    TRY_MAKE_SHARED(TakSource, fd);
     TRY_MAKE_SHARED(LibSndfileSource, fd);
 
     ::close(fd);
