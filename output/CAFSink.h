@@ -7,7 +7,7 @@
 #ifndef NO_COREAUDIO
 #include "AudioFile.h"
 #endif
-//#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
+#include "ALAC/EndianPortable.h" // BSWAP16 BSWAP32 BSWAP64
 
 class CAFSink : public ISink, public ITagStore {
     std::shared_ptr<FILE> m_file;

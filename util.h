@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <cmath>
 #include "strutil.h"
-#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
+#include "ALAC/EndianPortable.h" // BSWAP16 BSWAP32 BSWAP64
 
 #if defined(_MSC_VER) && _MSC_VER < 1800
 #ifdef _M_IX86

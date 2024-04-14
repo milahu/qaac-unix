@@ -2,7 +2,6 @@
 #include <cstdarg>
 #include <vector>
 #include "util.h"
-#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
 
 namespace util {
     void bswap16buffer(uint16_t *bp, size_t size)
