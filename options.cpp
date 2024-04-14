@@ -1,10 +1,10 @@
 #include <limits>
 #include "options.h"
 #include "win32util.h"
-#include "wgetopt.h"
+#include <getopt.h>
 #include "metadata.h"
 
-static getopt::option long_options[] = {
+static option long_options[] = {
 #ifdef QAAC
     { "formats", no_argument, 0, 'fmts' },
     { "abr", required_argument, 0, 'a' },
@@ -361,7 +361,7 @@ static const char * const short_opts = "hDo:d:b:r:insRSNA";
 bool Options::parse(int &argc, char **&argv)
 {
     int ch, pos;
-    while ((ch = getopt::getopt_long(argc, argv,
+    while ((ch = getopt_long(argc, argv,
                                    short_opts, long_options, 0)) != EOF)
     {
         if (ch == 'h')
@@ -371,16 +371,16 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'fmts')
             this->print_available_formats = true;
         else if (ch == 'o')
-            this->ofilename = getopt::optarg;
+            this->ofilename = optarg;
         else if (ch == 'd')
-            this->outdir = getopt::optarg;
+            this->outdir = optarg;
         else if (ch < 0xff && (pos = strutil::strindex("cavV", ch)) >= 0) {
             if ((this->output_format && !isAAC()) || this->method != -1) {
                 complain("Encoding mode options are exclusive.\n");
                 return false;
             }
             this->method = pos;
-            if (std::sscanf(getopt::optarg, "%lf", &this->bitrate) != 1) {
+            if (std::sscanf(optarg, "%lf", &this->bitrate) != 1) {
                 complain("AAC Bitrate/Quality must be an integer.\n");
                 return false;
             }
@@ -423,19 +423,19 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'caff')
             this->is_caf = true;
         else if (ch == 'q') {
-            if (std::sscanf(getopt::optarg, "%u", &this->quality) != 1) {
+            if (std::sscanf(optarg, "%u", &this->quality) != 1) {
                 complain("-q requires an integer.\n");
                 return false;
             }
         }
         else if (ch == 'log ')
-            this->logfilename = getopt::optarg;
+            this->logfilename = optarg;
         else if (ch == 'nspd')
             this->no_smart_padding = true;
         else if (ch == 'nsrc') {
             this->native_resampler = true;
-            if (getopt::optarg) {
-                strutil::Tokenizer<char> tokens(getopt::optarg, ",");
+            if (optarg) {
+                strutil::Tokenizer<char> tokens(optarg, ",");
                 char *tok;
                 while ((tok = tokens.next())) {
                     int n;
@@ -474,13 +474,13 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'cat ')
             this->concat = true;
         else if (ch == 'nfmt')
-            this->fname_format = getopt::optarg;
+            this->fname_format = optarg;
         else if (ch == 'tmpd')
-            this->tmpdir = getopt::optarg;
+            this->tmpdir = optarg;
         else if (ch == 'nmxn')
             this->no_matrix_normalize = true;
         else if (ch == 'cmap') {
-            strutil::Tokenizer<char> tokens(getopt::optarg, ",");
+            strutil::Tokenizer<char> tokens(optarg, ",");
             char *tok;
             while ((tok = tokens.next()) != 0) {
                 unsigned n;
@@ -504,24 +504,24 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'r') {
-            if (!std::strcmp(getopt::optarg, "keep"))
+            if (!std::strcmp(optarg, "keep"))
                 this->rate = -1;
-            else if (!std::strcmp(getopt::optarg, "auto"))
+            else if (!std::strcmp(optarg, "auto"))
                 this->rate = 0;
-            else if (std::sscanf(getopt::optarg, "%u", &this->rate) != 1) {
+            else if (std::sscanf(optarg, "%u", &this->rate) != 1) {
                 complain("Invalid arg for --rate.\n");
                 return false;
             }
         }
         else if (ch == 'lpf ') {
-            if (std::sscanf(getopt::optarg, "%u", &this->lowpass) != 1) {
+            if (std::sscanf(optarg, "%u", &this->lowpass) != 1) {
                 complain("--lowpass requires an integer.\n");
                 return false;
             }
         }
         else if (ch == 'b') {
             uint32_t n;
-            if (std::sscanf(getopt::optarg, "%u", &n) != 1) {
+            if (std::sscanf(optarg, "%u", &n) != 1) {
                 complain("-b requires an integer.\n");
                 return false;
             }
@@ -535,13 +535,13 @@ bool Options::parse(int &argc, char **&argv)
             this->no_dither = true;
         }
         else if (ch == 'mask') {
-            if (std::sscanf(getopt::optarg, "%i", &this->chanmask) != 1) {
+            if (std::sscanf(optarg, "%i", &this->chanmask) != 1) {
                 complain("--chanmask requires an integer.\n");
                 return false;
             }
         }
         else if (ch == 'Rchn') {
-            if (std::sscanf(getopt::optarg, "%u", &this->raw_channels) != 1) {
+            if (std::sscanf(optarg, "%u", &this->raw_channels) != 1) {
                 complain("--raw-channels requires an integer.\n");
                 return false;
             }
@@ -555,7 +555,7 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'Rrat') {
-            if (std::sscanf(getopt::optarg, "%u",
+            if (std::sscanf(optarg, "%u",
                              &this->raw_sample_rate) != 1) {
                 complain("--raw-rate requires an integer.\n");
                 return false;
@@ -566,18 +566,18 @@ bool Options::parse(int &argc, char **&argv)
             }
         }
         else if (ch == 'Rfmt')
-            this->raw_format = getopt::optarg;
+            this->raw_format = optarg;
         else if (ch == 'afst')
             this->alac_fast = true;
         else if (ch == 'gain') {
-            if (std::sscanf(getopt::optarg, "%lf", &this->gain) != 1) {
+            if (std::sscanf(optarg, "%lf", &this->gain) != 1) {
                 complain("--gain requires an floating point number.\n");
                 return false;
             }
         }
         else if (ch == 'drc ') {
             double threshold, ratio, knee, attack, release;
-            if (std::sscanf(getopt::optarg,
+            if (std::sscanf(optarg,
                              "%lf:%lf:%lf:%lf:%lf",
                              &threshold,
                              &ratio,
@@ -607,7 +607,7 @@ bool Options::parse(int &argc, char **&argv)
                 complain("DRC release time cannot be negative.\n");
                 return false;
             }
-            const char *p = getopt::optarg;
+            const char *p = optarg;
             for (int i = 0; i < 5; ++i) {
                 p = wcschr(p, ':');
                 if (p) ++p;
@@ -618,15 +618,15 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'limt')
             this->limiter = true;
         else if (ch == 'from')
-            this->start = getopt::optarg;
+            this->start = optarg;
         else if (ch == 'end ')
-            this->end = getopt::optarg;
+            this->end = optarg;
         else if (ch == 'dlay')
-            this->delay = getopt::optarg;
+            this->delay = optarg;
         else if (ch == 'ndly')
             this->num_priming = 0;
         else if (ch == 'encd') {
-            if (std::sscanf(getopt::optarg, "%u", &this->num_priming) != 1) {
+            if (std::sscanf(optarg, "%u", &this->num_priming) != 1) {
                 complain("Invalid arg for --num-priming.\n");
                 return false;
             }
@@ -638,52 +638,52 @@ bool Options::parse(int &argc, char **&argv)
         else if (ch == 'soar')
             this->sort_args = true;
         else if (ch == 'gapm') {
-            if (std::sscanf(getopt::optarg, "%u", &this->gapless_mode) != 1) {
+            if (std::sscanf(optarg, "%u", &this->gapless_mode) != 1) {
                 complain("Invalid arg for --gapless-mode.\n");
                 return false;
             }
         }
         else if (ch == 'txcp') {
-            if (std::sscanf(getopt::optarg, "%u", &this->textcp) != 1) {
+            if (std::sscanf(optarg, "%u", &this->textcp) != 1) {
                 complain("--text-codepage requires code page number.\n");
                 return false;
             }
         }
         else if (ch == 'ctrk') {
-            if (!strutil::parse_numeric_ranges(getopt::optarg,
+            if (!strutil::parse_numeric_ranges(optarg,
                                                &this->cue_tracks)) {
                 complain("Invalid arg for --cue-tracks.\n");
                 return false;
             }
         }
         else if (ch == 'atsz') {
-            if (std::sscanf(getopt::optarg, "%u", &this->artwork_size) != 1) {
+            if (std::sscanf(optarg, "%u", &this->artwork_size) != 1) {
                 complain("--artwork-size requires an integer.\n");
                 return false;
             }
         }
         else if (ch == Tag::kArtwork)
-            this->artwork_files.push_back(getopt::optarg);
+            this->artwork_files.push_back(optarg);
         else if (ch == 'cpat')
             this->copy_artwork = true;
         else if (std::find(tag_keys, tag_keys_end, uint32_t(ch)) != tag_keys_end) {
             if (ch == Tag::kLyrics)
-                this->ftagopts[ch] = getopt::optarg;
+                this->ftagopts[ch] = optarg;
             else if (ch != Tag::kCompilation)
-                this->tagopts[ch] = (getopt::optarg);
-            else if (!getopt::optarg)
+                this->tagopts[ch] = (optarg);
+            else if (!optarg)
                 this->tagopts[ch] = "1";
             else {
                 int n;
-                if (std::sscanf(getopt::optarg, "%d", &n) != 1) {
+                if (std::sscanf(optarg, "%d", &n) != 1) {
                     complain("Invalid --compilation option arg.\n");
                     return false;
                 }
-                this->tagopts[ch] = (getopt::optarg);
+                this->tagopts[ch] = (optarg);
             }
         }
         else if (ch == 'tag ' || ch == 'tagf') {
-            strutil::Tokenizer<char> tokens(getopt::optarg, ":");
+            strutil::Tokenizer<char> tokens(optarg, ":");
             char *key = tokens.next();
             char *value = tokens.rest();
             size_t keylen = std::wcslen(key);
@@ -708,7 +708,7 @@ bool Options::parse(int &argc, char **&argv)
                 this->ftagopts[fcc] = value;
         }
         else if (ch == 'ltag') {
-            strutil::Tokenizer<char> tokens(getopt::optarg, ":");
+            strutil::Tokenizer<char> tokens(optarg, ":");
             char *key = tokens.next();
             char *value = tokens.rest();
             if (!value) {
@@ -718,21 +718,21 @@ bool Options::parse(int &argc, char **&argv)
             this->longtags[(key)] = (value);
         }
         else if (ch == 'chap')
-            this->chapter_file = getopt::optarg;
+            this->chapter_file = optarg;
         else if (ch == 'mixp')
-            this->remix_preset = getopt::optarg;
+            this->remix_preset = optarg;
         else if (ch == 'mixm')
-            this->remix_file = getopt::optarg;
+            this->remix_file = optarg;
         else if (ch == 'fftg')
             this->filename_from_tag = true;
         else
             return false;
     }
-    argc -= getopt::optind;
-    argv += getopt::optind;
+    argc -= optind;
+    argv += optind;
 
     if (!argc && !this->check_only && !this->print_available_formats) {
-        if (getopt::optind == 1)
+        if (optind == 1)
             return usage(), false;
         else {
             complain("Input file name is required.\n");
