@@ -7,8 +7,8 @@
 
 # force clang
 # clang gives better error messages than gcc
-CC = clang
-CXX = clang++
+#CC = clang
+#CXX = clang++
 
 TARGET_EXEC ?= qaac
 
