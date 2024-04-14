@@ -239,7 +239,7 @@ parse_long_options(char * const *nargv, const char *options,
 
     optind++;
 
-    if ((has_equal = wcschr(current_argv, '=')) != NULL) {
+    if ((has_equal = std::strchr(current_argv, '=')) != NULL) {
         /* argument found (--option=arg) */
         current_argv_len = has_equal - current_argv;
         has_equal++;
@@ -435,7 +435,7 @@ start:
 #ifdef GNU_COMPATIBLE
             place[1] == '\0') {
 #else
-            (place[1] == '\0' && wcschr(options, '-') == NULL)) {
+            (place[1] == '\0' && std::strchr(options, '-') == NULL)) {
 #endif
             place = EMSG;       /* found non-option */
             if (flags & FLAG_ALLARGS) {
@@ -507,7 +507,7 @@ start:
 #ifdef GNU_COMPATIBLE
             dash_prefix = DD_PREFIX;
 #endif
-        } else if (*place != ':' && wcschr(options, *place) != NULL)
+        } else if (*place != ':' && std::strchr(options, *place) != NULL)
             short_too = 1;      /* could be short option too */
 
         optchar = parse_long_options(nargv, options, long_options,
@@ -520,7 +520,7 @@ start:
 
     if ((optchar = (int)*place++) == (int)':' ||
         (optchar == (int)'-' && *place != '\0') ||
-        (oli = (char*)(wcschr(options, optchar))) == NULL) {
+        (oli = (char*)(std::strchr(options, optchar))) == NULL) {
         /*
          * If the user specified "-" and  '-' isn't listed in
          * options, return -1 (non-option) as per POSIX.
