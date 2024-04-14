@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <vector>
+#include <inttypes.h>
 #include "util.h"
 
 namespace util {
@@ -155,7 +156,7 @@ namespace util {
         double ss;
         if (!spec || !*spec)
             return false;
-        if (std::sscanf(spec, "%lld%c%c", result, &a, &b) == 2 && a == 's')
+        if (std::sscanf(spec, "%" SCNd64 "%c%c", result, &a, &b) == 2 && a == 's')
             return true;
         if (spec[0] == '-') {
             sign = -1;
