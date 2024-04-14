@@ -442,7 +442,7 @@ bool Options::parse(int &argc, char **&argv)
                         this->native_resampler_quality = n;
                     else if (std::strlen(tok) == 4)
                         this->native_resampler_complexity =
-                            util::fourcc((tok).c_str());
+                            util::fourcc(tok);
                     else {
                         complain("Invalid arg for --native-resampler.\n");
                         return false;
