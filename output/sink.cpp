@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <inttypes.h>
 #include "strutil.h"
 #include "sink.h"
 #include "util.h"
@@ -350,7 +351,7 @@ void MP4SinkBase::writeInt32Tag(const char *fcc, const std::string &value)
 void MP4SinkBase::writeInt64Tag(const char *fcc, const std::string &value)
 {
     int64_t n;
-    if (std::sscanf(value.c_str(), "%lld", &n) == 1)
+    if (std::sscanf(value.c_str(), "%" SCNd64, &n) == 1)
         m_mp4file.SetMetadataUint64(fcc, n);
 }
 void MP4SinkBase::writeStringTag(const char *fcc, const std::string &value)
