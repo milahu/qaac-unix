@@ -195,7 +195,7 @@ void MP4Source::seekTo(int64_t count)
     time               = m_file.GetSampleTime(m_track_id, ipacket + 1);
     m_position_raw     = static_cast<int64_t>(time * m_time_ratio + .5);
     uint32_t preroll   = getMaxFrameDependency();
-    m_current_packet   = std::max(0LL, ipacket - preroll);
+    m_current_packet   = std::max(0L, ipacket - preroll);
     preroll            = ipacket - m_current_packet;
     m_start_skip       = mediapos - m_position_raw + getDecoderDelay();
     
