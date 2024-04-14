@@ -51,9 +51,11 @@ INC_DIRS := \
 
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CFLAGS ?= $(INC_FLAGS) -MMD -MP -Wfatal-errors -Wno-multichar -DQAAC=1
+COMMON_FLAGS = -MMD -MP -Wfatal-errors -DQAAC=1
 
-CXXFLAGS ?= $(INC_FLAGS) -MMD -MP -Wfatal-errors -Wno-multichar -DQAAC=1 -std=gnu++20
+CFLAGS ?= $(INC_FLAGS) $(COMMON_FLAGS)
+
+CXXFLAGS ?= $(INC_FLAGS) $(COMMON_FLAGS) -std=gnu++20
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
