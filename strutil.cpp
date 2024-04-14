@@ -124,7 +124,7 @@ namespace strutil {
         int n, state = NUMBER;
 
         do {
-            n = wcstoul(s, &end, 10);
+            n = std::strtoul(s, &end, 10);
             if (end == s || n < vmin || n > vmax)
                 return false;
             if (state == NUMBER)
