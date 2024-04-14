@@ -202,7 +202,7 @@ void ExtAFSource::seekTo(int64_t count)
     case kAudioFormatMPEG4AAC_HE_V2: npreroll = m_iasbd.mSampleRate / m_iasbd.mFramesPerPacket / 2; break;
     }
     int64_t off
-        = std::max(0LL, count - m_iasbd.mFramesPerPacket * npreroll);
+        = std::max(0UL, count - m_iasbd.mFramesPerPacket * npreroll);
     CHECKCA(ExtAudioFileSeek(m_eaf, off));
     int32_t distance = count - off;
     while (distance > 0) {
