@@ -52,7 +52,7 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
     }
 
     if (strcasecmp(ext, "avs") == 0)
-        return std::make_shared<AvisynthSource>(path);
+        throw std::runtime_error("not implemented: AvisynthSource");
 
 #define TRY_MAKE_SHARED(type, ...) \
     do { \
