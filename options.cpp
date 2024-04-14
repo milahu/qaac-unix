@@ -440,7 +440,7 @@ bool Options::parse(int &argc, char **&argv)
                     int n;
                     if (std::sscanf(tok, "%u", &n) == 1)
                         this->native_resampler_quality = n;
-                    else if (std::wcslen(tok) == 4)
+                    else if (std::strlen(tok) == 4)
                         this->native_resampler_complexity =
                             util::fourcc((tok).c_str());
                     else {
@@ -685,7 +685,7 @@ bool Options::parse(int &argc, char **&argv)
             strutil::Tokenizer<char> tokens(optarg, ":");
             char *key = tokens.next();
             char *value = tokens.rest();
-            size_t keylen = std::wcslen(key);
+            size_t keylen = std::strlen(key);
             if (!value || (keylen != 3 && keylen != 4)) {
                 complain("Invalid --tag option arg.\n");
                 return false;
