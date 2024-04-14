@@ -246,6 +246,23 @@ namespace win32 {
         return currentPosition != -1;
     }
 
+    // Function to determine the length of a file given its file descriptor
+    int64_t filelengthi64(int fd) {
+        // Save the current position to restore later
+        off_t current_pos = lseek(fd, 0, SEEK_CUR);
+        if (current_pos == -1) return -1;
+
+        // Seek to the end of the file to get the size
+        off_t end_pos = lseek(fd, 0, SEEK_END);
+        if (end_pos == -1) return -1;
+
+        // Restore the original position
+        lseek(fd, current_pos, SEEK_SET);
+
+        // Return the file length in bytes
+        return end_pos;
+    }
+
     FILE *tmpfile(const char *prefix);
 
     char *load_with_mmap(const char *path, uint64_t *size);

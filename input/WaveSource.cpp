@@ -31,9 +31,17 @@ WaveSource::WaveSource(const std::shared_ptr<FILE> &fp, bool ignorelength)
     else
         m_length = data_length / m_block_align;
     if (m_seekable) {
-        m_data_pos = lseek(fd(), 0, SEEK_CUR);
-        if (m_length == ~0ULL)
-            m_length = (_filelengthi64(fd()) - m_data_pos) / m_block_align;
+        int fd = fileno(m_fp.get());
+        m_data_pos = lseek(fd, 0, SEEK_CUR);
+        if (m_length == ~0ULL) {
+            int64_t file_size = win32::filelengthi64(fd);
+            if (file_size == -1) {
+                perror("Failed to determine file length");
+                m_length = ~0ULL; // Consider how to handle this case more gracefully
+            } else {
+                m_length = (file_size - m_data_pos) / m_block_align;
+            }
+        }
     }
 }
 
