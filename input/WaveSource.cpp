@@ -84,7 +84,7 @@ void WaveSource::seekTo(int64_t count)
         int64_t nread = 0;
         int64_t bytes = (count - m_position) * m_block_align;
         while (nread < bytes) {
-            int n = util::nread(fd(), buf, std::min(bytes - nread, 0x1000LL));
+            int n = util::nread(fd(), buf, std::min(bytes - nread, (int64_t)0x1000));
             if (n < 0) break;
             nread += n;
         }
@@ -143,7 +143,7 @@ void WaveSource::skip(int64_t n)
     else {
         char buf[8192];
         while (n > 0) {
-            int nn = static_cast<int>(std::min(n, 8192LL));
+            int nn = static_cast<int>(std::min(n, (int64_t)8192));
             util::check_eof(util::nread(fd(), buf, nn) == nn);
             n -= nn;
         }
