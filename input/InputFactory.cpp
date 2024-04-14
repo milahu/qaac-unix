@@ -66,20 +66,20 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
         } \
     } while (0)
 
-    TRY_MAKE_SHARED(WaveSource, fd, m_ignore_length);
+    TRY_MAKE_SHARED(WaveSource, fp, m_ignore_length);
     // Check if the file is seekable
     if (lseek(fd, 0, SEEK_CUR) == -1) {
         ::close(fd);
         throw std::runtime_error("Not available input file format");
     }
 
-    TRY_MAKE_SHARED(MP4Source, fd);
+    TRY_MAKE_SHARED(MP4Source, fp);
 #ifdef QAAC
-    TRY_MAKE_SHARED(ExtAFSource, fd);
+    TRY_MAKE_SHARED(ExtAFSource, fp);
 #endif
-    TRY_MAKE_SHARED(FLACSource, fd);
+    TRY_MAKE_SHARED(FLACSource, fp);
     TRY_MAKE_SHARED(WavpackSource, path);
-    TRY_MAKE_SHARED(LibSndfileSource, fd);
+    TRY_MAKE_SHARED(LibSndfileSource, fp);
 
     ::close(fd);
     throw std::runtime_error("Not available input file format");
