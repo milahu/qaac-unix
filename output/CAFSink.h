@@ -4,7 +4,9 @@
 #include <map>
 #include "ISink.h"
 #include "win32util.h"
+#ifndef NO_COREAUDIO
 #include "AudioFile.h"
+#endif
 //#include "ALAC/EndianPortable.c" // BSWAP16 BSWAP32 BSWAP64
 
 class CAFSink : public ISink, public ITagStore {
