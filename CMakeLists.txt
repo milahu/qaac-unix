@@ -77,12 +77,12 @@ add_executable(qaac
   chanmap.cpp
   misc.cpp
   CompositeSource.cpp
+  CoreAudioEncoder.cpp
+  CoreAudioPaddedEncoder.cpp
 #[[
   wicimage.cpp
   cuesheet.cpp
   metadata.cpp
-  CoreAudioEncoder.cpp
-  CoreAudioPaddedEncoder.cpp
   wgetopt.cpp
 ]]
 
