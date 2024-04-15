@@ -7,7 +7,7 @@
 #pragma warning(push)
 #pragma warning(disable: 4091)
 #pragma warning(pop)
-#include <uchardet.h>
+#include <uchardet/uchardet.h>
 #include <regex>
 
 namespace misc
