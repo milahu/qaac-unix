@@ -262,6 +262,7 @@ double target_sample_rate(const Options &opts, ISource *src)
 #endif
 }
 
+/*
 static
 void manipulate_channels(std::vector<std::shared_ptr<ISource> > &chain,
                          const Options &opts)
@@ -330,6 +331,7 @@ void manipulate_channels(std::vector<std::shared_ptr<ISource> > &chain,
         chain.push_back(mapper);
     }
 }
+*/
 
 std::string pcm_format_str(AudioStreamBasicDescription &asbd)
 {
@@ -366,7 +368,9 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
     bool threading = opts.threading && numProcessors > 1;
 
     AudioStreamBasicDescription sasbd = src->getSampleFormat();
+/*
     manipulate_channels(chain, opts);
+*/
     // check if channel layout is available for codec
     if (opts.isAAC() || opts.isALAC())
         get_encoding_channel_layout(chain.back().get(), opts, nullptr);

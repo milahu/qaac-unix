@@ -115,8 +115,8 @@ add_executable(qaac
   output/WaveSink.cpp
 ]]
 
-#[[
   filters/ChannelMapper.cpp
+#[[
   filters/Compressor.cpp
   filters/CoreAudioResampler.cpp
   filters/Limiter.cpp
