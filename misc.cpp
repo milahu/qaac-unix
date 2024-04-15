@@ -78,6 +78,10 @@ namespace misc
         std::vector<char> ibuf(fileSize);
         int n = std::fread(ibuf.data(), 1, fileSize, fp.get());
         ibuf.resize(n);
+
+        // shortcut: dont convert encoding
+        return std::string(ibuf.begin(), ibuf.end());
+        /*
         if (!codepage) {
             auto detector = std::shared_ptr<uchardet>(uchardet_new(), uchardet_delete);
             if (uchardet_handle_data(detector.get(), ibuf.data(), ibuf.size())) {
@@ -104,6 +108,7 @@ namespace misc
         // chop off BOM
         size_t bom = (obuf.size() && obuf[0] == 0xfeff) ? 1 : 0;
         return strutil::normalize_crlf(&obuf[bom], "\n");
+        */
     }
 
     class TagLookup {
