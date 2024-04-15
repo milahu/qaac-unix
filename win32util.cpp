@@ -7,13 +7,13 @@
 namespace win32 {
     void throw_error(const std::string &msg, uint32_t code)
     {
-        LPWSTR pszMsg = 0;
+        char* pszMsg = 0;
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                        FORMAT_MESSAGE_FROM_SYSTEM,
                        0,
                        code,
                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       (LPWSTR)&pszMsg,
+                       (char*)&pszMsg,
                        0,
                        0);
         std::string ss;
