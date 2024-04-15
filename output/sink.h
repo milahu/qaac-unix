@@ -95,6 +95,7 @@ public:
     void writeTags();
 };
 
+/*
 class ALACSink: public ISink, public MP4SinkBase {
 public:
     ALACSink(const std::string &path, const std::vector<uint8_t> &magicCookie,
@@ -133,5 +134,6 @@ private:
         }
     }
 };
+*/
 
 #endif

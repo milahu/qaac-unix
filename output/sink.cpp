@@ -39,6 +39,7 @@ size_t parseDecSpecificConfig(const std::vector<uint8_t> &config,
     return bs.position();
 }
 
+/*
 static
 void parseMagicCookieALAC(const std::vector<uint8_t> &cookie,
                           std::vector<uint8_t> *alac,
@@ -58,6 +59,7 @@ void parseMagicCookieALAC(const std::vector<uint8_t> &cookie,
         }
     }
 }
+*/
 
 using mp4v2::impl::MP4Atom;
 
@@ -424,6 +426,7 @@ void MP4Sink::writeTags()
     MP4SinkBase::writeTags();
 }
 
+#if 0
 ALACSink::ALACSink(const std::string &path,
         const std::vector<uint8_t> &magicCookie, bool temp)
         : MP4SinkBase(path, temp)
@@ -529,3 +532,4 @@ void ADTSSink::init(const std::vector<uint8_t> &config)
                   std::back_inserter(m_pce_data));
     }
 }
+#endif

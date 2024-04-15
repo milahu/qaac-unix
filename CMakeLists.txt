@@ -75,31 +75,33 @@ add_executable(qaac
   mp4v2wrapper.cpp
   win32util.cpp
   chanmap.cpp
+  misc.cpp
+  CompositeSource.cpp
+#[[
+  wicimage.cpp
   cuesheet.cpp
   metadata.cpp
-  misc.cpp
-  ALACEncoderX.cpp
-  CompositeSource.cpp
-#  CoreAudioEncoder.cpp
-#  CoreAudioPaddedEncoder.cpp
-#  wgetopt.cpp
-  wicimage.cpp
+  CoreAudioEncoder.cpp
+  CoreAudioPaddedEncoder.cpp
+  wgetopt.cpp
+]]
 
   # only wav
   input/InputFactory.cpp
   input/WaveSource.cpp
 #[[
+  ALACEncoderX.cpp
   input/ALACPacketDecoder.cpp
-  #input/AvisynthSource.cpp
+  input/AvisynthSource.cpp
   input/CoreAudioPacketDecoder.cpp
   input/ExtAFSource.cpp
   input/FLACModule.cpp
-  #input/FLACPacketDecoder.cpp
+  input/FLACPacketDecoder.cpp
   input/FLACSource.cpp
   input/LibSndfileSource.cpp
   input/MP4Source.cpp
   input/MPAHeader.cpp
-  #input/OpusPacketDecoder.cpp
+  input/OpusPacketDecoder.cpp
   input/RawSource.cpp
   input/TakSource.cpp
   input/WavpackSource.cpp

@@ -6,15 +6,19 @@
 #include <fcntl.h> // open
 #include <unistd.h> // lseek
 #include "win32util.h"
+/*
 #ifdef QAAC
 #include "ExtAFSource.h"
 #endif
 #include "FLACSource.h"
 #include "LibSndfileSource.h"
 #include "RawSource.h"
+*/
 #include "WaveSource.h"
+/*
 #include "WavpackSource.h"
 #include "MP4Source.h"
+*/
 
 std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
 {
@@ -44,12 +48,14 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
         throw std::runtime_error("Failed to create file stream");
     }
 
+/*
     if (m_is_raw) {
         std::shared_ptr<RawSource> src =
             std::make_shared<RawSource>(fp, m_raw_format);
         m_sources[path] = src;
         return src;
     }
+*/
 
     if (strcasecmp(ext, "avs") == 0)
         throw std::runtime_error("not implemented: AvisynthSource");
@@ -73,6 +79,7 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
         throw std::runtime_error("Not available input file format");
     }
 
+/*
     TRY_MAKE_SHARED(MP4Source, fp);
 #ifdef QAAC
     TRY_MAKE_SHARED(ExtAFSource, fp);
@@ -80,6 +87,7 @@ std::shared_ptr<ISeekableSource> InputFactory::open(const char *path)
     TRY_MAKE_SHARED(FLACSource, fp);
     TRY_MAKE_SHARED(WavpackSource, path);
     TRY_MAKE_SHARED(LibSndfileSource, fp);
+*/
 
     ::close(fd);
     throw std::runtime_error("Not available input file format");
