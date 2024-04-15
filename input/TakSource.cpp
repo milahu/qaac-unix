@@ -178,7 +178,7 @@ void TakSource::fetchTags()
     for (it = itemListMap.begin(); it != itemListMap.end(); ++it) {
         std::string key = it->first.toCString();
         if (it->second.type() == TagLib::APE::Item::Text) {
-            std::string value = it->second.toString().toWString();
+            std::string value = it->second.toString().to8Bit(true);
             tags[key] = (value);
         } else if (it->second.type() == TagLib::APE::Item::Binary) {
             if (strcasecmp(key.c_str(), "Cover Art (Front)"))

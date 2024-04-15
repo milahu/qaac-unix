@@ -214,7 +214,7 @@ void LibSndfileSource::fetchVorbisTags(int codec)
     auto &map = tag->fieldListMap();
     for (auto it = map.begin(); it != map.end(); ++it) {
         std::string key = it->first.toCString();
-        std::string value = it->second.toString().toWString();
+        std::string value = it->second.toString().to8Bit(true);
         tags[key] = (value);
     }
     m_tags = TextBasedTag::normalizeTags(tags);
