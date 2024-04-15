@@ -84,14 +84,25 @@ namespace win32 {
         return fd;
     }
 
-    bool is_same_file(HANDLE ha, HANDLE hb)
+    // Check if two file descriptors refer to the same file (Unix implementation)
+    inline bool is_same_file(int fda, int fdb)
     {
-        BY_HANDLE_FILE_INFORMATION bhfia, bhfib;
+        // Retrieve file information for the first file descriptor
+        struct stat statA;
+        if (fstat(fda, &statA) == -1) {
+            // Error occurred while retrieving file information for the first file descriptor
+            return false;
+        }
 
-        if (!GetFileInformationByHandle(ha, &bhfia)) return false;
-        if (!GetFileInformationByHandle(hb, &bhfib)) return false;
-        return bhfia.dwVolumeSerialNumber == bhfib.dwVolumeSerialNumber
-            && bhfia.nFileIndexHigh == bhfib.nFileIndexHigh
-            && bhfia.nFileIndexLow == bhfib.nFileIndexLow;
+        // Retrieve file information for the second file descriptor
+        struct stat statB;
+        if (fstat(fdb, &statB) == -1) {
+            // Error occurred while retrieving file information for the second file descriptor
+            return false;
+        }
+
+        // Compare inode numbers and device IDs to determine if the files are the same
+        return statA.st_dev == statB.st_dev && statA.st_ino == statB.st_ino;
     }
+
 }

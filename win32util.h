@@ -264,25 +264,7 @@ namespace win32 {
 
     int create_named_pipe(const char *path);
 
-    // Check if two file descriptors refer to the same file (Unix implementation)
-    inline bool is_same_file(int fda, int fdb) {
-        // Retrieve file information for the first file descriptor
-        struct stat statA;
-        if (fstat(fda, &statA) == -1) {
-            // Error occurred while retrieving file information for the first file descriptor
-            return false;
-        }
-
-        // Retrieve file information for the second file descriptor
-        struct stat statB;
-        if (fstat(fdb, &statB) == -1) {
-            // Error occurred while retrieving file information for the second file descriptor
-            return false;
-        }
-
-        // Compare inode numbers and device IDs to determine if the files are the same
-        return statA.st_dev == statB.st_dev && statA.st_ino == statB.st_ino;
-    }
+    inline bool is_same_file(int fda, int fdb);
 
 }
 #endif
