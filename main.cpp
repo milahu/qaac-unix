@@ -38,7 +38,9 @@
 #include "chanmap.h"
 #include "ChannelMapper.h"
 #include "logging.h"
+/*
 #include "Compressor.h"
+*/
 /*
 #include "metadata.h"
 */
@@ -443,6 +445,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
 */
         }
     }
+/*
     for (size_t i = 0; i < opts.drc_params.size(); ++i) {
         const DRCParams &p = opts.drc_params[i];
         if (opts.verbose > 1 || opts.logfilename)
@@ -465,6 +468,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                                       stat_file));
         chain.push_back(compressor);
     }
+*/
     if (normalize_pass) {
         do_normalize(chain, opts, src->isSeekable());
         if (src->isSeekable())
