@@ -1,4 +1,4 @@
-#include <tiostream.h>
+#include <taglib/tiostream.h>
 
 namespace TagLibX {
     using TagLib::FileName;

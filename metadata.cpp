@@ -2,11 +2,11 @@
 #include <taglib/aifffile.h>
 #include <taglib/apefile.h>
 #include <taglib/apetag.h>
-#include <mpeg/mpegfile.h>
-#include <mpeg/id3v1/id3v1genres.h>
-#include <mpeg/id3v2/id3v2framefactory.h>
-#include <mpeg/id3v2/frames/textidentificationframe.h>
-#include <mpeg/id3v2/frames/attachedpictureframe.h>
+#include <taglib/mpegfile.h>
+#include <taglib/id3v1genres.h>
+#include <taglib/id3v2framefactory.h>
+#include <taglib/textidentificationframe.h>
+#include <taglib/attachedpictureframe.h>
 #include "metadata.h"
 #ifdef _WIN32
 #include "win32util.h"
