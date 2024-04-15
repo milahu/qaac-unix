@@ -193,7 +193,7 @@ namespace misc
             if (std::sscanf(tok, tfmt, &h, &m, &s) == 3) {
                 strutil::strsep(&tok, "\t ");
                 add_chapter_entry(chaps, tok, h, m, s);
-            } else if (wcsncmp(tok, "Chapter", 7) == 0) {
+            } else if (strncmp(tok, "Chapter", 7) == 0) {
                 int hh, mm;
                 double ss;
                 char *key = strutil::strsep(&tok, "=");

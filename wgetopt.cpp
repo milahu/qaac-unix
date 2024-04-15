@@ -248,7 +248,7 @@ parse_long_options(char * const *nargv, const char *options,
 
     for (i = 0; long_options[i].name; i++) {
         /* find matching long option */
-        if (wcsncmp(current_argv, long_options[i].name,
+        if (strncmp(current_argv, long_options[i].name,
             current_argv_len))
             continue;
 
