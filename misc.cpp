@@ -228,20 +228,25 @@ namespace misc
         }
         return result;
     }
+
     std::shared_ptr<FILE> openConfigFile(const char *file)
     {
         std::vector<std::string> search_paths;
         const char *home = getenv("HOME");
-        if (home)
-            search_paths.push_back(strutil::format("%s\\%s", home, ".qaac"));
+        if (home) {
+            search_paths.push_back(strutil::format("%s/%s/%s", home, ".config", "qaac"));
+            search_paths.push_back(strutil::format("%s/%s", home, ".qaac"));
+        }
         char path[PATH_MAX];
+        /*
         if (SUCCEEDED(SHGetFolderPathW(0, CSIDL_APPDATA, 0, 0, path)))
-            search_paths.push_back(strutil::format("%s\\%s", path, "qaac"));
+            search_paths.push_back(strutil::format("%s/%s", path, "qaac"));
         search_paths.push_back(win32::get_module_directory());
+        */
         for (size_t i = 0; i < search_paths.size(); ++i) {
             try {
                 std::string pathtry =
-                    strutil::format("%s\\%s", search_paths[i].c_str(), file);
+                    strutil::format("%s/%s", search_paths[i].c_str(), file);
                 return win32::fopen(pathtry, "r");
             } catch (...) {
                 if (i == search_paths.size() - 1) throw;
@@ -299,7 +304,7 @@ namespace misc
     std::vector<std::vector<complex_t>>
     loadRemixerMatrixFromPreset(const char *preset_name)
     {
-        std::string path = strutil::format("matrix\\%s.txt", preset_name);
+        std::string path = strutil::format("matrix/%s.txt", preset_name);
         return loadRemixerMatrix(openConfigFile(path.c_str()));
     }
 
