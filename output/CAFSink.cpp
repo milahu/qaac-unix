@@ -76,7 +76,7 @@ void CAFSink::writeBER(uint32_t n)
     buf[0] ^= 0x80;
 
     for (--i; i >= 0; --i)
-        _putc_nolock(buf[i], m_file.get());
+        putc(buf[i], m_file.get());
 }
 
 void CAFSink::writeASBD(uint32_t format)
