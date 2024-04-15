@@ -6,7 +6,6 @@
 #include <cctype>
 #pragma warning(push)
 #pragma warning(disable: 4091)
-#include <shlobj.h>
 #pragma warning(pop)
 #include <mlang.h>
 #include <uchardet.h>
