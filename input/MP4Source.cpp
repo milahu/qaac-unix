@@ -9,8 +9,6 @@
 #else
 #include "ALACPacketDecoder.h"
 #endif
-#include "FLACPacketDecoder.h"
-#include "OpusPacketDecoder.h"
 
 unsigned
 MP4Edits::editForPosition(int64_t position, int64_t *offset_in_edit) const
@@ -55,11 +53,9 @@ MP4Source::MP4Source(const std::shared_ptr<FILE> &fp)
 
         switch (util::fourcc(type).nvalue) {
         case 'alac': setupALAC();       break;
-        case 'fLaC': setupFLAC();       break;
 #ifdef QAAC
         case 'mp4a': setupMPEG4Audio(); break;
 #endif
-        case 'Opus': setupOpus();       break;
         default:     throw std::runtime_error("Not supported input codec");
         }
 
@@ -315,24 +311,6 @@ void MP4Source::setupALAC()
     m_oasbd   = m_decoder->getSampleFormat();
 }
 
-void MP4Source::setupFLAC()
-{
-    const char *dfLaprop = "mdia.minf.stbl.stsd.fLaC.dfLa.data";
-    std::vector<uint8_t> dfLa;
-    {
-        uint8_t *value;
-        uint32_t size;
-        m_file.GetTrackBytesProperty(m_track_id, dfLaprop, &value, &size);
-        std::copy(value + 4, value + size, std::back_inserter(dfLa));
-        MP4Free(value);
-    }
-    m_decoder =
-        std::make_shared<FLACPacketDecoder>(this);
-    m_decoder->setMagicCookie(dfLa);
-    m_iasbd = ((FLACPacketDecoder*)m_decoder.get())->getInputFormat();
-    m_oasbd = m_decoder->getSampleFormat();
-}
-
 #ifdef QAAC
 void MP4Source::setupMPEG4Audio()
 {
@@ -395,35 +373,15 @@ void MP4Source::setupMPEG4Audio()
 }
 #endif
 
-void MP4Source::setupOpus()
-{
-    const char *dOpsprop = "mdia.minf.stbl.stsd.Opus.dOps.data";
-    std::vector<uint8_t> dOps;
-    {
-        uint8_t *value;
-        uint32_t size;
-        m_file.GetTrackBytesProperty(m_track_id, dOpsprop, &value, &size);
-        std::copy(value, value + size, std::back_inserter(dOps));
-        MP4Free(value);
-    }
-    m_decoder = std::make_shared<OpusPacketDecoder>(this);
-    m_decoder->setMagicCookie(dOps);
-    m_iasbd = ((FLACPacketDecoder*)m_decoder.get())->getInputFormat();
-    m_oasbd = m_decoder->getSampleFormat();
-}
-
 unsigned MP4Source::getMaxFrameDependency()
 {
     switch (m_iasbd.mFormatID) {
     case 'alac':
-    case 'fLaC':
         return 0;
     case '.mp3': return 10;
     case 'aach':
     case 'aacp':
         return m_iasbd.mSampleRate / 2 / m_iasbd.mFramesPerPacket;
-    case 'opus':
-        return 4;
     }
     return 1;
 }

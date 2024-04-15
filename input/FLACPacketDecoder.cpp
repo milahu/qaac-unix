@@ -17,6 +17,18 @@ FLACPacketDecoder::FLACPacketDecoder(IPacketFeeder *feeder)
     memset(&m_iasbd, 0, sizeof(m_iasbd));
     memset(&m_oasbd, 0, sizeof(m_oasbd));
 
+/*
+FIXME
+/nix/store/j00nb8s5mwaxgi77h21i1ycb91yxxqck-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:1480:4: fatal error: static assertion failed due to requirement '__is_invocable<std::_Bind<std::_Mem_fn<void (FLACPacketDecoder::*)(FLAC__StreamDecoder *)> (FLACPacketDecoder *)> &, FLAC__StreamDecoder *&>::value': deleter expression d(p) is well-formed
+          static_assert(__is_invocable<_Deleter&, _Yp*&>::value,
+          ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/nix/store/j00nb8s5mwaxgi77h21i1ycb91yxxqck-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:232:11: note: in instantiation of function template specialization 'std::__shared_ptr<FLAC__StreamDecoder>::__shared_ptr<FLAC__StreamDecoder, std::_Bind<std::_Mem_fn<void (FLACPacketDecoder::*)(FLAC__StreamDecoder *)> (FLACPacketDecoder *)>, void>' requested here
+        : __shared_ptr<_Tp>(__p, std::move(__d)) { }
+          ^
+/home/user/src/qaac/qaac/input/FLACPacketDecoder.cpp:20:17: note: in instantiation of function template specialization 'std::shared_ptr<FLAC__StreamDecoder>::shared_ptr<FLAC__StreamDecoder, std::_Bind<std::_Mem_fn<void (FLACPacketDecoder::*)(FLAC__StreamDecoder *)> (FLACPacketDecoder *)>, void>' requested here
+    m_decoder = decoder_t(m_module.stream_decoder_new(),
+                ^
+*/
     m_decoder = decoder_t(m_module.stream_decoder_new(),
                           std::bind(std::mem_fn(&ThisType::close), this));
     auto st = m_module.stream_decoder_init_stream(m_decoder.get(),
