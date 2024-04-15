@@ -1,4 +1,5 @@
 #include <taglib/tiostream.h>
+#include "win32util.h"
 
 namespace TagLibX {
     using TagLib::FileName;
@@ -57,7 +58,7 @@ namespace TagLibX {
         }
         long length()
         {
-            int64_t n = _filelengthi64(m_fd);
+            int64_t n = win32::filelengthi64(m_fd);
             if (n > 0xffffffffLL)
                 throw std::runtime_error("File size exceeded "
                                          "the limit of TagLib");
