@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <riff/aiff/aifffile.h>
+#include <taglib/aifffile.h>
 #include <ape/apefile.h>
 #include <ape/apetag.h>
 #include <mpeg/mpegfile.h>
