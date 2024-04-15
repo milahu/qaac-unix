@@ -9,6 +9,7 @@
 #endif
 #include "ALAC/EndianPortable.h" // BSWAP16 BSWAP32 BSWAP64
 #include "CoreAudio/CoreAudioTypes.h"
+#include "CoreAudio/AudioFile.h"
 
 class CAFSink : public ISink, public ITagStore {
     std::shared_ptr<FILE> m_file;
