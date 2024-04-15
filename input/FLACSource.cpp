@@ -58,7 +58,7 @@ FLACSource::FLACSource(const std::shared_ptr<FILE> &fp):
 
     m_decoder =
         decoder_t(m_module.stream_decoder_new(),
-                  std::bind1st(std::mem_fn(&FLACSource::close), this));
+                  std::bind(std::mem_fn(&FLACSource::close), this));
     TRYFL(m_module.stream_decoder_set_metadata_respond(
                 m_decoder.get(), FLAC__METADATA_TYPE_VORBIS_COMMENT));
     TRYFL(m_module.stream_decoder_set_metadata_respond(

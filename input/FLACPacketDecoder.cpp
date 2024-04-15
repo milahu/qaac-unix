@@ -18,7 +18,7 @@ FLACPacketDecoder::FLACPacketDecoder(IPacketFeeder *feeder)
     memset(&m_oasbd, 0, sizeof(m_oasbd));
 
     m_decoder = decoder_t(m_module.stream_decoder_new(),
-                          std::bind1st(std::mem_fn(&ThisType::close), this));
+                          std::bind(std::mem_fn(&ThisType::close), this));
     auto st = m_module.stream_decoder_init_stream(m_decoder.get(),
                                                   staticReadCallback,
                                                   staticSeekCallback,
