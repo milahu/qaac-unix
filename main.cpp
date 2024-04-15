@@ -29,7 +29,9 @@
 /*
 #include "Quantizer.h"
 */
+/*
 #include "Scaler.h"
+*/
 #include "Limiter.h"
 #include "PipedReader.h"
 #include "TrimmedSource.h"
@@ -470,12 +472,15 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
     }
 
     if (opts.gain) {
+        throw std::runtime_error("not implemented: gain");
+/*
         double scale = util::dB_to_scale(opts.gain);
         if (opts.verbose > 1 || opts.logfilename)
             LOG("Gain adjustment: %gdB, scale factor %g\n",
                 opts.gain, scale);
         std::shared_ptr<ISource> scaler(new Scaler(chain.back(), scale));
         chain.push_back(scaler);
+*/
     }
     if (opts.limiter) {
         if (opts.verbose > 1 || opts.logfilename)
@@ -538,7 +543,10 @@ void build_filter_chain(std::shared_ptr<ISeekableSource> src,
         chain.clear();
         chain.push_back(src);
         if (peak > FLT_MIN)
+            throw std::runtime_error("not implemented: gain");
+/*
             chain.push_back(std::make_shared<Scaler>(src, 1.0/peak));
+*/
         build_filter_chain_sub(src, chain, opts, false);
     }
 }
