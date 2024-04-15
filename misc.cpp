@@ -84,8 +84,8 @@ namespace misc
                 throw std::runtime_error((path + ": uchardet_handle_data() failed"));
             }
             uchardet_data_end(detector.get());
-            auto charset = uchardet_get_charset(detector.get());
-            if (charset < 0)
+            const char *charset = uchardet_get_charset(detector.get());
+            if (!*charset)
                 throw std::runtime_error((path + ": cannot detect code page"));
             codepage = getCodePageFromCharset(charset);
             if (codepage < 0)
