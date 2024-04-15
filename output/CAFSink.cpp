@@ -59,9 +59,9 @@ void CAFSink::finishWrite(const AudioFilePacketTableInfo &info)
     if (!m_seekable)
         return;
     int64_t pos = ftell(m_file.get());
-    if (_fseeki64(m_file.get(), m_data_pos - 12, SEEK_SET) == 0)
+    if (fseek(m_file.get(), m_data_pos - 12, SEEK_SET) == 0)
         write64(m_bytes_written + 4);
-    if (m_asbd.mBytesPerFrame == 0 && _fseeki64(m_file.get(), pos, SEEK_SET) == 0)
+    if (m_asbd.mBytesPerFrame == 0 && fseek(m_file.get(), pos, SEEK_SET) == 0)
         pakt(info);
 }
 
@@ -185,6 +185,6 @@ void CAFSink::pakt(const AudioFilePacketTableInfo &info)
         writeBER(m_packet_table[i]);
 
     int64_t off = ftell(m_file.get());
-    if (_fseeki64(m_file.get(), pakt_pos + 4, SEEK_SET) == 0)
+    if (fseek(m_file.get(), pakt_pos + 4, SEEK_SET) == 0)
         write64(off - pakt_pos - 12);
 }
