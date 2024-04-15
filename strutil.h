@@ -103,7 +103,7 @@ namespace strutil {
     inline
     std::string us2w(const std::string &src)
     {
-        return m2w(src, std::codecvt_utf8<char>());
+        return src;
     }
     inline
     std::string w2m(const std::string& src,
@@ -122,7 +122,7 @@ namespace strutil {
     inline
     std::string w2us(const std::string &src)
     {
-        return w2m(src, std::codecvt_utf8<char>());
+        return src;
     }
 
     std::string format(const char *fmt, ...);
