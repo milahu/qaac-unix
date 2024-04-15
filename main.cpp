@@ -35,7 +35,9 @@
 #include "Scaler.h"
 */
 #include "Limiter.h"
+/*
 #include "PipedReader.h"
+*/
 #include "TrimmedSource.h"
 #include "chanmap.h"
 #include "ChannelMapper.h"
@@ -526,6 +528,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                                                         false, true));
     }
 */
+/*
     if (threading && (opts.isAAC() || opts.isALAC())) {
         PipedReader *reader = new PipedReader(chain.back());
         reader->start();
@@ -533,6 +536,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
         if (opts.verbose > 1 || opts.logfilename)
             LOG("Enable threading\n");
     }
+*/
     if (opts.verbose > 1) {
         auto asbd = chain.back()->getSampleFormat();
         LOG("Format: %s -> %s\n",
