@@ -109,8 +109,8 @@ add_executable(qaac
 
   # TODO only m4a
   output/sink.cpp
-#[[
   output/CAFSink.cpp
+#[[
   output/WaveOutSink.cpp
   output/WaveSink.cpp
 ]]
