@@ -1,4 +1,5 @@
 #include "FLACModule.h"
+#include <stdexcept>
 
 #define CHECK(expr) do { if (!(expr)) throw std::runtime_error("!!!"); } \
     while (0)
