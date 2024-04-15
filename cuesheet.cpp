@@ -66,7 +66,6 @@ bool CueTokenizer<CharT>::nextline()
 }
 
 template struct CueTokenizer<char>;
-template struct CueTokenizer<char>;
 
 void CueTrack::addSegment(const CueSegment &seg)
 {
