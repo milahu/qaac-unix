@@ -84,40 +84,6 @@ namespace win32 {
         return fd;
     }
 
-    std::string get_dll_version_for_locale(HMODULE hDll, WORD langid)
-    {
-        HRSRC hRes = FindResourceExW(hDll,
-                                     RT_VERSION,
-                                     MAKEINTRESOURCEW(VS_VERSION_INFO),
-                                     langid);
-        if (!hRes)
-            win32::throw_error("FindResourceExW", GetLastError());
-        std::string data;
-        {
-            uint32_t cbres = SizeofResource(hDll, hRes);
-            HGLOBAL hMem = LoadResource(hDll, hRes);
-            if (hMem) {
-                char *pc = static_cast<char*>(LockResource(hMem));
-                if (cbres && pc)
-                    data.assign(pc, cbres);
-                FreeResource(hMem);
-            }
-        }
-        // find dwSignature of VS_FIXEDFILEINFO
-        size_t pos = data.find("\xbd\x04\xef\xfe");
-        if (pos != std::string::npos) {
-            VS_FIXEDFILEINFO vfi;
-            std::memcpy(&vfi, data.c_str() + pos, sizeof vfi);
-            WORD v[4];
-            v[0] = HIWORD(vfi.dwFileVersionMS);
-            v[1] = LOWORD(vfi.dwFileVersionMS);
-            v[2] = HIWORD(vfi.dwFileVersionLS);
-            v[3] = LOWORD(vfi.dwFileVersionLS);
-            return strutil::format("%u.%u.%u.%u", v[0],v[1],v[2],v[3]);
-        }
-        return "";
-    }
-
     bool is_same_file(HANDLE ha, HANDLE hb)
     {
         BY_HANDLE_FILE_INFORMATION bhfia, bhfib;
