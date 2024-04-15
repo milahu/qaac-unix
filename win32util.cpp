@@ -1,5 +1,7 @@
 #include "win32util.h"
 #include "util.h"
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <fcntl.h>
 #include "strutil.h"
@@ -14,29 +16,21 @@ namespace win32 {
 
     FILE *tmpfile(const char *prefix)
     {
-        std::string sprefix =
-            strutil::format("%s.%d.", prefix, GetCurrentProcessId());
-        char *tmpname = _wtempnam(0, sprefix.c_str());
-        std::shared_ptr<char> tmpname_p(tmpname, std::free);
-        HANDLE fh = CreateFileW(prefixed_path(tmpname).c_str(),
-                                GENERIC_READ | GENERIC_WRITE,
-                                0, 0, CREATE_ALWAYS,
-                                FILE_ATTRIBUTE_TEMPORARY |
-                                FILE_FLAG_DELETE_ON_CLOSE,
-                                0);
-        if (fh == INVALID_HANDLE_VALUE)
-            throw_error(tmpname, GetLastError());
-        int fd = _open_osfhandle(reinterpret_cast<intptr_t>(fh),
-                _O_BINARY|_O_RDWR);
+
+        std::string template_name =
+            strutil::format("%s.%d.XXXXXX", prefix, getpid());
+
+        int fd = mkstemp((char*)template_name.c_str());
         if (fd == -1) {
-            CloseHandle(fh);
-            util::throw_crt_error("win32::tmpfile: open_osfhandle()");
+            util::throw_crt_error("win32::tmpfile: mkstemp()");
         }
-        FILE *fp = _fdopen(fd, "w+");
+
+        FILE *fp = fdopen(fd, "w+");
         if (!fp) {
-            _close(fd);
+            close(fd);
             util::throw_crt_error("win32::tmpfile: _fdopen()");
         }
+
         return fp;
     }
 
