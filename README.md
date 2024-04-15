@@ -1,8 +1,15 @@
-=====================================
-qaac - CLI QuickTime AAC/ALAC encoder
-=====================================
+# qaac-unix
 
-How to build
-------------
-You need Microsoft Visual C++ 2010 to build qaac/refalac.
-AMD64 build is only available for refalac.
+QuickTime AAC encoder, ported to Unix
+
+
+
+## status
+
+not working
+
+
+
+## build
+
+see [build.sh](build.sh)
