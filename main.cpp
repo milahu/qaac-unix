@@ -26,7 +26,9 @@
 */
 #include "Normalizer.h"
 #include "MatrixMixer.h"
+/*
 #include "Quantizer.h"
+*/
 #include "Scaler.h"
 #include "Limiter.h"
 #include "PipedReader.h"
@@ -394,6 +396,8 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
         double irate = chain.back()->getSampleFormat().mSampleRate;
         double orate = target_sample_rate(opts, chain.back().get());
         if (orate != irate) {
+            throw std::runtime_error("not implemented: change of sample rate");
+/*
             if (!opts.native_resampler && SOXRModule::instance().loaded()) {
                 LOG("%gHz -> %gHz\n", irate, orate);
                 std::shared_ptr<SoxrResampler>
@@ -434,6 +438,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                 }
 #endif
             }
+*/
         }
     }
     for (size_t i = 0; i < opts.drc_params.size(); ++i) {
@@ -497,6 +502,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
         }
 */
     }
+/*
     if (opts.isAAC()) {
         AudioStreamBasicDescription sfmt = chain.back()->getSampleFormat();
         if (!(sfmt.mFormatFlags & kAudioFormatFlagIsFloat) ||
@@ -504,6 +510,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
             chain.push_back(std::make_shared<Quantizer>(chain.back(), 32,
                                                         false, true));
     }
+*/
     if (threading && (opts.isAAC() || opts.isALAC())) {
         PipedReader *reader = new PipedReader(chain.back());
         reader->start();
