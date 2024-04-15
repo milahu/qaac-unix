@@ -12,6 +12,19 @@
 #include "strutil.h"
 
 namespace win32 {
+
+    // get the number of milliseconds since system startup
+    unsigned long GetTickCount()
+    {
+        struct timespec now;
+        if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+            // Handle error
+            return 0;
+        }
+        // Calculate milliseconds since system startup
+        return now.tv_sec * 1000 + now.tv_nsec / 1000000;
+    }
+
     void throw_error(const std::string &msg, uint32_t code)
     {
         std::string ss;
