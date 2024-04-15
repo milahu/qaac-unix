@@ -3,6 +3,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <cerrno>
+#include <cstring>
 #include <fcntl.h>
 #include "strutil.h"
 
@@ -36,21 +41,30 @@ namespace win32 {
 
     char *load_with_mmap(const char *path, uint64_t *size)
     {
-        std::string fullpath = prefixed_path(path);
-        HANDLE hFile = CreateFileW(fullpath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-        if (hFile == INVALID_HANDLE_VALUE)
-            throw_error(fullpath, GetLastError());
-        uint32_t sizeHi, sizeLo;
-        sizeLo = GetFileSize(hFile, &sizeHi);
-        *size = (static_cast<uint64_t>(sizeHi) << 32) | sizeLo;
-        HANDLE hMap = CreateFileMappingW(hFile, 0, PAGE_READONLY, 0, 0, 0);
-        uint32_t err = GetLastError();
-        CloseHandle(hFile);
-        if (!hMap) throw_error("CreateFileMapping", err);
-        char *view =
-            reinterpret_cast<char*>( MapViewOfFile(hMap, FILE_MAP_READ,
-                                                   0, 0, 0));
-        CloseHandle(hMap);
+        // Open the file
+        int fd = open(path, O_RDONLY);
+        if (fd == -1) {
+            throw std::runtime_error(strutil::format("Failed to open file: %s", strerror(errno)));
+        }
+
+        // Get the file size
+        struct stat st;
+        if (fstat(fd, &st) == -1) {
+            close(fd);
+            throw std::runtime_error(strutil::format("Failed to get file size: %s", strerror(errno)));
+        }
+        *size = st.st_size;
+
+        // Map the file into memory
+        char* view = static_cast<char*>(mmap(nullptr, *size, PROT_READ, MAP_PRIVATE, fd, 0));
+        if (view == MAP_FAILED) {
+            close(fd);
+            throw std::runtime_error(strutil::format("Failed to mmap file: %s", strerror(errno)));
+        }
+
+        // Close the file descriptor
+        close(fd);
+
         return view;
     }
 
