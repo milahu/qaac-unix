@@ -244,7 +244,7 @@ parse_long_options(char * const *nargv, const char *options,
         current_argv_len = has_equal - current_argv;
         has_equal++;
     } else
-        current_argv_len = wcslen(current_argv);
+        current_argv_len = strlen(current_argv);
 
     for (i = 0; long_options[i].name; i++) {
         /* find matching long option */
@@ -252,7 +252,7 @@ parse_long_options(char * const *nargv, const char *options,
             current_argv_len))
             continue;
 
-        if (wcslen(long_options[i].name) == current_argv_len) {
+        if (strlen(long_options[i].name) == current_argv_len) {
             /* exact match */
             match = i;
             exact_match = 1;

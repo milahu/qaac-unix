@@ -147,7 +147,7 @@ namespace misc
         strutil::Tokenizer<char> tokens(res, "/");
         char *tok;
         while ((tok = tokens.next())) {
-            if (wcslen(tok) > 250)
+            if (strlen(tok) > 250)
                 tok[250] = 0;
             comp.push_back(tok);
         }
