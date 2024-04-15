@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <taglib/aifffile.h>
-#include <ape/apefile.h>
-#include <ape/apetag.h>
+#include <taglib/apefile.h>
+#include <taglib/apetag.h>
 #include <mpeg/mpegfile.h>
 #include <mpeg/id3v1/id3v1genres.h>
 #include <mpeg/id3v2/id3v2framefactory.h>
