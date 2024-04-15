@@ -7,25 +7,8 @@
 namespace win32 {
     void throw_error(const std::string &msg, uint32_t code)
     {
-        char* pszMsg = 0;
-        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                       FORMAT_MESSAGE_FROM_SYSTEM,
-                       0,
-                       code,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       (char*)&pszMsg,
-                       0,
-                       0);
         std::string ss;
-        if (pszMsg) {
-            strutil::squeeze(pszMsg, "\r\n");
-            ss = strutil::format("%s: %s", msg.c_str(), pszMsg);
-            LocalFree(pszMsg);
-        }
-        else if (code < 0xfe00)
-            ss = strutil::format("%d: %s", code, msg.c_str());
-        else
-            ss = strutil::format("%08x: %s", code, msg.c_str());
+        ss = strutil::format("%d: %s", code, msg.c_str());
         throw std::runtime_error((ss));
     }
 
