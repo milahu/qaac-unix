@@ -24,7 +24,9 @@
 /*
 #include "SoxLowpassFilter.h"
 */
+/*
 #include "Normalizer.h"
+*/
 #include "MatrixMixer.h"
 /*
 #include "Quantizer.h"
@@ -348,6 +350,7 @@ std::string pcm_format_str(AudioStreamBasicDescription &asbd)
     return strutil::format("%s%d", stype[itype], asbd.mBitsPerChannel);
 }
 
+/*
 static double do_normalize(std::vector<std::shared_ptr<ISource> > &chain,
                            const Options &opts, bool seekable)
 {
@@ -367,6 +370,7 @@ static double do_normalize(std::vector<std::shared_ptr<ISource> > &chain,
     LOG("Peak: %g (%gdB)\n", normalizer->getPeak(), util::scale_to_dB(normalizer->getPeak()));
 	return normalizer->getPeak();
 }
+*/
 
 void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
                             std::vector<std::shared_ptr<ISource> > &chain,
@@ -469,11 +473,13 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
         chain.push_back(compressor);
     }
 */
+/*
     if (normalize_pass) {
         do_normalize(chain, opts, src->isSeekable());
         if (src->isSeekable())
             return;
     }
+*/
 
     if (opts.gain) {
         throw std::runtime_error("not implemented: gain");
@@ -540,6 +546,7 @@ void build_filter_chain(std::shared_ptr<ISeekableSource> src,
 {
     chain.push_back(src);
     build_filter_chain_sub(src, chain, opts, opts.normalize);
+/*
     if (opts.normalize && src->isSeekable()) {
         src->seekTo(0);
         Normalizer *normalizer = dynamic_cast<Normalizer*>(chain.back().get());
@@ -548,11 +555,10 @@ void build_filter_chain(std::shared_ptr<ISeekableSource> src,
         chain.push_back(src);
         if (peak > FLT_MIN)
             throw std::runtime_error("not implemented: gain");
-/*
             chain.push_back(std::make_shared<Scaler>(src, 1.0/peak));
-*/
         build_filter_chain_sub(src, chain, opts, false);
     }
+*/
 }
 
 static
