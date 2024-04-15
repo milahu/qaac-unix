@@ -54,11 +54,6 @@ namespace win32 {
 
     void throw_error(const std::string& msg, uint32_t error);
 
-    inline void throw_error(const std::string& msg, uint32_t error)
-    {
-        throw_error(strutil::us2w(msg), error);
-    }
-
     inline std::string GetFullPathName(const std::string &path) {
         char resolved_path[PATH_MAX];
         if (realpath(path.c_str(), resolved_path) != nullptr) {
