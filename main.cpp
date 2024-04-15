@@ -21,7 +21,9 @@
 #include "CompositeSource.h"
 #include "NullSource.h"
 #include "SoxrResampler.h"
+/*
 #include "SoxLowpassFilter.h"
+*/
 #include "Normalizer.h"
 #include "MatrixMixer.h"
 #include "Quantizer.h"
@@ -375,6 +377,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
     if (opts.isAAC() || opts.isALAC())
         get_encoding_channel_layout(chain.back().get(), opts, nullptr);
 
+/*
     if (opts.lowpass > 0) {
         if (!SoXConvolverModule::instance().loaded())
             LOG("WARNING: --lowpass requires libsoxconvolver. LPF disabled\n");
@@ -386,6 +389,7 @@ void build_filter_chain_sub(std::shared_ptr<ISeekableSource> src,
             chain.push_back(f);
         }
     }
+*/
     {
         double irate = chain.back()->getSampleFormat().mSampleRate;
         double orate = target_sample_rate(opts, chain.back().get());
