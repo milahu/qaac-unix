@@ -71,7 +71,7 @@ namespace misc
     std::string loadTextFile(const std::string &path, int codepage)
     {
         auto fp = std::shared_ptr<FILE>(win32::wfopenx(path.c_str(), "rb"), std::fclose);
-        int64_t fileSize = _filelengthi64(fileno(fp.get()));
+        int64_t fileSize = win32::filelengthi64(fileno(fp.get()));
         if (fileSize > 0x100000) {
             throw std::runtime_error((path + ": file too big"));
         }
