@@ -70,15 +70,18 @@ namespace win32 {
 
     int create_named_pipe(const char *path)
     {
-        HANDLE fh = CreateNamedPipeW(path,
-                                     PIPE_ACCESS_OUTBOUND,
-                                     PIPE_TYPE_BYTE | PIPE_WAIT,
-                                     1, 0, 0, 0, 0);
-        if (fh == INVALID_HANDLE_VALUE)
-            throw_error(path, GetLastError());
-        ConnectNamedPipe(fh, 0);
-        return _open_osfhandle(reinterpret_cast<intptr_t>(fh),
-                               _O_WRONLY | _O_BINARY);
+        // Create the named pipe
+        if (mkfifo(path, 0666) == -1) {
+            throw std::runtime_error(strutil::format("Failed to create named pipe: %s", strerror(errno)));
+        }
+
+        // Open the named pipe for writing
+        int fd = open(path, O_WRONLY);
+        if (fd == -1) {
+            throw std::runtime_error(strutil::format("Failed to open named pipe: %s", strerror(errno)));
+        }
+
+        return fd;
     }
 
     std::string get_dll_version_for_locale(HMODULE hDll, WORD langid)
