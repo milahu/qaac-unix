@@ -231,7 +231,7 @@ namespace misc
     std::shared_ptr<FILE> openConfigFile(const char *file)
     {
         std::vector<std::string> search_paths;
-        const char *home = _wgetenv("HOME");
+        const char *home = getenv("HOME");
         if (home)
             search_paths.push_back(strutil::format("%s\\%s", home, ".qaac"));
         char path[PATH_MAX];
