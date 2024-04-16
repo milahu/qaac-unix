@@ -10,7 +10,8 @@ mkShell {
 
     # clang gives better error mesages than gcc
     #gcc
-    clang
+    clang # llvmPackages_16.clang
+    #llvmPackages_17.clang
 
     #python3 # for node-gyp
 
@@ -28,4 +29,9 @@ mkShell {
     # use dll files on linux
     #(callPackage ./nix/loadlibrary { })
   ];
+
+  shellHook = ''
+    export CC=clang
+    export CXX=clang++
+  '';
 }
