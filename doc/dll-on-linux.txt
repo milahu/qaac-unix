@@ -1,0 +1,58 @@
+https://github.com/taviso/loadlibrary
+
+https://www.codeproject.com/Articles/13501/Platform-Independent-Coding-DLLs-and-SOs
+
+
+
+
+
+winelib
+
+https://stackoverflow.com/questions/704802/use-dll-win32-in-linux-platforms
+
+https://stackoverflow.com/questions/374157/using-windows-dll-from-linux
+https://stackoverflow.com/a/47672142/10440128
+https://github.com/pleiszenburg/zugbruecke
+Python module for calling into Windows DLLs from Python on Linux.
+It is based on IPC between a regular Linux/Unix Python process and a Wine-based Python process
+
+
+
+https://stackoverflow.com/questions/57120218/wrap-windows-dll-using-wine-on-linux
+
+HINSTANCE sdl = LoadLibrary("SDL2.dll");
+assert(sdl);
+
+WINAPI __typeof(SDL_Init)* init = GetProcAddress(sdl, "SDL_Init");
+err = init(SDL_INIT_VIDEO);
+assert(err == 0);
+
+WINAPI __typeof(SDL_CreateWindow)* create_window = GetProcAddress(sdl, "SDL_CreateWindow");
+SDL_Window* window = create_window("Drift", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 768, 0);
+assert(window);
+
+WINAPI __typeof(SDL_Delay)* delay = GetProcAddress(sdl, "SDL_Delay");
+delay(3000);
+
+
+
+https://github.com/ctypesgen/ctypesgen
+
+generate python ctypes from c header files
+
+
+
+https://github.com/lucasg/Dependencies
+
+A rewrite of the old legacy software "depends.exe" in C#
+for Windows devs to troubleshoot dll load dependencies issues
+
+Display imports and exports the way Depends.exe does
+
+
+
+https://github.com/taviso/loadlibrary/pull/97
+
+https://github.com/cube0x8/loadlibrary/tree/x64
+
+loadlibrary with x86_64 support
