@@ -1,0 +1,4 @@
+[submodule "loadlibrary"]
+	path = loadlibrary
+	url = https://github.com/milahu/loadlibrary
+	branch = make-it-work-in-cxx
