@@ -65,6 +65,42 @@
 #include "CoreAudioResampler.h"
 #endif
 
+// https://github.com/taviso/loadlibrary
+// dlopen for dll files
+// based on loadlibrary/mpclient.c
+#include <stdlib.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <stdarg.h>
+#include <assert.h>
+#include <string.h>
+#include <time.h>
+#include <sys/resource.h>
+#include <sys/unistd.h>
+#include <asm/unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <mcheck.h>
+#include <err.h>
+#include <loadlibrary/peloader/winnt_types.h>
+#include <loadlibrary/peloader/pe_linker.h>
+#include <loadlibrary/peloader/ntoskernel.h>
+#include <loadlibrary/peloader/util.h>
+#include <loadlibrary/peloader/log.h>
+#include <loadlibrary/intercept/hook.h>
+#include <loadlibrary/include/rsignal.h>
+#include <loadlibrary/include/engineboot.h>
+#include <loadlibrary/include/scanreply.h>
+#include <loadlibrary/include/streambuffer.h>
+#include <loadlibrary/include/openscan.h>
+
 namespace fs = std::filesystem;
 
 #ifdef REFALAC
@@ -1275,6 +1311,89 @@ std::string get_output_filename(const std::string &ifilename,
     return outputPath.string();
 }
 
+
+// based on loadlibrary/mpclient.c
+// Any usage limits to prevent bugs disrupting system.
+const struct rlimit kUsageLimits[] = {
+    [RLIMIT_FSIZE]  = { .rlim_cur = 0x20000000, .rlim_max = 0x20000000 },
+    [RLIMIT_CPU]    = { .rlim_cur = 3600,       .rlim_max = RLIM_INFINITY },
+    [RLIMIT_CORE]   = { .rlim_cur = 0,          .rlim_max = 0 },
+    [RLIMIT_NOFILE] = { .rlim_cur = 32,         .rlim_max = 32 },
+};
+
+// TODO is this used to call functions in the DLL file?
+// based on loadlibrary/mpclient.c
+DWORD (* __rsignal)(PHANDLE KernelHandle, DWORD Code, PVOID Params, DWORD Size);
+
+// based on loadlibrary/mpclient.c
+static DWORD EngineScanCallback(PSCANSTRUCT Scan)
+{
+    if (Scan->Flags & SCAN_MEMBERNAME) {
+        LogMessage("Scanning archive member %s", Scan->VirusName);
+    }
+    if (Scan->Flags & SCAN_FILENAME) {
+        LogMessage("Scanning %s", Scan->FileName);
+    }
+    if (Scan->Flags & SCAN_PACKERSTART) {
+        LogMessage("Packer %s identified.", Scan->VirusName);
+    }
+    if (Scan->Flags & SCAN_ENCRYPTED) {
+        LogMessage("File is encrypted.");
+    }
+    if (Scan->Flags & SCAN_CORRUPT) {
+        LogMessage("File may be corrupt.");
+    }
+    if (Scan->Flags & SCAN_FILETYPE) {
+        LogMessage("File %s is identified as %s", Scan->FileName, Scan->VirusName);
+    }
+    if (Scan->Flags & 0x08000022) {
+        LogMessage("Threat %s identified.", Scan->VirusName);
+    }
+    // This may indicate PUA.
+    if ((Scan->Flags & 0x40010000) == 0x40010000) {
+        LogMessage("Threat %s identified.", Scan->VirusName);
+    }
+    return 0;
+}
+
+
+
+
+// based on loadlibrary/mpclient.c
+// These are available for pintool.
+BOOL __noinline InstrumentationCallback(PVOID ImageStart, SIZE_T ImageSize)
+{
+    // Prevent the call from being optimized away.
+    asm volatile ("");
+    return TRUE;
+}
+
+
+
+// based on loadlibrary/mpclient.c
+static DWORD ReadStream(PVOID _this, ULONGLONG Offset, PVOID Buffer, DWORD Size, PDWORD SizeRead)
+{
+    fseek((FILE *)_this, Offset, SEEK_SET);
+    *SizeRead = fread((FILE *)Buffer, 1, Size, (FILE *)_this);
+    return TRUE;
+}
+
+// based on loadlibrary/mpclient.c
+static DWORD GetStreamSize(PVOID _this, PULONGLONG FileSize)
+{
+    fseek((FILE *)_this, 0, SEEK_END);
+    *FileSize = ftell((FILE *)_this);
+    return TRUE;
+}
+
+// based on loadlibrary/mpclient.c
+static PWCHAR GetStreamName(PVOID _this)
+{
+    return (PWCHAR)"input";
+}
+
+
+
 /*
 #ifdef _MSC_VER
 int wmain(int argc, char **argv)
@@ -1320,13 +1439,12 @@ int main(int argc, char **argv)
         std::string encoder_name;
         encoder_name = strutil::format(PROGNAME " %s", get_qaac_version());
 #ifdef QAAC
-// TODO is this also needed for 'aac '? or only for 'aach'?
 /*
 //      decltype(__pfnDliNotifyHook2) __pfnDliFailureHook2 = DllImportHook;
-        // TODO Replace "CoreAudioToolbox.so" with the actual path to your shared library
-        void* hDll = dlopen("CoreAudioToolbox.so", RTLD_NOW);
+        // TODO Replace "CoreAudioToolbox.dll" with the actual path to your shared library
+        void* hDll = dlopen("CoreAudioToolbox.dll", RTLD_NOW);
         if (!hDll)
-            throw std::runtime_error("failed to load CoreAudioToolbox.so");
+            throw std::runtime_error("failed to load CoreAudioToolbox.dll");
         else {
             WORD langid_us = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
             std::string ver = win32::get_dll_version_for_locale(hDll, langid_us);
@@ -1336,7 +1454,176 @@ int main(int argc, char **argv)
             dlclose(hDll);
         }
 */
+
+/*
+FIXME
+/nix/store/0gi4vbw1qfjncdl95a9ply43ymd6aprm-binutils-2.40/bin/ld: CMakeFiles/qaac.dir/main.cpp.o: in function `main':
+/home/user/src/qaac/qaac/main.cpp:1639: undefined reference to `pe_load_library(char const*, void**, unsigned long*)'
+/home/user/src/qaac/qaac/main.cpp:1644: undefined reference to `link_pe_images(pe_image*, unsigned short)'
+/home/user/src/qaac/qaac/main.cpp:1673: undefined reference to `get_export(char const*, void*)'
+/home/user/src/qaac/qaac/main.cpp:1722: undefined reference to `setup_nt_threadinfo(EXCEPTION_DISPOSITION (*)(_EXCEPTION_RECORD*, _EXCEPTION_FRAME*, _CONTEXT*, _EXCEPTION_FRAME**))'
+*/
+
+// based on loadlibrary/mpclient.c
+
+    PIMAGE_DOS_HEADER DosHeader;
+    PIMAGE_NT_HEADERS PeHeader;
+    HANDLE KernelHandle;
+    SCAN_REPLY ScanReply;
+    BOOTENGINE_PARAMS BootParams;
+    SCANSTREAM_PARAMS ScanParams;
+    STREAMBUFFER_DESCRIPTOR ScanDescriptor;
+    ENGINE_INFO EngineInfo;
+    ENGINE_CONFIG EngineConfig;
+
+    struct pe_image image = {
+        .entry  = NULL,
+        .name   = "CoreAudioToolbox.dll",
+    };
+
+// FIXME undefined reference to `pe_load_library(char const*, void**, unsigned long*)'
+    // Load the mpengine module.
+    if (pe_load_library(image.name, &image.image, &image.size) == false) {
+        throw std::runtime_error("failed to load CoreAudioToolbox.dll");
+    }
+
+// FIXME undefined reference to `link_pe_images(pe_image*, unsigned short)'
+    // Handle relocations, imports, etc.
+    //link_pe_images(&image, 1);
+    link_pe_images(&image, (unsigned short)1);
+
+    // Fetch the headers to get base offsets.
+    DosHeader   = (PIMAGE_DOS_HEADER) image.image;
+
+#ifdef __cplusplus
+    // fix: error: arithmetic on a pointer to void
+    PeHeader    = (PIMAGE_NT_HEADERS)(static_cast<char*>(image.image) + DosHeader->e_lfanew);
+#else
+    PeHeader    = (PIMAGE_NT_HEADERS)(image.image + DosHeader->e_lfanew);
 #endif
+
+    // TODO generate CoreAudioToolbox.map == IDA .map file
+    // TODO can i use ghidra? or some command line tool? to create the .map file
+    /*
+      i only have
+      ./implib/CoreAudioToolbox.lib
+      ./implib/CoreAudioToolbox.def
+      ./CoreAudioToolbox.h
+    */
+    /*
+    // Load any additional exports.
+    if (!process_extra_exports(image.image, PeHeader->OptionalHeader.BaseOfCode, "CoreAudioToolbox.map")) {
+#ifndef NDEBUG
+        std::cerr << "The map file wasn't found, symbols wont be available";
+#endif
+    }
+    */
+
+    if (get_export("__rsignal", &__rsignal) == -1) {
+        //errx(EXIT_FAILURE, "Failed to resolve mpengine entrypoint");
+        throw std::runtime_error("failed to resolve entrypoint of CoreAudioToolbox.dll");
+    }
+
+#ifdef __cplusplus
+    // fix C++ error: function definition is not allowed here
+    // https://stackoverflow.com/questions/26920504/local-function-definition-are-illegal
+    // https://stackoverflow.com/questions/59913867/casting-lambda-with-non-void-return-type-to-function-pointer
+    PEXCEPTION_HANDLER ExceptionHandler = reinterpret_cast<PEXCEPTION_HANDLER>(+[](
+#else
+    EXCEPTION_DISPOSITION ExceptionHandler(
+#endif
+            struct _EXCEPTION_RECORD *ExceptionRecord,
+            struct _EXCEPTION_FRAME *EstablisherFrame,
+            struct _CONTEXT *ContextRecord,
+            struct _EXCEPTION_FRAME **DispatcherContext
+    )
+    {
+        LogMessage("Toplevel Exception Handler Caught Exception");
+        abort();
+        //throw std::runtime_error("Toplevel Exception Handler Caught Exception");
+    }
+#ifdef __cplusplus
+    );
+    /*
+    typedef EXCEPTION_DISPOSITION (ExceptionHandler_t)(
+            struct _EXCEPTION_RECORD *,
+            struct _EXCEPTION_FRAME *,
+            struct _CONTEXT *,
+            struct _EXCEPTION_FRAME **
+    );
+    ExceptionHandler_t ExceptionHandler = ExceptionHandler_lambda;
+    */
+#endif
+
+#ifdef __cplusplus
+    auto ResourceExhaustedHandler = [](int Signal)
+#else
+    VOID ResourceExhaustedHandler(int Signal)
+#endif
+    {
+        //errx(EXIT_FAILURE, "Resource Limits Exhausted, Signal %s", strsignal(Signal));
+        throw std::runtime_error(strutil::format("Resource Limits Exhausted, Signal %s", strsignal(Signal)));
+    }
+#ifdef __cplusplus
+    ;
+#endif
+
+    setup_nt_threadinfo(ExceptionHandler);
+
+    // Call DllMain()
+    image.entry((PVOID) 'MPEN', DLL_PROCESS_ATTACH, NULL);
+
+    // Install usage limits to prevent system crash.
+    setrlimit(RLIMIT_CORE, &kUsageLimits[RLIMIT_CORE]);
+    setrlimit(RLIMIT_CPU, &kUsageLimits[RLIMIT_CPU]);
+    setrlimit(RLIMIT_FSIZE, &kUsageLimits[RLIMIT_FSIZE]);
+    setrlimit(RLIMIT_NOFILE, &kUsageLimits[RLIMIT_NOFILE]);
+
+    signal(SIGXCPU, ResourceExhaustedHandler);
+    signal(SIGXFSZ, ResourceExhaustedHandler);
+
+# ifndef NDEBUG
+    // Enable Maximum heap checking.
+    mcheck_pedantic(NULL);
+# endif
+
+    ZeroMemory(&BootParams, sizeof BootParams);
+    ZeroMemory(&EngineInfo, sizeof EngineInfo);
+    ZeroMemory(&EngineConfig, sizeof EngineConfig);
+
+    BootParams.ClientVersion = BOOTENGINE_PARAMS_VERSION;
+    BootParams.Attributes    = BOOT_ATTR_NORMAL;
+    BootParams.SignatureLocation = (PWCHAR)"engine";
+    BootParams.ProductName = (PWCHAR)"Legitimate Antivirus";
+    EngineConfig.QuarantineLocation = (PWCHAR)"quarantine";
+    EngineConfig.Inclusions = (PWCHAR)"*.*";
+    EngineConfig.EngineFlags = 1 << 1;
+    BootParams.EngineInfo = &EngineInfo;
+    BootParams.EngineConfig = &EngineConfig;
+    KernelHandle = NULL;
+
+    if (__rsignal(&KernelHandle, RSIG_BOOTENGINE, &BootParams, sizeof BootParams) != 0) {
+        LogMessage("__rsignal(RSIG_BOOTENGINE) returned failure, missing definitions?");
+        LogMessage("Make sure the VDM files and mpengine.dll are in the engine directory");
+        return 1;
+    }
+
+    ZeroMemory(&ScanParams, sizeof ScanParams);
+    ZeroMemory(&ScanDescriptor, sizeof ScanDescriptor);
+    ZeroMemory(&ScanReply, sizeof ScanReply);
+
+    ScanParams.Descriptor        = &ScanDescriptor;
+    ScanParams.ScanReply         = &ScanReply;
+    ScanReply.EngineScanCallback = EngineScanCallback;
+    ScanReply.field_C            = 0x7fffffff;
+    ScanDescriptor.Read          = ReadStream;
+    ScanDescriptor.GetSize       = GetStreamSize;
+    ScanDescriptor.GetName       = GetStreamName;
+
+// TODO now what?
+
+#endif // #if QAAC
+
         opts.encoder_name = strutil::us2w(encoder_name);
         if (!opts.print_available_formats)
             LOG("%s\n", opts.encoder_name.c_str());

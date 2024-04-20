@@ -5,11 +5,22 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 project(qaac LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
+#set(CMAKE_CXX_STANDARD 17)
+# fix?
+# main.cpp: warning: array designators are a C99 extension [-Wc99-designator]
+#     [RLIMIT_FSIZE]  = { .rlim_cur = 0x20000000, .rlim_max = 0x20000000 },
+#     ^~~~~~~~~~~~~~
+# c99 Designated Initializers
+# https://stackoverflow.com/questions/18731707/why-does-c11-not-support-designated-initializer-lists-as-c99
+set(CMAKE_CXX_STANDARD 20)
+#set(CMAKE_CXX_EXTENSIONS OFF) # TODO what
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(common_extra_flags "-O1 -ggdb -Wfatal-errors -Werror -Wno-multichar -DQAAC=1 -DNO_COREAUDIO=1")
+# -Wfatal-errors: stop on first error
+# -Werror: warnings are errors
+# -Wno-ignored-attributes: ignore: warning: '__stdcall__' calling convention is not supported for this target
+#set(common_extra_flags "-O1 -ggdb -Wfatal-errors -Werror -Wno-multichar -Wno-ignored-attributes -DQAAC=1 -DNO_COREAUDIO=1")
+set(common_extra_flags "-O1 -ggdb -Wfatal-errors -Wno-multichar -Wno-ignored-attributes -DQAAC=1 -DNO_COREAUDIO=1")
 
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${common_extra_flags}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${common_extra_flags}")
@@ -130,7 +141,7 @@ add_executable(qaac
   filters/SoxrResampler.cpp
 ]]
 
-  # TODO move to separate project for better caching
+  # TODO move to subproject
   # why? upstream mp4v2 has no MP4StdIOCallbacks
   mp4v2/libplatform/io/File.cpp
   mp4v2/libplatform/io/File_posix.cpp
@@ -233,6 +244,71 @@ add_executable(qaac
   mp4v2/src/qtff/PictureAspectRatioBox.cpp
   mp4v2/src/rtphint.cpp
   mp4v2/src/text.cpp
+
+  # TODO move to subproject
+  # find loadlibrary/ -name '*.c'
+  loadlibrary/mpscript.c
+  loadlibrary/mpclient.c
+  loadlibrary/intercept/hook.c
+  loadlibrary/intercept/libdisasm/ia32_implicit.c
+  loadlibrary/intercept/libdisasm/x86_disasm.c
+  loadlibrary/intercept/libdisasm/x86_format.c
+  loadlibrary/intercept/libdisasm/ia32_invariant.c
+  loadlibrary/intercept/libdisasm/ia32_modrm.c
+  loadlibrary/intercept/libdisasm/x86_imm.c
+  loadlibrary/intercept/libdisasm/ia32_settings.c
+  loadlibrary/intercept/libdisasm/x86_misc.c
+  loadlibrary/intercept/libdisasm/x86_operand_list.c
+  loadlibrary/intercept/libdisasm/x86_insn.c
+  loadlibrary/intercept/libdisasm/ia32_opcode_tables.c
+  loadlibrary/intercept/libdisasm/ia32_insn.c
+  loadlibrary/intercept/libdisasm/ia32_reg.c
+  loadlibrary/intercept/libdisasm/ia32_operand.c
+  loadlibrary/peloader/winstrings.c
+  loadlibrary/peloader/crt.c
+  loadlibrary/peloader/util.c
+  loadlibrary/peloader/pe_linker.c
+  loadlibrary/peloader/winapi/Ole.c
+  loadlibrary/peloader/winapi/Process.c
+  loadlibrary/peloader/winapi/Debugger.c
+  loadlibrary/peloader/winapi/GetStartupInfoW.c
+  loadlibrary/peloader/winapi/Handle.c
+  loadlibrary/peloader/winapi/WinTrust.c
+  loadlibrary/peloader/winapi/Locale.c
+  loadlibrary/peloader/winapi/Crypt.c
+  loadlibrary/peloader/winapi/Strings.c
+  loadlibrary/peloader/winapi/IsProcessorFeaturePresent.c
+  loadlibrary/peloader/winapi/Environment.c
+  loadlibrary/peloader/winapi/InitializeSListHead.c
+  loadlibrary/peloader/winapi/Internal.c
+  loadlibrary/peloader/winapi/Exception.c
+  loadlibrary/peloader/winapi/Version.c
+  loadlibrary/peloader/winapi/GetSystemDirectory.c
+  loadlibrary/peloader/winapi/rtlbitmap.c
+  loadlibrary/peloader/winapi/Memory.c
+  loadlibrary/peloader/winapi/ProcessThreads.c
+  loadlibrary/peloader/winapi/LoadLibrary.c
+  loadlibrary/peloader/winapi/EncodePointer.c
+  loadlibrary/peloader/winapi/GetStdHandle.c
+  loadlibrary/peloader/winapi/EventTracing.c
+  loadlibrary/peloader/winapi/Event.c
+  loadlibrary/peloader/winapi/Heap.c
+  loadlibrary/peloader/winapi/CriticalSection.c
+  loadlibrary/peloader/winapi/TlsAlloc.c
+  loadlibrary/peloader/winapi/SystemTime.c
+  loadlibrary/peloader/winapi/Paths.c
+  loadlibrary/peloader/winapi/Security.c
+  loadlibrary/peloader/winapi/Threads.c
+  loadlibrary/peloader/winapi/Files.c
+  loadlibrary/peloader/winapi/Wer.c
+  loadlibrary/peloader/winapi/Registry.c
+  loadlibrary/peloader/winapi/GetLastError.c
+  loadlibrary/peloader/extra.c
+  loadlibrary/peloader/log.c
+  loadlibrary/coverage/tree.c
+  loadlibrary/coverage/coverage_parse_min.c
+  loadlibrary/coverage/instrument.c
+
 )
 
 target_include_directories(qaac
